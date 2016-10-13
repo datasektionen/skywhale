@@ -1,13 +1,16 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var example = require('./routes/example');
 var models = require("./models");
+
+var example = require('./routes/example');
+var nominating = require('./routes/nominating');
 
 var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/', example);
+app.use('/nominate', nominating);
 
 var port = process.env.PORT || 5000;
 
