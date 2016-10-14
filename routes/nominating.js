@@ -10,7 +10,11 @@ router.post('/nominatefreetext',function(req, res) {
 
 router.get('/nominate', function(req, res) {
 	//kthid
-	mail.sendNewNomination("Jesper Simonsson", "jsimo", "studerandeskyddsombud");
+	mail.sendNewNomination("Jesper Simonsson", "jsimo", ["studerandeskyddsombud"], "17:e maj", "Val-SM").then(function(bla) {
+		res.send(bla);
+	}).catch(function(err) {
+		res.send(err);
+	});
 });
 
 module.exports = router;
