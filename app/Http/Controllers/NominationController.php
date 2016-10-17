@@ -42,7 +42,7 @@ class NominationController extends BaseController {
 
 		// Now get the open elections and their positions that are open for nomination
 		$openElections = Election::open();
-		$nominations = Auth::user()->nominations($openElections)->get();
+		$nominations = Position::forUser(Auth::user()->id, $openElections);
 
 		return view('answer-nomination')
 			->with('positions', $nominations);

@@ -7,23 +7,23 @@
 <h1>{{ $election->name }}</h1>
 <p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
 <ul class="elections">
-	@foreach($election->positions as $position)
+	@foreach($election->positions() as $position)
 	<li>
-		<h3>{{ $position->name }}</h3>
-		@if($position->nominees($election)->get()->count() > 0)
+		<h3>{{ $position->title }}</h3>
+		@if($election->nominees($position)->get()->count() > 0)
 		<p></p>
 		<ul>
-			@foreach($position->nominees($election)->get() as $nominee)
-			<li class="{{ $nominee->pivot->status == 'accepted' ? 'accepted' : ($nominee->pivot->status == 'declined' ? 'declined' : '') }}">
-				<div class="crop" style="background-image: url(https://zfinger.datasektionen.se/user/{{ $nominee->kth_username }}/image/100);"></div>
-				@if ($nominee->pivot->status == 'accepted')
+			@foreach($election->nominees($position)->get() as $nominee)
+			<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : '') }}">
+				<div class="crop" style="background-image: url(https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/100);"></div>
+				@if ($nominee->status == 'accepted')
 					Accepterat:
-				@elseif ($nominee->pivot->status == 'declined')
+				@elseif ($nominee->status == 'declined')
 					Tackat nej:
 				@endif
-				<a href="/person/{{ $nominee->id }}">{{ $nominee->name }}</a>
+				<a href="/person/{{ $nominee->user_id }}">{{ \App\Models\User::find($nominee->user_id)->name }}</a>
 				@if (Auth::check() && Auth::user()->isAdmin())
-				<a href="/admin/elections/remove-nomination/{{ $nominee->pivot->uuid }}">Ta bort</a>
+				<a href="/admin/elections/remove-nomination/{{ $nominee->uuid }}">Ta bort</a>
 				@endif
 			</li>
 			@endforeach

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTokenColumnUserPositionUuid extends Migration
+class UpdateUserPositionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,10 @@ class AddTokenColumnUserPositionUuid extends Migration
     public function up()
     {
         Schema::table('position_user', function (Blueprint $table) {
-            $table->dropColumn('token');
-            $table->uuid('uuid');
+            $table->dropColumn('position_id');
+            $table->string('position');
         });
+        Schema::drop('positions');
     }
 
     /**
@@ -26,9 +27,10 @@ class AddTokenColumnUserPositionUuid extends Migration
      */
     public function down()
     {
-        Schema::table('position_user', function (Blueprint $table) {
-            $table->dropColumn('uuid');
-            $table->string('token', 64);
+        Schema::table('user_position', function (Blueprint $table) {
+            $table->integer('position_id')->unsigned();
+            $table->dropColumn('position');
         });
+        // Add the positions table
     }
 }

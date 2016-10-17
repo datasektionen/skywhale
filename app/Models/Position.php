@@ -21,26 +21,99 @@ class Position extends Model {
     protected $table = 'positions';
 
     /**
-     * Nominations for this position.
-     *
-     * @param  $election The election we want to know nominees of
-     * @return relation
-     */
-    public function nominees($election) {
-        return $this
-            ->belongsToMany('App\Models\User')
-            ->withPivot('status', 'uuid')
-            ->whereNull('position_user.deleted_at')
-            ->where('position_user.election_id', '=', $election->id)
-            ->orderBy(DB::raw("FIELD(status, 'acccepted', 'waiting', 'declined')"));
-    }
-
-    /**
      * The election for this position.
      *
      * @return relation
      */
     public function election() {
         return $this->hasOne('App\Models\Election');
+    }
+
+    public static function nominationsForUser($user_id, $openElections = null) {
+        if ($openElections === null) {
+            $openElections = Election::open();
+        }
+
+        $electionIds = [];
+        foreach ($openElections as $election) {
+            $electionIds[] = $election->id;
+        }
+
+        return DB::table('position_user')
+            ->where('user_id', $user_id)
+            ->whereNull('position_user.deleted_at')
+            ->whereIn('position_user.election_id', $electionIds);
+    }
+
+    public static function forUser($user_id, $openElections = null) {
+        $nominations = Position::nominationsForUser($user_id, $openElections)->get();
+        
+        $positions = Position::allKey();
+
+        $res = [];
+        foreach ($nominations as $nomination) {
+            $obj = $nomination;
+            $obj->positionObject = $positions[$nomination->position];
+            $obj->electionObject = Election::find($nomination->election_id);
+            $res[] = $obj;
+        }
+        
+        return $res;
+    }
+
+    /**
+     * Get all positions from API.
+     * 
+     * @param  array  $columns
+     * @return array           the roles
+     */
+    public static function all($columns = array()) {
+        $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
+        $roles = json_decode($rolesString);
+
+        return $roles;
+    }
+
+    public static function find($identifier) {
+        $ans = file_get_contents("http://dfunkt.froyo.datasektionen.se/api/role/chefred");
+        return json_decode($ans);
+    }
+
+    /**
+     * Get all positions from API with their identifier as key.
+     * 
+     * @param  array  $columns
+     * @return array  the roles
+     */
+    public static function allKey($columns = array()) {
+        $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
+        $roles = json_decode($rolesString);
+
+        $res = [];
+        foreach ($roles as $role) {
+            $res[$role->identifier] = $role;
+        }
+
+        return $res;
+    }
+
+    /**
+     * [dataForIds description]
+     * @param  [type] $positions [description]
+     * @return [type]            [description]
+     */
+    public static function dataForIds($positions) {
+        $ans = [];
+        $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
+        $roles = json_decode($rolesString);
+
+        foreach ($positions as $position) {
+            foreach ($roles as $role) {
+                if ($role->identifier == $position) {
+                    $ans[] = $role;
+                }
+            }
+        }
+        return collect($ans);
     }
 }

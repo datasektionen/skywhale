@@ -66,8 +66,8 @@
         <div class="input">
             @foreach (\App\Models\Position::all() as $position)
                 <div class="checkbox">
-                    {{ Form::checkbox('positions[]', $position->id, false, array('id' => 'position-' . $position->id )) }} 
-                    <label for="position-{{ $position->id }}">{{ $position->name }}</label>
+                    {{ Form::checkbox('positions[]', $position->identifier, false, array('id' => 'position-' . $position->identifier )) }} 
+                    <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>
                 </div>
             @endforeach
             <p>Du kan lägga till fler poster senare.</p>

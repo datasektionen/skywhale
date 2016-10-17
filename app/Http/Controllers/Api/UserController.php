@@ -30,24 +30,28 @@ class UserApiController extends BaseController {
 	public function getElections() {
 		$elections = [];
 		foreach (Election::open() as $election) {
-			$elections[$election->id]["opens"] = $election->opens;
-			$elections[$election->id]["nomination_stop"] = $election->nomination_stop;
-			$elections[$election->id]["acceptance_stop"] = $election->acceptance_stop;
-			$elections[$election->id]["closes"] = $election->closes;
-			foreach ($election->positions as $position) {
+			$x = [];
+			$x["id"] = $election->id;
+			$x["name"] = $election->name;
+			$x["description"] = $election->description;
+			$x["opens"] = $election->opens;
+			$x["nomination_stop"] = $election->nomination_stop;
+			$x["acceptance_stop"] = $election->acceptance_stop;
+			$x["closes"] = $election->closes;
+			foreach ($election->positionIds() as $position) {
 				$pos = [];
-				$pos["id"] = $position->id;
-				$pos["name"] = $position->name;
-				$pos["description"] = $position->description;
-				foreach ($position->nominees($election)->get() as $nominee) {
+				$pos["identifier"] = $position;
+				$p = new stdClass; $p->identifier = $position;
+				foreach ($election->nominees($p)->get() as $nominee) {
 					$nom = [];
 					$nom["name"] = $nominee->name;
 					$nom["kth_username"] = $nominee->kth_username;
-					$nom["pivot"]["status"] = $nominee->pivot->status;
+					$nom["pivot"]["status"] = $nominee->status;
 					$pos["nominees"][] = $nom;
 				}
-				$elections[$election->id]["positions"][] = $pos;
+				$x["positions"][] = $pos;
 			}
+			$elections[] = $x;
 		}
 		return response()->json($elections);
 	}

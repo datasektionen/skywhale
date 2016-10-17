@@ -55,8 +55,8 @@ $(document).ready(function () {
         <div class="input">
             @foreach (\App\Models\Election::positionsForAllNominateableElections() as $position)
             <div class="checkbox">
-                {{ Form::checkbox('positions[]', $position->id, false, array('id' => 'position-' . $position->id )) }} 
-                <label for="position-{{ $position->id }}">{{ $position->name }}</label>
+                {{ Form::checkbox('positions[]', $position->identifier, false, array('id' => 'position-' . $position->identifier )) }} 
+                <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>
             </div>
             @endforeach
         </div>
@@ -75,11 +75,11 @@ $(document).ready(function () {
         </div>
     </div>
     @elseif (\App\Models\Election::nominateableElections()->count() === 1)
-    <p>Du nominerar i valet {{ \App\Models\Election::nominateableElections()->first()->name }}.</p>
-    {!! Form::hidden('election', \App\Models\Election::nominateableElections()->first()->id) !!}
+        <p>Du nominerar i valet {{ \App\Models\Election::nominateableElections()->first()->name }}.</p>
+        {!! Form::hidden('election', \App\Models\Election::nominateableElections()->first()->id) !!}
     @else
-    <p>Du nominerar inte i något val.</p>
-    {!! Form::hidden('election', -1) !!}
+        <p>Du nominerar inte i något val.</p>
+        {!! Form::hidden('election', -1) !!}
     @endif
 
     <div class="form-entry">

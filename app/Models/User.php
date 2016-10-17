@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Webpatser\Uuid\Uuid;
 use Session;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use GuzzleHttp\Client;
 
 /**
  * User model. Represents a user.
@@ -23,7 +24,7 @@ class User extends Authenticatable {
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+    'name', 'email', 'password',
     ];
 
     /**
@@ -32,7 +33,7 @@ class User extends Authenticatable {
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+    'password', 'remember_token',
     ];
 
     /**
@@ -44,25 +45,25 @@ class User extends Authenticatable {
      */
     public function nominate($electionId, $positionId) {
         $election = Election::find($electionId);
-        $position = Position::find($positionId);
 
-        if ($election === null || $position === null)
+        if ($election === null)
             return false;
 
-        if ($position->nominees($election)->get()->contains($this))
+        if (DB::table('position_user')
+            ->where('user_id', $this->id)
+            ->where('position', $positionId)
+            ->where('election_id', $election->id)
+            ->get()->count() > 0)
             return false;
 
-        DB::insert(
-            'INSERT INTO position_user (user_id, position_id, election_id, status, uuid, deleted_at) values (?, ?, ?, ?, ?, ?)', 
-            [
-                $this->id,
-                $position->id,
-                $election->id,
-                'waiting',
-                Uuid::generate()->string,
-                null
-            ]
-        );
+        DB::insert('INSERT INTO position_user (user_id, position, election_id, status, uuid, deleted_at) values (?, ?, ?, ?, ?, ?)', [
+            $this->id,
+            $positionId,
+            $election->id,
+            'waiting',
+            Uuid::generate()->string,
+            null
+        ]);
         // TODO Check if insert was successful
         return true;
     }
@@ -75,37 +76,49 @@ class User extends Authenticatable {
      * @return void
      */
     public function bulkNominate($electionId, $positionIds) {
+        $election = Election::find($electionId);
+
+        $shouldSendMail = false;
         foreach ($positionIds as $positionId) {
-            $this->nominate($electionId, $positionId);
+            $shouldSendMail = $shouldSendMail || $this->nominate($electionId, $positionId);
         }
 
-        // TODO Skicka mejl
-        // Med länk till samtliga personens nomineringar, som ska finnas på 
-        // /nomination/answer om personen är inloggad.
-    }
-
-    /**
-     * Returns a relation of Positions belonging to this user 
-     * via nominations in the given elections.
-     * 
-     * @param  [Election] $openElections A list of elections that the Positions are in
-     * @return Relation the positions as a relation
-     */
-    public function nominations($openElections = null) {
-        if ($openElections === null) {
-            $openElections = Election::open();
+        if (!$shouldSendMail) {
+            return false;
         }
 
-        $electionIds = [];
-        foreach ($openElections as $election) {
-            $electionIds[] = $election->id;
-        }
+        $to = $this->kth_username . "@kth.se";
+        $positions = Position::dataForIds($positionIds);
+        $from = "valberedning@d.kth.se";
+        $subject = "Du har nya nomineringar";
+        $html = view('emails.notify-nomination')
+            ->with('person', $this)
+            ->with('election', $election)
+            ->with('positions', $positions);
+        $postData = [
+            'to' => $to,
+            'from' => $from,
+            'subject' => $subject,
+            'html' => $html,
+            'key' => env('SPAM_API_KEY')
+        ];
+        $concat = function ($array) {
+            $res = "";
+            foreach ($array as $key => $val) {
+                $res .= $key . "=" . rawurlencode($val) . "&";
+            }
+            return $res;
+        };
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $concat($postData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+        curl_close ($ch);
+        print_r($server_output);
 
-        return $this
-            ->belongsToMany('App\Models\Position')
-            ->withPivot('status','uuid','election_id')
-            ->whereNull('position_user.deleted_at')
-            ->whereIn('position_user.election_id', $electionIds);
+        return true;
     }
 
     /**

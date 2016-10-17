@@ -52,7 +52,7 @@ class ElectionAdminController extends BaseController {
 		if ($election === null) {
 			abort(400);
 		}
-		return view('admin.elections.edit')->with('election', $election);
+		return view('admin.elections.edit')->with('election', $election)->with('positions', $election->positions());
 	}
 
 	/**
@@ -82,8 +82,8 @@ class ElectionAdminController extends BaseController {
 		$election->save();
 
 		// Connect all positions to this election
-		foreach ($request->get('positions') as $position_id) {
-			$election->positions()->attach(intval($position_id));
+		foreach ($request->get('positions') as $positionIdentifier) {
+			$election->addPosition($positionIdentifier);
 		}
 
 		return redirect('/admin/elections');
@@ -123,13 +123,11 @@ class ElectionAdminController extends BaseController {
 		$election->save();
 
 		// First disconnect all the positions in case we already are connected 
-		foreach ($election->positions as $position) {
-			$election->positions()->detach(intval($position->id));
-		}
+		$election->removeAllPositions();
 
-		// Then connect
-		foreach ($request->get('positions') as $position_id) {
-			$election->positions()->attach(intval($position_id));
+		// Connect all positions to this election
+		foreach ($request->get('positions') as $positionIdentifier) {
+			$election->addPosition($positionIdentifier);
 		}
 
 		return redirect('/admin/elections')->with('success', 'Valet uppdaterades.');

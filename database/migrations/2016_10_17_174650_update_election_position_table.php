@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnElectionIdToPersonPositionTable extends Migration
+class UpdateElectionPositionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddColumnElectionIdToPersonPositionTable extends Migration
      */
     public function up()
     {
-        Schema::table('person_position', function ($table) {
-            $table->integer('election_id')->unsigned();
+        Schema::table('election_position', function (Blueprint $table) {
+            $table->dropColumn('position_id');
+            $table->string('position');
         });
     }
 
@@ -25,8 +26,9 @@ class AddColumnElectionIdToPersonPositionTable extends Migration
      */
     public function down()
     {
-        Schema::table('person_position', function ($table) {
-            $table->dropColumn('election_id');
+        Schema::table('election_position', function (Blueprint $table) {
+            $table->dropColumn('position');
+            $table->int('position_id')->unsigned();
         });
     }
 }

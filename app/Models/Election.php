@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 /**
  * Election model. Represents an election, an event that has four timestamps
@@ -28,7 +29,66 @@ class Election extends Model {
      * @return relation
      */
     public function positions() {
-        return $this->belongsToMany('App\Models\Position');
+        $rows = DB::select('SELECT * FROM election_position WHERE election_id = ?', [
+            $this->id
+        ]);
+
+        $positions = [];
+        foreach ($rows as $row) {
+            $positions[] = $row->position;
+        }
+
+        return Position::dataForIds($positions);
+    }
+
+    /**
+     * The Positions open for voting in this election.
+     *
+     * @return relation
+     */
+    public function positionIds() {
+        $rows = DB::select('SELECT * FROM election_position WHERE election_id = ?', [
+            $this->id
+        ]);
+
+        $positions = [];
+        foreach ($rows as $row) {
+            $positions[] = $row->position;
+        }
+
+        return $positions;
+    }
+
+    /**
+     * Adds a position to the election.
+     *
+     * @param $identifier the position identifier from dfunct
+     * @return true always and ever <3
+     */
+    public function addPosition($identifier) {
+        DB::insert(
+            'INSERT INTO election_position (position, election_id) values (?, ?)', 
+            [
+                $identifier,
+                $this->id
+            ]
+        );
+        return true;
+    }
+
+    /**
+     * Removes all positions.
+     *
+     * @return true always and ever <3
+     */
+    public function removeAllPositions() {
+        DB::delete(
+            'DELETE FROM election_position WHERE election_id = ?', 
+            [
+                $this->id
+            ]
+        );
+        return true;
     }
 
     /**
@@ -81,11 +141,30 @@ class Election extends Model {
     public static function positionsForElections($elections) {
         $positions = [];
         foreach ($elections as $election) {
-            foreach ($election->positions as $position) {
-                $positions[$position->id] = $position;
+            $rows = DB::select('SELECT * FROM election_position WHERE election_id = ?', [
+                $election->id
+            ]);
+            foreach ($rows as $row) {
+                $positions[] = $row->position;
             }
         }
-        return $positions;
+
+        return Position::dataForIds(array_unique($positions));
+    }
+
+    /**
+     * Nominations for this position.
+     *
+     * @param  $position The position we want to know nominees of
+     * @return relation
+     */
+    public function nominees($position) {
+        return DB::table('position_user')
+            ->join('users', 'users.id', '=', 'position_user.user_id')
+            ->whereNull('position_user.deleted_at')
+            ->where('position_user.election_id', '=', $this->id)
+            ->where('position_user.position', '=', $position->identifier)
+            ->orderBy(DB::raw("FIELD(status, 'acccepted', 'waiting', 'declined')"));
     }
 
 

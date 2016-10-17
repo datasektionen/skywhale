@@ -38,10 +38,6 @@ Route::post('nominate', 'NominationController@postNominate');
 Route::get('admin', 'Admin\AdminController@getIndex')								->middleware('admin');
 
 Route::get ('admin/positions', 'Admin\PositionAdminController@getShow')				->middleware('admin');
-Route::get ('admin/positions/new', 'Admin\PositionAdminController@getNew')			->middleware('admin');
-Route::post('admin/positions/new', 'Admin\PositionAdminController@postNew')			->middleware('admin');
-Route::get ('admin/positions/edit/{id}', 'Admin\PositionAdminController@getEdit')	->middleware('admin');
-Route::post('admin/positions/edit/{id}', 'Admin\PositionAdminController@postEdit')	->middleware('admin');
 
 Route::get ('admin/elections', 'Admin\ElectionAdminController@getShow')				->middleware('admin');
 Route::get ('admin/elections/new', 'Admin\ElectionAdminController@getNew')			->middleware('admin');

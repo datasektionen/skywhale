@@ -3,14 +3,14 @@
 @section('title', 'Ändra val: ' . $election->name)
 
 @section('content')
-{!! Form::model($election) !!}
+{!! Form::open() !!}
 <div class="form">
     <div class="form-entry">
         <span class="description">
             Namn på valtillfället:
         </span>
         <div class="input">
-            {!! Form::text('name', NULL, array('placeholder' => 'T.ex. Budget-SM')) !!}
+            {!! Form::text('name', $election->name, array('placeholder' => 'T.ex. Budget-SM')) !!}
         </div>
     </div>
 
@@ -19,7 +19,7 @@
             Beskrivning av valtillfället:
         </span>
         <div class="input">
-            {!! Form::textarea('description', NULL, array('placeholder' => 'T.ex. "Det väljs massa roliga poster, kom och lek!"')) !!}
+            {!! Form::textarea('description', $election->description, array('placeholder' => 'T.ex. "Det väljs massa roliga poster, kom och lek!"')) !!}
         </div>
     </div>
 
@@ -66,8 +66,12 @@
         <div class="input">
             @foreach (\App\Models\Position::all() as $position)
                 <div class="checkbox">
-                    {{ Form::checkbox('positions[]', $position->id, $election->positions->contains($position->id), array('id' => 'position-' . $position->id )) }} 
-                    <label for="position-{{ $position->id }}">{{ $position->name }}</label>
+                    {{ Form::checkbox('positions[]', 
+                        $position->identifier, 
+                        $positions->contains($position), 
+                        array('id' => 'position-' . $position->identifier)
+                    ) }}
+                    <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>
                 </div>
             @endforeach
             <p>Du kan lägga till fler poster senare.</p>
