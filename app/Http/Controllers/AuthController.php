@@ -87,6 +87,6 @@ class AuthController extends BaseController {
 			return redirect('/')->with('error', 'Du loggades inte in.');
 		}
 
-		return redirect('/')->with('success', 'Du loggades in.');
+		return redirect()->intended('/')->with('success', 'Du loggades in.');
 	}
 }
