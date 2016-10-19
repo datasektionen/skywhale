@@ -12,6 +12,7 @@
 				<li>
 					<h3>{{ $position->title }}</h3>
 					@if($election->nominees($position)->get()->count() > 0)
+						<p></p>
 						<ul>
 							@foreach($election->nominees($position)->get() as $nominee)
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : '') }}">
