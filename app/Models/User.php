@@ -111,6 +111,7 @@ class User extends Authenticatable {
             return $res;
         };
         
+        /*
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -119,7 +120,7 @@ class User extends Authenticatable {
         $server_output = curl_exec($ch);
         curl_close ($ch);
         print_r($server_output);
-        
+        */
         return true;
     }
 
