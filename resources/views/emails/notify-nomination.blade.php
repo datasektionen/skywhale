@@ -17,6 +17,8 @@
     <body>
         <div class="outer" style="background-color:#F7F7F7;margin:0;padding:0;border:0">
             <div class="main" style="max-width: 700px;margin:0 auto;padding:0;border:0">
+                <div class="top" style="background-color:#EE2A7B;margin:0;padding:0;border:0;text-align:center;height:10px;">
+                </div>
                 <div class="content" style="background-color:#FFF;padding: 30px 30px;margin:0;border:0">
                     <p style="margin:0;padding:0;border:0">Hej, {{ $person->name }}!</p>
                     <br/>

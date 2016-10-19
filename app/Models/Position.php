@@ -1,35 +1,23 @@
 <?php namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use DB;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Position model. Represents a position (Post in Swedish).
+ * Data source is the dfunkt API.
  *
  * @author Jonas Dahl
  * @version 2016-10-14
  */
-class Position extends Model {
-    use SoftDeletes;
-    
+class Position {
     /**
-     * The table associated with the model.
-     *
-     * @var string
+     * Returns all nominations for the specified user.
+     * 
+     * @param  int    $userId        the id of the user to get nominations for
+     * @param  [Election]  $openElections A list of elections, will default to all open ones if null or not given
+     * @return DB query              querying for all relevant rows in position_user
      */
-    protected $table = 'positions';
-
-    /**
-     * The election for this position.
-     *
-     * @return relation
-     */
-    public function election() {
-        return $this->hasOne('App\Models\Election');
-    }
-
-    public static function nominationsForUser($user_id, $openElections = null) {
+    public static function nominationsForUser($userId, $openElections = null) {
         if ($openElections === null) {
             $openElections = Election::open();
         }
@@ -40,11 +28,18 @@ class Position extends Model {
         }
 
         return DB::table('position_user')
-            ->where('user_id', $user_id)
+            ->where('user_id', $userId)
             ->whereNull('position_user.deleted_at')
             ->whereIn('position_user.election_id', $electionIds);
     }
 
+    /**
+     * Get all nominated positions for given user in given elections.
+     * 
+     * @param  int         $userId        the id of the user to get nominations for
+     * @param  [Election]  $openElections A list of elections, will default to all open ones if null or not given
+     * @return [Position]                 A list of Positions connected with the user and election
+     */
     public static function forUser($user_id, $openElections = null) {
         $nominations = Position::nominationsForUser($user_id, $openElections)->get();
         
@@ -65,7 +60,7 @@ class Position extends Model {
      * Get all positions from API.
      * 
      * @param  array  $columns
-     * @return array           the roles
+     * @return json decoded roles list
      */
     public static function all($columns = array()) {
         $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
@@ -74,13 +69,19 @@ class Position extends Model {
         return $roles;
     }
 
+    /**
+     * Get one Position from API. Notice: This function queries the API. Do not spam.
+     *
+     * @param  string $identifier the defunct identifier
+     * @return json decoded response from api
+     */
     public static function find($identifier) {
-        $ans = file_get_contents("http://dfunkt.froyo.datasektionen.se/api/role/chefred");
+        $ans = file_get_contents("http://dfunkt.froyo.datasektionen.se/api/role/" . $identifier);
         return json_decode($ans);
     }
 
     /**
-     * Get all positions from API with their identifier as key.
+     * Get all positions from API with their dfunkt identifier as key.
      * 
      * @param  array  $columns
      * @return array  the roles
@@ -98,9 +99,9 @@ class Position extends Model {
     }
 
     /**
-     * [dataForIds description]
-     * @param  [type] $positions [description]
-     * @return [type]            [description]
+     * Returns a list of dfunkt roles. The list only contains roles that are on the $positions argument list.
+     * @param  [string] $positions dfunkt identifiers
+     * @return collection of positions
      */
     public static function dataForIds($positions) {
         $ans = [];

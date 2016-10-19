@@ -64,6 +64,7 @@ class User extends Authenticatable {
             Uuid::generate()->string,
             null
         ]);
+
         // TODO Check if insert was successful
         return true;
     }
@@ -80,7 +81,7 @@ class User extends Authenticatable {
 
         $shouldSendMail = false;
         foreach ($positionIds as $positionId) {
-            $shouldSendMail = $shouldSendMail || $this->nominate($electionId, $positionId);
+            $shouldSendMail = $this->nominate($electionId, $positionId) || $shouldSendMail;
         }
 
         if (!$shouldSendMail) {
@@ -109,6 +110,7 @@ class User extends Authenticatable {
             }
             return $res;
         };
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -117,7 +119,7 @@ class User extends Authenticatable {
         $server_output = curl_exec($ch);
         curl_close ($ch);
         print_r($server_output);
-
+        
         return true;
     }
 

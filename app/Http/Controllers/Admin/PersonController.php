@@ -150,6 +150,8 @@ class PersonAdminController extends BaseController {
 			if (strlen($user->year) > 0)		 $info['year'] = $user->year;
 		}
 
+		// TODO Remove all nominations for both users and then add them to skip duplicates
+
 		// If we have reduced the number of users below 2, throw error
 		if (count($users) < 2) {
 			redirect('/admin/persons')->with('error', 'Finns för få personer att slå ihop.');

@@ -23,7 +23,7 @@
 				@endif
 				<a href="/person/{{ $nominee->user_id }}">{{ \App\Models\User::find($nominee->user_id)->name }}</a>
 				@if (Auth::check() && Auth::user()->isAdmin())
-				<a href="/admin/elections/remove-nomination/{{ $nominee->uuid }}">Ta bort</a>
+				<a href="/admin/elections/edit-nomination/{{ $nominee->uuid }}">Ändra</a>
 				@endif
 			</li>
 			@endforeach
