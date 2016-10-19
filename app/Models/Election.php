@@ -159,16 +159,19 @@ class Election extends Model {
      * @return relation
      */
     public function nominees($position) {
-        return DB::table('position_user')
+        $x = DB::table('position_user')
             ->join('users', 'users.id', '=', 'position_user.user_id')
             ->whereNull('position_user.deleted_at')
             ->where('position_user.election_id', '=', $this->id)
-            ->where('position_user.position', '=', $position->identifier)
-            ->orderBy(DB::raw("order by (case status 
+            ->where('position_user.position', '=', $position->identifier);
+        if (!env('APP_DEBUG', false)) {
+            $x = $x->orderBy(DB::raw(" (case status 
                 when 'acccepted' then 1 
                 when 'waiting' then 2
                 when 'declined' then 3
                 end)"));
+        }
+        return $x;
     }
 
 
