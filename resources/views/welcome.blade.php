@@ -9,7 +9,7 @@
 		<p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
 		<ul class="elections">
 			@foreach($election->positions() as $position)
-				<li>{{--
+				<li>
 					<h3>{{ $position->title }}</h3>
 					@if($election->nominees($position)->get()->count() > 0)
 						<ul>
@@ -30,7 +30,7 @@
 						</ul>
 					@else
 						<p>Inga nominerade.</p>
-					@endif--}}
+					@endif
 				</li>
 			@endforeach
 		</ul>
