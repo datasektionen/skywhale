@@ -3,6 +3,7 @@
 @section('title', 'Val')
 
 @section('content')
+{{--
 @forelse(App\Models\Election::open() as $election)
 <h1>{{ $election->name }}</h1>
 <p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
@@ -37,4 +38,5 @@
 @empty
 	<p>Det finns inga öppna val just nu.</p>
 @endforelse
+--}}
 @endsection
