@@ -139,7 +139,7 @@ class ElectionAdminController extends BaseController {
 	 * @param  string $uuid the uuid to remove
 	 * @return view to show question
 	 */
-	public static function getRemoveNomination($uuid) {
+	public function getRemoveNomination($uuid) {
 		// Get the nomination row
 		$row = \DB::table('position_user')
 			->where('uuid', $uuid)
@@ -161,7 +161,7 @@ class ElectionAdminController extends BaseController {
 	 * @param  string $uuid the uuid to remove
 	 * @return redirect     to main page
 	 */
-	public static function getRemoveNominationSure($uuid) {
+	public function getRemoveNominationSure($uuid) {
 		// Get the nomination row
 		$row = \DB::table('position_user')
 			->where('uuid', $uuid)
@@ -177,5 +177,59 @@ class ElectionAdminController extends BaseController {
 			->delete();
 
 		return redirect('/')->with('success', 'Tog bort nominering.');
+	}
+
+	/**
+	 * Edit nomination. Shows a form.
+	 * 
+	 * @param  string $uuid the uuid to edit
+	 * @return view to show question
+	 */
+	public function getEditNomination($uuid) {
+		// Get the nomination row
+		$row = \DB::table('position_user')
+			->where('uuid', $uuid)
+			->first();
+
+		// Redirect away if bad
+		if ($row === null) {
+			return redirect('/')->with('error', 'Kunde inte hitta nominering att ändra.');
+		}
+
+		return view('admin.elections.edit-nomination')
+			->with('nomination', $row)
+			->with('user', User::find($row->user_id))
+			->with('election', Election::find($row->election_id))
+			->with('positions', Position::allKey())
+			->with('positionId', $row->position)
+			->with('uuid', $uuid);
+	}
+
+	/**
+	 * Edit nomination.
+	 * 
+	 * @param  string $uuid the uuid to remove
+	 * @return redirect     to main page
+	 */
+	public function postEditNomination($uuid, Request $request) {
+		$this->validate($request, [
+			'status' => 'required|in:declined,accepted,waiting'
+		]);
+
+		// Get the nomination row
+		$row = \DB::table('position_user')
+			->where('uuid', $uuid)
+			->first();
+
+		if ($row === null) {
+			return redirect('/')->with('error', 'Kunde inte hitta nominering att ändra.');
+		}
+
+		// Do the update
+		\DB::table('position_user')
+			->where('uuid', $uuid)
+			->update(['status' => $request->input('status')]);
+
+		return redirect('/')->with('success', 'Ändrade nominering.');
 	}
 }
