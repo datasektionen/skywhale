@@ -168,6 +168,10 @@ input[type="text"], textarea, input[type="datetime-local"] {
 	margin: 10px 0;
 	font-weight: bold;
 }
+.form-entry .description .desc {
+	display: block;
+	font-weight: 300;
+}
 .checkbox {
 	width: 25px;
 	margin: 7px 0;

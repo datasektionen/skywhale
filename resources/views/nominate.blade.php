@@ -39,7 +39,8 @@ $(document).ready(function () {
 <div class="form">
     <div class="form-entry">
         <span class="description">
-            Vem vill du nominera?
+            Vem vill du nominera?<br>
+            <span class="desc">Börja skriv ett namn så kommer en lista där du kan välja personer. Du kan också skriva manuellt. Kan du då inte allas KTH-mejl utantill? Kolla <a href="https://zfinger.datasektionen.se">Z-Finger.</a></span>
         </span>
         <div class="input">
             {!! Form::text('name', NULL, array('placeholder' => 'Namn', 'id' => 'name')) !!}
