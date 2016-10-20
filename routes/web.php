@@ -57,6 +57,8 @@ Route::get ('admin/persons/new', 'Admin\PersonAdminController@getNew')				->midd
 Route::post('admin/persons/new', 'Admin\PersonAdminController@postNew')				->middleware('admin');
 Route::get ('admin/persons/edit/{id}', 'Admin\PersonAdminController@getEdit')		->middleware('admin');
 Route::post('admin/persons/edit/{id}', 'Admin\PersonAdminController@postEdit')		->middleware('admin');
+Route::get('admin/persons/remove/{id}', 'Admin\PersonAdminController@getRemove')    ->middleware('admin');
+Route::get('admin/persons/remove-confirmed/{id}', 'Admin\PersonAdminController@getRemoveConfirmed')->middleware('admin');
 
 Route::get ('logout', 'AuthController@getLogout')									->middleware('auth');
 Route::get ('login', 'AuthController@getLogin')										->middleware('guest');

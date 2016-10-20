@@ -131,4 +131,17 @@ class User extends Authenticatable {
     public function isAdmin() {
         return Session::has('admin') && Session::get('admin') === $this->id;
     }
+
+    /**
+     * Cascade deletion to nominations.
+     * 
+     * @return void
+     */
+    public function delete() {
+        DB::table('position_user')
+            ->where('user_id', $this->id)
+            ->delete();
+            
+        parent::delete();
+    }
 }

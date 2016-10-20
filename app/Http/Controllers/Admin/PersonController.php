@@ -150,7 +150,7 @@ class PersonAdminController extends BaseController {
 			if (strlen($user->year) > 0)		 $info['year'] = $user->year;
 		}
 
-		// TODO Remove all nominations for both users and then add them to skip duplicates
+		// TODO Remove all nominations for both users and then add them to skip duplicates 
 
 		// If we have reduced the number of users below 2, throw error
 		if (count($users) < 2) {
@@ -204,5 +204,39 @@ class PersonAdminController extends BaseController {
 		}
 
 		return redirect('/admin/persons')->with('success', 'Personerna slogs ihop.');
+	}
+
+	/**
+	 * Handles get request on removing persons. Shows confirm view.
+	 *
+	 * @param $id the id of the Person to remove
+	 * @return view with confirmation page
+	 */
+	public function getRemove($id) {
+		$person = User::find($id);
+
+		if ($person === null) {
+			return redirect()->back()->with('error', 'Kunde inte hitta personen.');
+		}
+
+		return view('admin.persons.remove')->with('person', $person);
+	}
+
+	/**
+	 * Handles get request on removing persons. Removes person with $id and returns redirect.
+	 * 
+	 * @param $id the id of the Person to remove
+	 * @return redirect         to /admin/persons
+	 */
+	public function getRemoveConfirmed($id) {
+		$person = User::find($id);
+
+		if ($person === null) {
+			return redirect('/admin/persons')->with('error', 'Kunde inte hitta personen.');
+		}
+
+		$person->delete();
+
+		return redirect('/admin/persons')->with('Användaren togs bort.');
 	}
 }
