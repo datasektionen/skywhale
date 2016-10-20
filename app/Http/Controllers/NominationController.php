@@ -73,9 +73,14 @@ class NominationController extends BaseController {
 		if ($user === null) {
 			$user = new User;
 			$user->name = $request->input('name');
-			$user->kth_user_id = "u12341234"; // TODO
+			$user->kth_user_id = ""; // TODO Get data from API
 			$user->kth_username = explode('@', $request->input('email'))[0];
-			$user->year = $request->input('year', 'D-XX');
+			$user->year = $request->input('year', '');
+			$user->save();
+		}
+
+		if ((empty($user->year) || strlen($user->year) < 2) && $request->has('year') && strlen($request->input('year')) >= 2) {
+			$user->year = $request->input('year');
 			$user->save();
 		}
 

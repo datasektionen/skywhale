@@ -29,6 +29,14 @@ $(document).ready(function () {
     };;
 });
 </script>
+<style type="text/css">
+    input.ui-autocomplete-loading {
+        background-image: url(/images/loading.gif);
+        background-size: 30px;
+        background-repeat: no-repeat;
+        background-position: center right;
+    }
+</style>
 @endsection
 
 @section('content')
