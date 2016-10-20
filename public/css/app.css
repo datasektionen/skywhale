@@ -153,6 +153,14 @@ input[type="text"], textarea, input[type="datetime-local"] {
 	font-family: inherit;
 	font-size: inherit;
 }
+.center {
+	margin: 0 auto;
+	text-align: center;
+}
+.center table {
+	margin: 0 auto;
+	text-align: left;
+}
 
 .form {
 	background: #fcfcfc;
