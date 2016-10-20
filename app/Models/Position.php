@@ -65,7 +65,9 @@ class Position {
     public static function all($columns = array()) {
         $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
         $roles = json_decode($rolesString);
-
+        usort($roles, function ($a, $b) {
+            return strcmp($a->title, $b->title);
+        });
         return $roles;
     }
 
