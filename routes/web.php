@@ -46,6 +46,8 @@ Route::get ('admin/elections/edit/{id}', 'Admin\ElectionAdminController@getEdit'
 Route::post('admin/elections/edit/{id}', 'Admin\ElectionAdminController@postEdit')	->middleware('admin');
 Route::get ('admin/elections/remove-nomination/{uuid}', 'Admin\ElectionAdminController@getRemoveNomination')->middleware('admin');
 Route::get ('admin/elections/remove-nomination-sure/{uuid}', 'Admin\ElectionAdminController@getRemoveNominationSure')->middleware('admin');
+Route::get ('admin/elections/remove/{id}', 'Admin\ElectionAdminController@getRemove')->middleware('admin');
+Route::get ('admin/elections/remove-confirmed/{id}', 'Admin\ElectionAdminController@getRemoveConfirmed')->middleware('admin');
 Route::get ('admin/elections/edit-nomination/{uuid}', 'Admin\ElectionAdminController@getEditNomination')->middleware('admin');
 Route::post('admin/elections/edit-nomination/{uuid}', 'Admin\ElectionAdminController@postEditNomination')->middleware('admin');
 
@@ -57,8 +59,8 @@ Route::get ('admin/persons/new', 'Admin\PersonAdminController@getNew')				->midd
 Route::post('admin/persons/new', 'Admin\PersonAdminController@postNew')				->middleware('admin');
 Route::get ('admin/persons/edit/{id}', 'Admin\PersonAdminController@getEdit')		->middleware('admin');
 Route::post('admin/persons/edit/{id}', 'Admin\PersonAdminController@postEdit')		->middleware('admin');
-Route::get('admin/persons/remove/{id}', 'Admin\PersonAdminController@getRemove')    ->middleware('admin');
-Route::get('admin/persons/remove-confirmed/{id}', 'Admin\PersonAdminController@getRemoveConfirmed')->middleware('admin');
+Route::get ('admin/persons/remove/{id}', 'Admin\PersonAdminController@getRemove')   ->middleware('admin');
+Route::get ('admin/persons/remove-confirmed/{id}', 'Admin\PersonAdminController@getRemoveConfirmed')->middleware('admin');
 
 Route::get ('logout', 'AuthController@getLogout')									->middleware('auth');
 Route::get ('login', 'AuthController@getLogin')										->middleware('guest');

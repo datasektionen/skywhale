@@ -34,7 +34,6 @@
 			<th>Namn</th>
 			<th>KTH-användarnamn</th>
 			<th>År</th>
-			<th></th>
 		</tr>
 		@foreach ($persons as $person)
 		<tr>
@@ -47,7 +46,6 @@
 			<td><a href="/admin/persons/edit/{{ $person->id }}" title="Ändra">{{ $person->name }}</a></td>
 			<td>{{ $person->kth_username }}</td>
 			<td>{{ $person->year }}</td>
-			<td><a href="/admin/persons/remove/{{ $person->id }}">Ta bort</a></td>
 		</tr>
 		@endforeach
 	</table>

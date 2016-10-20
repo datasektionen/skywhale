@@ -232,4 +232,38 @@ class ElectionAdminController extends BaseController {
 
 		return redirect('/')->with('success', 'Ändrade nominering.');
 	}
+
+	/**
+	 * Handles get request on removing election. Shows confirm view.
+	 *
+	 * @param $id the id of the election to remove
+	 * @return view with confirmation page
+	 */
+	public function getRemove($id) {
+		$election = Election::find($id);
+
+		if ($election === null) {
+			return redirect()->back()->with('error', 'Kunde inte hitta valet.');
+		}
+
+		return view('admin.elections.remove')->with('election', $election);
+	}
+
+	/**
+	 * Handles get request on removing election. Removes election with $id and returns redirect.
+	 * 
+	 * @param $id the id of the electino to remove
+	 * @return redirect         to /admin/elections
+	 */
+	public function getRemoveConfirmed($id) {
+		$election = Election::find($id);
+
+		if ($election === null) {
+			return redirect('/admin/elections')->with('error', 'Kunde inte hitta valet.');
+		}
+
+		$election->delete();
+
+		return redirect('/admin/elections')->with('Valet togs bort.');
+	}
 }

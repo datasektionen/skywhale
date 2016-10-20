@@ -174,6 +174,23 @@ class Election extends Model {
         return $x;
     }
 
+    /**
+     * Cascade deletion posts and nominations.
+     * 
+     * @return void
+     */
+    public function delete() {
+        DB::table('position_user')
+            ->where('election_id', $this->id)
+            ->delete();
+
+        DB::table('election_position')
+            ->where('election_id', $this->id)
+            ->delete();
+            
+        parent::delete();
+    }
+
 
 
     /**

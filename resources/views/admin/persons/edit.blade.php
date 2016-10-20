@@ -2,6 +2,10 @@
 
 @section('title', 'Ändra person: ' . $person->name)
 
+@section('action-button')
+    <a class="action" href="/admin/persons/remove/{{ $person->id }}">Ta bort</a>
+@endsection
+
 @section('content')
 {!! Form::model($person) !!}
 <div class="form">

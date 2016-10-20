@@ -2,6 +2,10 @@
 
 @section('title', 'Ändra val: ' . $election->name)
 
+@section('action-button')
+    <a href="/admin/elections/remove/{{ $election->id }}" class="action">Ta bort</a>
+@endsection
+
 @section('content')
 {!! Form::open() !!}
 <div class="form">
