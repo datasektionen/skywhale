@@ -1,21 +1,18 @@
 {
-  "name": "val",
-  "version": "0.0.1",
-  "description": "valsystem",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "start": "node index.js"
+    "prod": "gulp --production",
+    "dev": "gulp watch"
   },
-  "author": "todo",
-  "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "moment": "^2.15.1",
-    "pg": "^6.1.0",
-    "pug": "^2.0.0-beta6",
-    "request": "^2.75.0",
-    "sequelize": "^3.24.3",
-    "sqlite3": "^3.1.6"
+  "devDependencies": {
+    "bootstrap-sass": "^3.3.7",
+    "gulp": "^3.9.1",
+    "jquery": "^3.1.0",
+    "laravel-elixir": "^6.0.0-11",
+    "laravel-elixir-vue-2": "^0.2.0",
+    "laravel-elixir-webpack-official": "^1.0.2",
+    "lodash": "^4.16.2",
+    "vue": "^2.0.1",
+    "vue-resource": "^1.0.3"
   }
 }
