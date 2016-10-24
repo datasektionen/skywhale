@@ -27,7 +27,7 @@
 
 
 @section('admin-content')
-	{!! Form::open(array('url' => '/admin/persons/merge')) !!}
+	{!! Form::open(array('url' => URL::to('/admin/persons/merge', [], true))) !!}
 	<table>
 		<tr>
 			<th></th>

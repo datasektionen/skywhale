@@ -43,7 +43,7 @@ $(document).ready(function () {
 @if (\App\Models\Election::nominateableElections()->count() == 0) 
 <p>Det finns inga öppna val att nominera i.</p>
 @else
-{!! Form::open() !!}
+{!! Form::open(['url' => URL::to(Request::path(), [], true)]) !!}
 <div class="form">
     <div class="form-entry">
         <span class="description">

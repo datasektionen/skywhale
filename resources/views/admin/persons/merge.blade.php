@@ -21,7 +21,7 @@
 
     <p>Nu måste du bara välja information för den slutliga personen.</p>
 
-    {!! Form::open(array('url' => 'admin/persons/merge-final')) !!}
+    {!! Form::open(array('url' => URL::to('admin/persons/merge-final', [], true))) !!}
         <div class="form">
             <div class="form-entry">
                 <span class="description">

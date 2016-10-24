@@ -6,7 +6,7 @@
 <p>Du ändrar att <b>{{ $user->name }}</b> är nominerad till <b>{{ $positions[$positionId]->title }}</b> i valet {{ $election->name }}. Just nu är statusen "{{ $nomination->status == 'accepted' ? 'Accepterad' : ($nomination->status == 'declined' ? 'Tackat nej' : 'Inte svarat') }}".</p>
 
 <p><a href="/admin/elections/remove-nomination/{{ $uuid }}">Du kan också ta bort nomineringen genom att klicka här.</a></p>
-{!! Form::open() !!}
+{!! Form::open(['url' => URL::to(Request::path(), [], true)]) !!}
 <div class="form">
     <div class="form-entry">
         <span class="description">

@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-{!! Form::open() !!}
+{!! Form::open(['url' => URL::to(Request::path(), [], true)]) !!}
 <div class="form">
     <div class="form-entry">
         <span class="description">
