@@ -2,7 +2,7 @@
 PHP (<3) Laravel application that handles elections. An election is an event with starting and ending date (also containing dates for nomination and acceptance stops). An election has at least one position open for election. 
 
 ## API
-There is an API for Skywhale. The API is located at ```/api``` (!(http://val.datasektionen.se/api)).
+There is an API for Skywhale. The API is located at ```/api``` (http://val.datasektionen.se/api).
 
 ### API endpoints
 The following endpoints are based on the above URL.
@@ -33,10 +33,10 @@ The following endpoints are based on the above URL.
 ```
 
 ## Roadmap
-Random features are implemented at a random speed. Post an ![issue](https://github.com/datasektionen/skywhale/issues), and maybe it will be implemented. One day.
+Random features are implemented at a random speed. Post an [issue](https://github.com/datasektionen/skywhale/issues), and maybe it will be implemented. One day.
 
 ## Installation and setup
-To setup the app, a web server is needed. The installation depends on your web server. One option is to user ![Laravel Homestead](https://laravel.com/docs/4.2/homestead). 
+To setup the app, a web server is needed. The installation depends on your web server. One option is to user [Laravel Homestead](https://laravel.com/docs/4.2/homestead). 
 
 
 ### Laravel PHP Framework
