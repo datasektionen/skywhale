@@ -53,7 +53,7 @@ class UserApiController extends BaseController {
 			}
 			$elections[] = $x;
 		}
-		return response()->json($elections);
+		return response()->json($elections)->header('Access-Control-Allow-Origin', '*');
 	}
 
 	/**
