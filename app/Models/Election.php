@@ -163,14 +163,12 @@ class Election extends Model {
             ->join('users', 'users.id', '=', 'position_user.user_id')
             ->whereNull('position_user.deleted_at')
             ->where('position_user.election_id', '=', $this->id)
-            ->where('position_user.position', '=', $position->identifier);
-        if (!env('APP_DEBUG', false)) {
-            $x = $x->orderBy(DB::raw(" (case status 
-                when 'acccepted' then 1 
-                when 'waiting' then 2
-                when 'declined' then 3
-                end)"));
-        }
+            ->where('position_user.position', '=', $position->identifier)
+            ->orderBy(DB::raw(" CASE status 
+                WHEN 'accepted' then 1 
+                WHEN 'declined' then 3 
+                ELSE 2 
+                END"));
         return $x;
     }
 
