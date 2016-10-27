@@ -158,6 +158,9 @@ input.small {
 	width: 100%;
 }
 
+.center table {
+	margin: 0 auto;
+}
 
 
 /**
