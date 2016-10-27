@@ -38,15 +38,18 @@ class UserApiController extends BaseController {
 			$x["nomination_stop"] = $election->nomination_stop;
 			$x["acceptance_stop"] = $election->acceptance_stop;
 			$x["closes"] = $election->closes;
-			foreach ($election->positionIds() as $position) {
+			$positions = $election->positions();
+			foreach ($positions as $position) {
 				$pos = [];
-				$pos["identifier"] = $position;
-				$p = new stdClass; $p->identifier = $position;
-				foreach ($election->nominees($p)->get() as $nominee) {
+				$pos["identifier"] = $position->identifier;
+				$pos["title"] = $position->title;
+				$pos["nominees"] = array();
+				foreach ($election->nominees($position)->get() as $nominee) {
 					$nom = [];
 					$nom["name"] = $nominee->name;
+					$nom["uuid"] = $nominee->uuid;
 					$nom["kth_username"] = $nominee->kth_username;
-					$nom["pivot"]["status"] = $nominee->status;
+					$nom["status"] = $nominee->status;
 					$pos["nominees"][] = $nom;
 				}
 				$x["positions"][] = $pos;
