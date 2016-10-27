@@ -6,6 +6,8 @@
 
 	@forelse(App\Models\Election::open() as $election)
 		<h1>{{ $election->name }}</h1>
+		<p>{{ $election->description }}</p>
+		<p>Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }}, acceptansstopp är {{ date("Y-m-d H:i", strtotime($election->acceptance_stop)) }} och valet stänger {{ date("Y-m-d H:i", strtotime($election->closes)) }}.</p>
 		<p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
 		<ul class="elections">
 			@foreach($election->positions() as $position)
