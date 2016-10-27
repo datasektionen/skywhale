@@ -3,7 +3,7 @@
 @section('title', 'Alla val')
 
 @section('action-button')
-	<a href="/admin/elections/new" class="action">Nytt valtillfälle</a>
+	<a href="/admin/elections/new" class="primary-action">Nytt valtillfälle</a>
 @endsection
 
 @section('admin-content')

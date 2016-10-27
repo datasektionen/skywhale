@@ -19,7 +19,7 @@
             Beskrivning av valtillfället:
         </span>
         <div class="input">
-            {!! Form::textarea('description', NULL, array('placeholder' => 'T.ex. "Det väljs massa roliga poster, kom och lek!"')) !!}
+            {!! Form::textarea('description', NULL, array('placeholder' => 'T.ex. "Det väljs massa roliga poster, kom och lek!"', 'class' => 'textarea')) !!}
         </div>
     </div>
 

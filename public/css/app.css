@@ -1,36 +1,168 @@
-@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700);
+/**
+ * File structure:
+ * - Imports
+ * - Browser resets
+ * - General page styles
+ * - Handy classes
+ * - Message classes
+ * - Main page elements
+ * - jQuery UI Autocomplete
+ */
+.dark-blue .lighten-5 {
+  background: #42a5f5;
+}
+.dark-blue .lighten-4 {
+  background: #2196f3;
+}
+.dark-blue .lighten-3 {
+  background: #1e88e5;
+}
+.dark-blue .lighten-2 {
+  background: #1976d2;
+}
+.dark-blue .lighten-1 {
+  background: #1565c0;
+}
+.dark-blue .theme-color {
+  background: #07d;
+}
+.dark-blue .darken-1 {
+  background: #004090;
+}
+.dark-blue .darken-2 {
+  background: #003583;
+}
+.dark-blue .darken-3 {
+  background: #003380;
+}
+.dark-blue .darken-4 {
+  background: #002975;
+}
+.dark-blue .text-lighten-5 {
+  color: #42a5f5;
+}
+.dark-blue .text-lighten-4 {
+  color: #2196f3;
+}
+.dark-blue .text-lighten-3 {
+  color: #1e88e5;
+}
+.dark-blue .text-lighten-2 {
+  color: #1976d2;
+}
+.dark-blue .text-lighten-1 {
+  color: #1565c0;
+}
+.dark-blue .text-theme-color {
+  color: #07d;
+}
+.dark-blue .text-darken-1 {
+  color: #004090;
+}
+.dark-blue .text-darken-2 {
+  color: #003583;
+}
+.dark-blue .text-darken-3 {
+  color: #003380;
+}
+.dark-blue .text-darken-4 {
+  color: #002975;
+}
+.dark-blue .btn-color {
+  color: #fff;
+}
+.dark-blue header {
+  background: #1565c0;
+}
+.dark-blue header a {
+  color: #fff;
+}
+.dark-blue header .primary-action {
+  background: #004090;
+  color: #fff;
+}
+.dark-blue header h2 {
+  color: #fff;
+}
+.dark-blue header .header-right span {
+  color: #42a5f5;
+}
+@media (max-width: 991px) {
+  .dark-blue header .header-left {
+    background: #07d;
+  }
+}
+.dark-blue .button.theme-color:hover {
+  background: #1976d2 !important;
+}
+.dark-blue #secondary-nav .text-theme-color {
+  color: #07d !important;
+  font-weight: bold;
+}
+.dark-blue #content h1 {
+  color: #07d;
+}
+.dark-blue #content a {
+  color: #07d;
+}
+.dark-blue #content table thead {
+  background: #07d;
+  color: #212121;
+}
+.dark-blue .footer-toolbar .primary-action {
+  background: #004090;
+  color: #212121;
+}
+.dark-blue .footer-toolbar .secondary-action {
+  background: #2196f3;
+  color: #004090;
+}
+.dark-blue #methone-container-replace::shadow #methone_header {
+  background: #004090;
+}
 
-body {
-	font-family: 'Lato', sans-serif;
-	background: #fdfafb;
-	margin: 0;
-	padding: 0;
-	line-height: 1.5;
-	color: #575757;
+
+
+
+
+
+
+
+th, td {
+	padding: 10px;
 }
-a {
-	color: #07d;
+p {
+	padding: 0 0 20px;
 }
-table {
-	margin: 10px 0;
-	border-collapse: collapse;
-}
-.center {
-	text-align: center;
-}
-th {
-	text-align: left;
-}
-th,td {
-	padding: 5px 10px 5px 5px;
-}
+
+
+
 input[type="text"], textarea, input[type="number"], input[type="datetime-local"] {
-	min-width: 300px;
+	width: 300px;
+	max-width: 100%;
 }
 input.small {
 	min-width: 0px;
-	width: 70px;
+	width: 100px !important;
 }
+
+
+
+/**
+ * Handy classes.
+ */
+.center {
+	text-align: center;
+	margin: 0 auto;
+	display: inline-block;
+	width: 100%;
+}
+
+
+
+/**
+ * Message classes.
+ */
 .error, .success {
 	border: 1px solid #c99;
 	background: #fdd;
@@ -47,74 +179,15 @@ input.small {
 	padding: 20px;
 	margin: 0 0 10px;
 }
-.ui-autocomplete {
-	background: #000;
-	font-family: 'Lato' !important;
-}
-.ui-autocomplete li {
-	display: block;
-}
-.ui-autocomplete li a {
-	display: block;
-}
-.ui-autocomplete li a div {
-	margin-left: 0px;
-}
-.wrapper {
-	background: #fff;
-	padding: 20px 25px 50px;
-	max-width: 1190px;
-	margin: 0 auto;
-}
 
-#top-bar-push {
-	height: 50px;
-	background: #06c;
-}
-.header {
-	height:100px;
-	background: #07d;
-	box-shadow: 0 0 8px rgba(0, 0, 0, .2);
-	text-align: center;
-}
-.header a.back {
 
-}
-.header h1 {
-	text-align: center;
-	margin: 0 auto;
-	display: block;
-	line-height: 100px;
-	height: 100px;
-	color: #fff;
-	vertical-align: bottom;
-}
-.header h1 span {
-	display: inline-block;
-	vertical-align: middle;
-	line-height: 1;      
-}
-.header a.action {
-	float: right;
-	display: block;
-	background: #05b;
-	color: #fff;
-	font-weight: bold;
-	text-decoration: none;
-	font-size: 1em;
-	padding: 10px;
-	position: absolute;
-	right: 25px;
-	top: 25px;
-}
 
-.header .center {
-	max-width: 1150px;
-	margin: 0 auto;
-	position: relative;
-}
 
+/**
+ * Main page elements.
+ */
 input[type="submit"] {
+	margin: 10px 0;
 	padding: 12px 20px;
 	font-family: inherit;
 	font-size: inherit;
@@ -135,6 +208,7 @@ input[type="text"], textarea, input[type="datetime-local"] {
 	box-shadow: inset 0 2px 3px rgba(0, 0, 0, .1);
 	color: #696969;
 	background: #fff;
+	width: 100%;
 }
 .form .select {
 	padding: 10px 3px;
@@ -152,14 +226,6 @@ input[type="text"], textarea, input[type="datetime-local"] {
 	border: none;
 	font-family: inherit;
 	font-size: inherit;
-}
-.center {
-	margin: 0 auto;
-	text-align: center;
-}
-.center table {
-	margin: 0 auto;
-	text-align: left;
 }
 
 .form {
@@ -181,15 +247,22 @@ input[type="text"], textarea, input[type="datetime-local"] {
 	font-weight: 300;
 }
 .checkbox {
-	width: 25px;
-	margin: 7px 0;
+	width: 500px;
+	max-width: 100%;
+	height: 45px;
+	margin: -10px 0;
 	position: relative;
+	margin: 10px 0 -10px;
+}
+table .checkbox {
+	width: 30px;
+	margin: 3px 0 0;
+	height: 20px;
 }
 .checkbox label {
 	position: absolute;
-	left: 30px;
+	left: 12px;
 	top: 0;
-	width: 300px;
 }
 .checkbox label:before {
 	content: '';
@@ -198,7 +271,7 @@ input[type="text"], textarea, input[type="datetime-local"] {
 	width: 25px;
 	height: 25px;
 	top: -2px;
-	left: -30px;
+	left: -12px;
 	float: left;
 	background: #fff;
 	border:1px solid #ddd;
@@ -208,14 +281,15 @@ input[type="text"], textarea, input[type="datetime-local"] {
 	opacity: 0.2;
 	content: '';
 	position: absolute;
-	width: 9px;
-	height: 5px;
+	width: 13px;
+	height: 8px;
 	background: transparent;
-	top: 7px;
-	left: -22px;
+	top: 4px;
+	left: -6px;
 	border: 3px solid #fff;
 	border-top: none;
 	border-right: none;
+	transition: .1s;
 	transform: rotate(-45deg);
 }
 .checkbox label:hover::after {
@@ -256,6 +330,8 @@ ul.elections > li h3 {
 	margin: 0;
 	padding: 10px 20px;
 	background: #eee;
+	font-size: 1.2em;
+	font-weight: bold;
 }
 ul.elections > li p {
 	padding: 0 20px;
@@ -269,6 +345,9 @@ ul.elections > li ul {
 ul.elections > li ul li {
 	margin: 0;
 	padding: 0;
+}
+ul.elections > li ul li a {
+	text-decoration: underline !important;
 }
 .crop {
 	background-repeat: no-repeat;
@@ -325,11 +404,13 @@ ul.elections > li ul li {
 .main-content {
 	width: 70%;
 	float: right;
-	padding-top: 4	px;
+	margin-top: 10px;
 }
 
-.answer {
+table.answer {
 	margin: 0 auto;
+	background: none;
+	border: none !important;
 }
 .answer td {
 	padding-right: 0;
@@ -347,13 +428,14 @@ a.action {
 	border: 0;
 	margin: 0;
 	display: inline-block;
-	color: #fff;
 	font-weight: bold;
 	padding: 10px;
 	background: #ccc;
+	color: #fff !important;
 }
 .answer tr {
 	border-bottom: 1px solid #ccc;
+	background: none !important;
 }
 
 .accept {
@@ -448,4 +530,28 @@ ul.pagination li.active span {
 	table {
 		margin: 10px auto;
 	}
+}
+
+
+/**
+ * jQuery autocomplete
+ */
+.ui-autocomplete {
+	background: #000;
+	font-family: 'Lato' !important;
+}
+.ui-autocomplete li {
+	display: block;
+}
+.ui-autocomplete li a {
+	display: block;
+}
+.ui-autocomplete li a div {
+	margin-left: 0px;
+}
+
+.footer {
+	margin: 40px auto;
+	display: block;
+	text-align: center;
 }

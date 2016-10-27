@@ -15,5 +15,4 @@
 	</tr>
 	@endforeach
 </table>
-{!! $positions->links() !!}
 @endsection

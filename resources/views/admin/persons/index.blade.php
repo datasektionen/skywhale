@@ -5,7 +5,7 @@
 
 
 @section('action-button')
-	<a href="/admin/persons/new" class="action">Ny person</a>
+	<a href="/admin/persons/new" class="primary-action">Ny person</a>
 @endsection
 
 

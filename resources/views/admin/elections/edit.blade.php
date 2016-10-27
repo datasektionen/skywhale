@@ -3,7 +3,7 @@
 @section('title', 'Ändra val: ' . $election->name)
 
 @section('action-button')
-    <a href="/admin/elections/remove/{{ $election->id }}" class="action">Ta bort</a>
+    <a href="/admin/elections/remove/{{ $election->id }}" class="primary-action">Ta bort</a>
 @endsection
 
 @section('content')

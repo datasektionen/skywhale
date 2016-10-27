@@ -3,7 +3,9 @@
 @section('title', 'Svara på nominering')
 
 @section('content')
+@if (count($positions) > 0)
 <p class="center">Du har blivit nominerad till följande poster:</p>
+@endif
 <table class="answer">
     @forelse($positions as $position)
     <tr>
