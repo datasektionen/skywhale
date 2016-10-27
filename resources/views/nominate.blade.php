@@ -10,21 +10,47 @@ $(document).ready(function () {
     });
 
     $('#name').autocomplete({
-        source: "/api/user/search",
+        source: function(request, response) {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "https://zfinger.datasektionen.se/users/" + request.term,
+                dataType: "json",
+                success: function (data) {
+                    if (data != null) {
+                        response(data.results.slice(0,8));
+                    }
+                },
+                error: function(result) {
+                    alert("Error");
+                }
+            });
+        },
         minLength: 3,
         delay: 100,
         select: function(event, ui) {
-            $("#email").val(ui.item.id + "@kth.se");
-            $("#name").val(ui.item.name);
+            $("#email").val(ui.item.uid + "@kth.se");
+            $("#name").val(ui.item.cn);
             if (ui.item.year)
                 $("#year").val(ui.item.year);
             else 
                 $("#year").hide();
+            return false;
+        },
+        focus: function(event, ui) {
+            $("#email").val(ui.item.uid + "@kth.se");
+            $("#name").val(ui.item.cn);
+            if (ui.item.year)
+                $("#year").val(ui.item.year);
+            else 
+                $("#year").hide();
+            return false;
         }
     }).data("ui-autocomplete")._renderItem = function(ul, item) {
+        console.log(item);
         return $("<li></li>")
             .data("item.autocomplete", item)
-            .append('<a><div class="crop" style="background-image:url(https://zfinger.datasektionen.se/user/' + item.id + '/image/)"></div>'+ item.label + "</a>") 
+            .append('<a><div class="crop" style="background-image:url(https://zfinger.datasektionen.se/user/' + item.uid + '/image/)"></div>'+ item.cn + " (" + item.uid + "@kth.se)</a>") 
             .appendTo(ul);
     };;
 });
