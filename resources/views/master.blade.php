@@ -88,7 +88,8 @@
             <div class="clear"></div>
         </div>
         <footer>
-            <a href="http://github.com/datasektionen/skywhale" class="footer">&#10084;</a>
+            <a href="http://github.com/datasektionen/skywhale">&#10084;</a> |
+            <a href="/rss">RSS</a>
         </footer>
 
     </div>

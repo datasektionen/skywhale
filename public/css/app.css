@@ -557,10 +557,13 @@ ul.pagination li.active span {
 	margin-left: 0px;
 }
 
-.footer {
+footer {
 	margin: 40px auto;
 	display: block;
 	text-align: center;
+}
+footer a {
+	display: inline-block;
 }
 
 input.inactive {
