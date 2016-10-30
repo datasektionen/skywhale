@@ -15,7 +15,7 @@
 
 		$('.hidebox-b').change(function () {
 			if ($(this).prop('checked')) {
-				$('.declined').slideUp();
+				$('.declined').hide();
 			} else {
 				$('.declined').show();
 			}
