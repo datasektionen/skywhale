@@ -3,7 +3,7 @@
 
 <channel>
   <title>Datasektionens Valsystem - Skywhale</title>
-  <link>{{ url('/') }}</link>
+  <link>{{ url("/") }}</link>
   <description>Följ samtliga val på Datasektionen</description>
   @foreach ($events as $event)
 
