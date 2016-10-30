@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 use Carbon\Carbon;
 use DateTimeZone;
 use DateInterval;
+use Auth;
 
 /**
  * User model. Represents a user.
@@ -143,6 +144,111 @@ class User extends Authenticatable {
         return true;
     }
 
+    public function accept($uuid) {
+        // Get election and see if acceptance stop has been
+        $row = \DB::table('position_user')
+            ->where('uuid', $uuid)
+            ->first();
+
+        // Only own user can answer, or admin
+        if (Auth::guest() || (Auth::user()->id != $row->user_id && !Auth::user()->isAdmin())) {
+            return false;
+        }
+
+        // Only accept answer if open
+        if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
+            return false;
+        }
+
+        if ($row->status == 'accepted') {
+            return false;
+        }
+        
+        // Change status to accepted
+        \DB::table('position_user')
+            ->where('uuid', $uuid)
+            ->update(['status' => 'accepted']);
+
+        $event = new Event;
+        $event->user_id = $row->user_id;
+        $event->election_id = $row->election_id;
+        $event->action = "accepted";
+        $event->position = $row->position;
+        $event->save();
+
+        return true;
+    }
+
+    public function decline($uuid) {
+        // Get election and see if acceptance stop has been
+        $row = \DB::table('position_user')
+            ->where('uuid', $uuid)
+            ->first();
+
+        // Only own user can answer, or admin
+        if (Auth::guest() || (Auth::user()->id != $row->user_id && !Auth::user()->isAdmin())) {
+            return false;
+        }
+
+        // Only accept answer if open
+        if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
+            return false;
+        }
+
+        if ($row->status == 'declined') {
+            return false;
+        }
+        
+        // Change status to declined
+        \DB::table('position_user')
+            ->where('uuid', $uuid)
+            ->update(['status' => 'declined']);
+
+        $event = new Event;
+        $event->user_id = $row->user_id;
+        $event->election_id = $row->election_id;
+        $event->action = "declined";
+        $event->position = $row->position;
+        $event->save();
+
+        return true;
+    }
+
+    public function regret($uuid) {
+        // Get election and see if acceptance stop has been
+        $row = \DB::table('position_user')
+            ->where('uuid', $uuid)
+            ->first();
+
+        // Only own user can answer, or admin
+        if (Auth::guest() || (Auth::user()->id != $row->user_id && !Auth::user()->isAdmin())) {
+            return false;
+        }
+
+        // Only accept answer if open
+        if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
+            return false;
+        }
+
+        if ($row->status == 'waiting') {
+            return false;
+        }
+        
+        // Change status to waiting
+        \DB::table('position_user')
+            ->where('uuid', $uuid)
+            ->update(['status' => 'waiting']);
+
+        $event = new Event;
+        $event->user_id = $row->user_id;
+        $event->election_id = $row->election_id;
+        $event->action = "regretted";
+        $event->position = $row->position;
+        $event->save();
+
+        return true;
+    }
+
     /**
      * Nominates person to position.
      *
@@ -171,6 +277,13 @@ class User extends Authenticatable {
             Uuid::generate()->string,
             null
         ]);
+
+        $event = new Event;
+        $event->user_id = $this->id;
+        $event->election_id = $election->id;
+        $event->action = "nominated";
+        $event->position = $positionId;
+        $event->save();
 
         // TODO Check if insert was successful
         return true;

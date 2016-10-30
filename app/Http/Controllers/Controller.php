@@ -10,6 +10,7 @@ use Auth;
 use App\Models\Election;
 use App\Models\Position;
 use App\Models\User;
+use App\Models\Event;
 
 /**
  * Main controller. Handles requests that does not fit in under other controllers.
@@ -42,5 +43,12 @@ class Controller extends BaseController {
 		}
 
 		return view('show-person')->with('user', $user);
+	}
+
+	public function getRss() {
+		return response(view('rss')
+			->with('positions', Position::allKey())
+			->with('events', Event::orderBy('id', 'DESC')->limit(10)->get()))
+			->header('Content-Type', 'application/rss+xml; charset=utf-8');
 	}
 }

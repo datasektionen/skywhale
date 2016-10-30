@@ -116,10 +116,7 @@ class NominationController extends BaseController {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
 		
-		// Change status to accepted
-		\DB::table('position_user')
-			->where('uuid', $uuid)
-			->update(['status' => 'accepted']);
+		Auth::user()->accept($uuid);
 
 		return redirect()->back()->with('success', 'Du tackade ja!');
 	}
@@ -146,10 +143,7 @@ class NominationController extends BaseController {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
 		
-		// Change status to declined
-		\DB::table('position_user')
-			->where('uuid', $uuid)
-			->update(['status' => 'declined']);
+		Auth::user()->decline($uuid);
 
 		return redirect()->back()->with('success', 'Du tackade nej!');
 	}
@@ -176,10 +170,7 @@ class NominationController extends BaseController {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
 		
-		// Change status to waiting
-		\DB::table('position_user')
-			->where('uuid', $uuid)
-			->update(['status' => 'waiting']);
+		Auth::user()->regret($uuid);
 
 		return redirect()->back()->with('success', 'Du ångrade dig!');
 	}

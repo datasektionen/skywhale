@@ -282,10 +282,18 @@ class ElectionAdminController extends BaseController {
 			return redirect('/')->with('error', 'Kunde inte hitta nominering att ändra.');
 		}
 
-		// Do the update
-		\DB::table('position_user')
-			->where('uuid', $uuid)
-			->update(['status' => $request->input('status')]);
+		$user = User::find($row->user_id);
+		if ($user === null) {
+			return redirect('/')->with('error', 'Kunde inte hitta personen som har nomineringen.');
+		}
+
+		if ($request->input('status') === 'accepted' && $row->status != 'accepted') {
+			$user->accept($uuid);
+		} else if ($request->input('status') === 'declined' && $row->status != 'declined') {
+			$user->decline($uuid);
+		} else if ($request->input('status') === 'waiting' && $row->status != 'waiting') {
+			$user->regret($uuid);
+		}
 
 		return redirect('/')->with('success', 'Ändrade nominering.');
 	}

@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
  * Main routes.
  */
 Route::get ('/', 'Controller@getWelcome');
+Route::get ('/rss', 'Controller@getRss');
 Route::get('person/{id}', 'Controller@getPerson');
 
 Route::get ('nominate', 'NominationController@getNominate');
