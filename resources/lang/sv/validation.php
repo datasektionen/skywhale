@@ -115,6 +115,7 @@ return [
         'positions' => 'poster',
         'election' => 'val',
         'email' => 'e-postadress',
-        'kth_username' => 'KTH-användarnamn'
+        'kth_username' => 'KTH-användarnamn',
+        'election_position' => 'poster'
     ],
 ];

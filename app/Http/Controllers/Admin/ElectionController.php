@@ -42,6 +42,20 @@ class ElectionAdminController extends BaseController {
 	}
 
 	/**
+	 * Show form for editing an election's positions. Returns 400 if $id not found
+	 * 
+	 * @param  int $id the id of the election to edit
+	 * @return view    the form view
+	 */
+	public function getEditPositions($id) {
+		$election = Election::find($id);
+		if ($election === null) {
+			abort(400);
+		}
+		return view('admin.elections.edit-positions')->with('election', $election)->with('positions', $election->positions());
+	}
+
+	/**
 	 * Show form for editing an election. Returns 400 if $id not found
 	 * 
 	 * @param  int $id the id of the election to edit
@@ -123,11 +137,54 @@ class ElectionAdminController extends BaseController {
 		$election->save();
 
 		// First disconnect all the positions in case we already are connected 
-		$election->removeAllPositions();
+		$election->removeAllPositions($request->get('positions'));
 
 		// Connect all positions to this election
 		foreach ($request->get('positions') as $positionIdentifier) {
 			$election->addPosition($positionIdentifier);
+		}
+
+		return redirect('/admin/elections')->with('success', 'Valet uppdaterades.');
+	}
+
+	/**
+	 * Handles post request on editing an election.
+	 * 
+	 * @param  ind     $id      the id to edit
+	 * @param  Request $request the post request
+	 * @return redirect         to /admin/election is succes, back otherwise
+	 */
+	public function postEditPositions($id, Request $request) {
+		/*
+		$this->validate($request, [
+			'name' 				=> 'required',
+			'description' 		=> 'required',
+			'opens' 			=> 'required|date',
+			'nomination_stop' 	=> 'required|date|after:opens',
+			'acceptance_stop' 	=> 'required|date|after:nomination_stop',
+			'closes' 			=> 'required|date|after:acceptance_stop',
+			'positions' 		=> 'required|array|minCount:1'
+		]);
+		*/
+
+		// Get the election from $id, or die
+		$election = Election::find($id);
+		if ($election === null) {
+			return redirect()->back()->withInput()->with('error', 'Valtillfället kunde inte hittas.');
+		}
+
+		// Save new information
+		foreach ($election->positionsPivot() as $pivot) {
+			$election->setNominationStop(
+				$pivot->position, 
+				$request->input('nomination_stop_' . $pivot->position),
+				$request->has('nomination_stop_null') && in_array($pivot->position, $request->input('nomination_stop_null'))
+			);
+			$election->setAcceptanceStop(
+				$pivot->position, 
+				$request->input('acceptance_stop_' . $pivot->position),
+				$request->has('acceptance_stop_null') && in_array($pivot->position, $request->input('acceptance_stop_null'))
+			);
 		}
 
 		return redirect('/admin/elections')->with('success', 'Valet uppdaterades.');

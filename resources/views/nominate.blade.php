@@ -66,15 +66,16 @@ $(document).ready(function () {
 @endsection
 
 @section('content')
-@if (\App\Models\Election::nominateableElections()->count() == 0) 
-<p>Det finns inga öppna val att nominera i.</p>
+@if ($positions->flatten()->count() == 0) 
+    <p>Det finns inga öppna val att nominera i.</p>
 @else
+
 {!! Form::open(['url' => URL::to(Request::path(), [], true)]) !!}
 <div class="form">
     <div class="form-entry">
         <span class="description">
             Vem vill du nominera?<br>
-            <span class="desc">Börja skriv ett namn så kommer en lista där du kan välja personer. Du kan också skriva manuellt. Kan du då inte allas KTH-mejl utantill? Kolla <a href="https://zfinger.datasektionen.se">Zfinger.</a></span>
+            <span class="desc">Börja skriv ett namn så kommer en lista där du kan välja personer. Om du hellre vill skriva manuellt kan du kolla <a href="https://zfinger.datasektionen.se">Z-finger</a> för att hitta KTH-mejl.</span>
         </span>
         <div class="input">
             {!! Form::text('name', NULL, array('placeholder' => 'Namn', 'id' => 'name')) !!}
@@ -88,34 +89,19 @@ $(document).ready(function () {
             Till vilka poster?
         </span>
         <div class="input">
-            @foreach (\App\Models\Election::positionsForAllNominateableElections() as $position)
-            <div class="checkbox">
-                {{ Form::checkbox('positions[]', $position->identifier, false, array('id' => 'position-' . $position->identifier )) }} 
-                <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>
-            </div>
+            @foreach ($positions as $election)
+                @if ($positions->count() > 1)
+                    <h4>{{ $election->first()->pivot->name }}</h4>
+                @endif
+                @foreach ($election as $position)
+                    <div class="checkbox">
+                        {{ Form::checkbox('election_position[]', $position->pivot->election_id . '_' . $position->identifier, false, array('id' => 'position-' . $position->pivot->election_id . '_' . $position->identifier )) }} 
+                        <label for="position-{{ $position->pivot->election_id . '_' . $position->identifier }}">{{ $position->title }}</label>
+                    </div>
+                @endforeach
             @endforeach
         </div>
     </div>
-
-    @if (\App\Models\Election::nominateableElections()->count() > 1)
-    <div class="form-entry">
-        <span class="description">
-            Val
-        </span>
-        <div class="input">
-            <div class="select">
-                {!! Form::select('election', \App\Models\Election::nominateableElections()->pluck('name', 'id')) !!}
-            </div>
-            <div class="clear"></div>
-        </div>
-    </div>
-    @elseif (\App\Models\Election::nominateableElections()->count() === 1)
-        <p>Du nominerar i valet {{ \App\Models\Election::nominateableElections()->first()->name }}.</p>
-        {!! Form::hidden('election', \App\Models\Election::nominateableElections()->first()->id) !!}
-    @else
-        <p>Du nominerar inte i något val.</p>
-        {!! Form::hidden('election', -1) !!}
-    @endif
 
     <div class="form-entry">
         <div class="input">

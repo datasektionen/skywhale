@@ -72,7 +72,7 @@
                 <div class="checkbox">
                     {{ Form::checkbox('positions[]', 
                         $position->identifier, 
-                        $positions->contains($position), 
+                        $positions->contains(function ($value, $key) use ($position) { return $value->identifier == $position->identifier; }), 
                         array('id' => 'position-' . $position->identifier)
                     ) }}
                     <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>

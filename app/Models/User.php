@@ -76,12 +76,20 @@ class User extends Authenticatable {
      * @param [int] $positionIds The ids of the positions to nominate to
      * @return void
      */
-    public function bulkNominate($electionId, $positionIds) {
-        $election = Election::find($electionId);
-
+    public function bulkNominate($electionPositions) {
+        $positionIds = [];
         $shouldSendMail = false;
-        foreach ($positionIds as $positionId) {
-            $shouldSendMail = $this->nominate($electionId, $positionId) || $shouldSendMail;
+        foreach ($electionPositions as $electionPosition) {
+            $parts = explode("_", $electionPosition);
+            if (count($parts) != 2) {
+                continue;
+            }
+            $election = Election::find($parts[0]);
+            if ($election === null) {
+                continue;
+            }
+            $positionIds[] = $parts[1];
+            $shouldSendMail = $this->nominate($election->id, $parts[1]) || $shouldSendMail;
         }
 
         if (!$shouldSendMail) {

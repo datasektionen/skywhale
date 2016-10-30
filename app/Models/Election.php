@@ -28,17 +28,61 @@ class Election extends Model {
      *
      * @return relation
      */
-    public function positions() {
+    public function positions($onlyNominateable = false) {
+        $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
+
+        $db = DB::table('election_position')
+            ->select('elections.name', 'election_position.*')
+            ->join('elections', 'elections.id', '=', 'election_position.election_id')
+            ->where('election_id', $this->id);
+        
+        if ($onlyNominateable) {
+            $db = $db->where(function ($query) use ($now) {
+                $query->where(function ($query) use ($now) {
+                    $query->whereNull('election_position.nomination_stop')
+                        ->where('elections.nomination_stop', '>', $now);
+                })->orWhere(function ($query) use ($now) {
+                    $query->whereNotNull('election_position.nomination_stop')
+                        ->where('election_position.nomination_stop', '>', $now);
+                });
+            });
+        }        
+
+        $rows = $db->get();
+
+        $positions = [];
+        $pivots = [];
+        foreach ($rows as $row) {
+            $positions[$row->position] = $row->position;
+            $pivots[$row->position] = $row;
+        }
+
+        $positionsWithData = Position::dataForIds($positions);
+        $res = [];
+        foreach ($positionsWithData as $p) {
+            $res[$p->identifier] = $p;
+            $res[$p->identifier]->pivot = $pivots[$p->identifier];
+        }
+
+        return collect($res);
+    }
+
+    /**
+     * The Positions open for voting in this election.
+     *
+     * @return relation
+     */
+    public function positionsPivot() {
         $rows = DB::select('SELECT * FROM election_position WHERE election_id = ?', [
             $this->id
         ]);
 
-        $positions = [];
+        $pivots = [];
         foreach ($rows as $row) {
-            $positions[] = $row->position;
+            $pivots[$row->position] = $row;
         }
 
-        return Position::dataForIds($positions);
+        return collect($pivots);
     }
 
     /**
@@ -66,6 +110,13 @@ class Election extends Model {
      * @return true always and ever <3
      */
     public function addPosition($identifier) {
+        $count = DB::table('election_position')
+            ->where('position', $identifier)
+            ->where('election_id', $this->id)
+            ->count();
+        if ($count > 0)
+            return false;
+
         DB::insert(
             'INSERT INTO election_position (position, election_id) values (?, ?)', 
             [
@@ -81,13 +132,15 @@ class Election extends Model {
      *
      * @return true always and ever <3
      */
-    public function removeAllPositions() {
-        DB::delete(
-            'DELETE FROM election_position WHERE election_id = ?', 
-            [
-                $this->id
-            ]
-        );
+    public function removeAllPositions($except = null) {
+        if ($except == null) {
+            $except = collect([]);
+        }
+
+        DB::table('election_position')
+            ->where('election_id', $this->id)
+            ->whereNotIn('election_position.position', $except)
+            ->delete();
         return true;
     }
 
@@ -124,12 +177,18 @@ class Election extends Model {
      * 
      * @return boolean true if users can accept positions right now, false otherwise
      */
-    public function acceptsAnswers() {
+    public function acceptsAnswers($uuid) {
+        $row = DB::table('position_user')
+            ->join('election_position', 'election_position.election_id', '=', 'position_user.election_id')
+            ->where('uuid', $uuid)
+            ->first();
+
         $tz = new DateTimeZone('Europe/Stockholm');
         $now = Carbon::now($tz);
         $opens = Carbon::createFromFormat("Y-m-d H:i:s", $this->opens, $tz);
         $stop = Carbon::createFromFormat("Y-m-d H:i:s", $this->acceptance_stop, $tz);
-        return $opens->lt($now) && $stop->gt($now);
+        $specStop = Carbon::createFromFormat("Y-m-d H:i:s", $row->acceptance_stop, $tz);
+        return $opens->lt($now) && $stop->gt($now) && ($row->acceptance_stop === null || $specStop->gt($now));
     }
 
     /**
@@ -189,13 +248,46 @@ class Election extends Model {
         parent::delete();
     }
 
+    /**
+     * Sets the nomination stop for position.
+     * 
+     * @param string $postitionIdentidifer the position
+     * @param string(Y-m-d H:i) $value the datetime
+     * @param bool $null true if should be null
+     */
+    public function setNominationStop($postitionIdentidifer, $value, $null) {
+        DB::table('election_position')
+            ->where('election_id', $this->id)
+            ->where('position', $postitionIdentidifer)
+            ->update(['nomination_stop' => $null ? null : date("Y-m-d H:i:s", strtotime($value))]);
+    }
+
+    /**
+     * Sets the acceptance stop for position.
+     * 
+     * @param string $postitionIdentidifer the position
+     * @param string(Y-m-d H:i) $value the datetime
+     * @param bool $null true if should be null
+     */
+    public function setAcceptanceStop($postitionIdentidifer, $value, $null) {
+        DB::table('election_position')
+            ->where('election_id', $this->id)
+            ->where('position', $postitionIdentidifer)
+            ->update(['acceptance_stop' => $null ? null : date("Y-m-d H:i:s", strtotime($value))]);
+    }
 
 
     /**
      * @deprecated 2016-10-16 bad name
      */
-    public static function nominateableElections() {
-        return Election::nominateable();
+    public static function nominateablePositions() {
+        $positions = collect([]);
+        foreach (Election::open() as $election) {
+            $p = $election->positions(true);
+            if ($p->count() > 0)
+                $positions->push($p);
+        }
+        return $positions;
     }
 
     /**

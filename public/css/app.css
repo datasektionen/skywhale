@@ -539,9 +539,13 @@ ul.pagination li.active span {
 /**
  * jQuery autocomplete
  */
-.ui-autocomplete {
+.ui-autocomplete, .ui-autocomplete-input {
 	background: #000;
 	font-family: 'Lato' !important;
+	transition: all 0s;
+}
+.ui-autocomplete * {
+	transition: all 0s;
 }
 .ui-autocomplete li {
 	display: block;
@@ -557,4 +561,9 @@ ul.pagination li.active span {
 	margin: 40px auto;
 	display: block;
 	text-align: center;
+}
+
+input.inactive {
+	visibility: hidden;
+	opacity: 0;
 }

@@ -44,6 +44,8 @@ Route::get ('admin/elections/new', 'Admin\ElectionAdminController@getNew')			->m
 Route::post('admin/elections/new', 'Admin\ElectionAdminController@postNew')			->middleware('admin');
 Route::get ('admin/elections/edit/{id}', 'Admin\ElectionAdminController@getEdit')	->middleware('admin');
 Route::post('admin/elections/edit/{id}', 'Admin\ElectionAdminController@postEdit')	->middleware('admin');
+Route::get ('admin/elections/edit/{id}/positions', 'Admin\ElectionAdminController@getEditPositions')->middleware('admin');
+Route::post('admin/elections/edit/{id}/positions', 'Admin\ElectionAdminController@postEditPositions')->middleware('admin');
 Route::get ('admin/elections/remove-nomination/{uuid}', 'Admin\ElectionAdminController@getRemoveNomination')->middleware('admin');
 Route::get ('admin/elections/remove-nomination-sure/{uuid}', 'Admin\ElectionAdminController@getRemoveNominationSure')->middleware('admin');
 Route::get ('admin/elections/remove/{id}', 'Admin\ElectionAdminController@getRemove')->middleware('admin');

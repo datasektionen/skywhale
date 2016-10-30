@@ -19,7 +19,7 @@
 	@foreach ($elections as $election)
 	<tr>
 		<td><a href="/admin/elections/edit/{{ $election->id }}" title="Ändra">{{ $election->name }}</a></td>
-		<td>{{ $election->positions()->count() }}</td>
+		<td>{{ $election->positions()->count() }} (<a href="/admin/elections/edit/{{ $election->id }}/positions">Redigera</a>)</td>
 		<td>{{ date("Y-m-d H:i", strtotime($election->opens)) }}</td>
 		<td>{{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }}</td>
 		<td>{{ date("Y-m-d H:i", strtotime($election->acceptance_stop)) }}</td>

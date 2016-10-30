@@ -16,7 +16,7 @@
             </p>
         </td>
         <td>
-            @if ($position->electionObject->acceptsAnswers())
+            @if ($position->electionObject->acceptsAnswers($position->uuid))
                 @if($position->status === 'waiting')
                     <a href="/nomination/answer/accept/{{ $position->uuid }}" class="action accept">Acceptera</a>
                     <a href="/nomination/answer/decline/{{ $position->uuid }}" class="action decline">Tacka nej</a>

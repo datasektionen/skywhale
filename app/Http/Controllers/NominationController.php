@@ -26,7 +26,8 @@ class NominationController extends BaseController {
 	 * @return view the nomination view
 	 */
 	public function getNominate() {
-		return view('nominate');
+		return view('nominate')
+			->with('positions', Election::nominateablePositions());
 	}
 
 	/**
@@ -61,8 +62,7 @@ class NominationController extends BaseController {
 		$this->validate($request, [
 			'name' => 'required',
 			'email' => 'required|email|regex:/.*@kth\.se/',
-			'election' => 'required|integer',
-			'positions' => 'required|array|minCount:1'
+			'election_position' => 'required|array|minCount:1'
 		]);
 
 		// Try to get user form kth_username
@@ -86,7 +86,9 @@ class NominationController extends BaseController {
 
 		// And finally nominate to all posts
 		// bulkNominate should also send mail to user
-		$user->bulkNominate(intval($request->input('election')), $request->input('positions'));
+		if (!$user->bulkNominate($request->input('election_position'))) {
+			return redirect('/')->with('error', $user->name . ' nominerades inte.');
+		}
 
 		// Redirect to main page with success message
 		return redirect('/')->with('success', $user->name . ' nominerades.');
@@ -110,7 +112,7 @@ class NominationController extends BaseController {
 		}
 
 		// Only accept answer if open
-		if ($row === null || !Election::find($row->election_id)->acceptsAnswers()) {
+		if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
 		

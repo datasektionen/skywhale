@@ -13,8 +13,15 @@
 			@foreach($election->positions() as $position)
 				<li>
 					<h3>{{ $position->title }}</h3>
+					<p>
+						@if ($position->pivot->nomination_stop !== null)
+							Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($position->pivot->nomination_stop)) }}.
+						@endif
+						@if ($position->pivot->acceptance_stop !== null)
+							Acceptansstopp är {{ date("Y-m-d H:i", strtotime($position->pivot->acceptance_stop)) }}.
+						@endif
+					</p>
 					@if($election->nominees($position)->get()->count() > 0)
-						<p></p>
 						<ul>
 							@foreach($election->nominees($position)->get() as $nominee)
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : '') }}">
