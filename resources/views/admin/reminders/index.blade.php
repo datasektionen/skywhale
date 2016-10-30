@@ -28,7 +28,7 @@
 				@endforeach
 			</td>
 			<td>
-				{{ date("Y-m-d H:i", strtotime($nominee[0]->reminded)) }}
+				{{ $nominee[0]->reminded === null ? 'Aldrig' : date("Y-m-d H:i", strtotime($nominee[0]->reminded)) }}
 			</td>
 		</tr>
 	@endforeach
