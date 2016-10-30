@@ -78,10 +78,12 @@ class User extends Authenticatable {
     public function remind() {
         $tz = new DateTimeZone('Europe/Stockholm');
         $now = Carbon::now($tz);
-        $reminded = Carbon::createFromFormat("Y-m-d H:i:s", $this->reminded, $tz);
-        $reminded->add(new DateInterval('P1D'));
-        if ($reminded->gt($now)) {
-            return false;
+        if (property_exists($this, 'reminded') && $this->reminded !== null) {
+            $reminded = Carbon::createFromFormat("Y-m-d H:i:s", $this->reminded, $tz);
+            $reminded->add(new DateInterval('P1D'));
+            if ($reminded->gt($now)) {
+                return false;
+            }
         }
         $x = User::select('users.name', 'users.id', 'elections.id AS election_id', 'elections.name AS election_name', 'position_user.position', 'users.reminded')
             ->join('position_user', 'position_user.user_id', '=', 'users.id')
