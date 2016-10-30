@@ -14,7 +14,7 @@
     </ul>
 </p>
 <p style="margin:0;padding:0;border:0">
-    Vi skulle nu vilja att du <a href="{{ url('/nomination/answer') }}">besöker valsidan och svarar på dina nomineringar</a>. Länken är <a href="{{ url('/nomination/answer') }}">{{ url('/nomination/answer') }}</a> om din e-postklient inte klarar av att visa länkar. Sista dagen att acceptera dina nomineringar är {{ date("j/n Y",strtotime($election->acceptance_stop)-(86399/2)) }}, om inget speciellt gäller för din post.
+    Vi skulle nu vilja att du <a href="{{ url('/nomination/answer') }}">besöker valsidan och svarar på dina nomineringar</a>. Länken är <a href="{{ url('/nomination/answer') }}">{{ url('/nomination/answer') }}</a> om din e-postklient inte klarar av att visa länkar. Sista dagen att acceptera dina nomineringar är {{ date("j/n Y",strtotime($election->acceptance_stop)-(86399/2)) }}, om inget speciellt gäller för de poster du blivit nominerad till.
 </p>
 <br/>
 <p style="margin:0;padding:0;border:0">
@@ -22,6 +22,6 @@
 </p>
 <br/>
 <p style="margin:0;padding:0;border:0">
-    På <a href="{{ url('/') }}">valsidan</a> kan du se vilka andra som är nominerade. Se även <a href="//dfunkt.datasektionen.se">funktionärssidan</a> för mer utförlig information om posten. Det går även bra att fråga medlemmarna i Valberedningen eller skicka eventuella frågor till <a href="mailto:valberedning@d.kth.se">valberedning@d.kth.se</a>.
+    På <a href="{{ url('/') }}">valsidan</a> kan du se vilka andra som är nominerade. Se även <a href="http://dfunkt.froyo.datasektionen.se">funktionärssidan</a> för mer utförlig information om posten. Det går även bra att fråga medlemmarna i Valberedningen eller skicka eventuella frågor till <a href="mailto:valberedning@d.kth.se">valberedning@d.kth.se</a>.
 </p>
 @endsection
