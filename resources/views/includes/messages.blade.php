@@ -8,7 +8,7 @@
                     @endforeach
                 </ul>
             @else
-                <p>{{ Session::get('error') }}</p>
+                <p>{!! Session::get('error') !!}</p>
             @endif
         </div>
     @endif
@@ -26,7 +26,7 @@
 
     @if (Session::has('success'))
         <div class="success">
-            <p>{{ Session::get('success') }}</p>
+            <p>{!! Session::get('success') !!}</p>
         </div>
     @endif
 @endif

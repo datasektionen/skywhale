@@ -179,16 +179,30 @@ class Election extends Model {
      */
     public function acceptsAnswers($uuid) {
         $row = DB::table('position_user')
-            ->join('election_position', 'election_position.election_id', '=', 'position_user.election_id')
+            ->select('election_position.acceptance_stop')
+            ->join('election_position', 'election_position.position', '=', 'position_user.position')
             ->where('uuid', $uuid)
+            ->where('election_position.election_id', $this->id)
             ->first();
 
         $tz = new DateTimeZone('Europe/Stockholm');
         $now = Carbon::now($tz);
         $opens = Carbon::createFromFormat("Y-m-d H:i:s", $this->opens, $tz);
         $stop = Carbon::createFromFormat("Y-m-d H:i:s", $this->acceptance_stop, $tz);
-        $specStop = Carbon::createFromFormat("Y-m-d H:i:s", $row->acceptance_stop, $tz);
-        return $opens->lt($now) && $stop->gt($now) && ($row->acceptance_stop === null || $specStop->gt($now));
+        if (property_exists($row, 'acceptance_stop') && $row->acceptance_stop !== null)
+            $specStop = Carbon::createFromFormat("Y-m-d H:i:s", $row->acceptance_stop, $tz);
+
+        return 
+            $opens->lt($now) 
+            && (
+                (   
+                    !isset($specStop) && $stop->gt($now)
+                )
+                || 
+                (
+                    isset($specStop) && $specStop->gt($now)
+                )
+            );
     }
 
     /**

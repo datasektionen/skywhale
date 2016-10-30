@@ -9,6 +9,7 @@
 				<li><a href="/admin/elections">Valtillfällen</a></li>
 				<li><a href="/admin/positions">Poster</a></li>
 				<li><a href="/admin/persons">Personer</a></li>
+				<li><a href="/admin/reminders">Påminnelsemejl</a></li>
 			</ul>
 		</div>
 	</div>

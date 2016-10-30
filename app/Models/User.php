@@ -8,6 +8,9 @@ use Webpatser\Uuid\Uuid;
 use Session;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
+use DateTimeZone;
+use DateInterval;
 
 /**
  * User model. Represents a user.
@@ -35,6 +38,110 @@ class User extends Authenticatable {
     protected $hidden = [
     'password', 'remember_token',
     ];
+
+    public static function notAnswered() {
+        $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
+
+        $x = User::select('users.name', 'users.id', 'elections.name AS election_name', 'position_user.position', 'users.reminded')
+            ->join('position_user', 'position_user.user_id', '=', 'users.id')
+            ->join('election_position', function ($query) {
+                $query->on('position_user.position', '=', 'election_position.position')
+                    ->on('election_position.election_id', '=', 'position_user.election_id');
+            })
+            ->join('elections', 'elections.id', 'position_user.election_id')
+            ->where('status', 'waiting')
+            ->where(function ($query) use ($now) {
+                $query->where(function ($query) use ($now) {
+                    $query->whereNull('election_position.acceptance_stop')
+                        ->where('elections.acceptance_stop', '>', $now);
+                })->orWhere(function ($query) use ($now) {
+                    $query->whereNotNull('election_position.acceptance_stop')
+                        ->where('election_position.acceptance_stop', '>', $now);
+                });
+            })
+            ->orderBy('users.reminded', 'ASC')
+            ->get();
+
+        return $x;
+    }
+
+    public static function notAnsweredAggregated() {
+        $usersPositions = User::notAnswered();
+        $res = [];
+        foreach ($usersPositions as $up) {
+            $res[$up->id][] = $up;
+        }
+        return $res;
+    }
+
+    public function remind() {
+        $tz = new DateTimeZone('Europe/Stockholm');
+        $now = Carbon::now($tz);
+        $reminded = Carbon::createFromFormat("Y-m-d H:i:s", $this->reminded, $tz);
+        $reminded->add(new DateInterval('P1D'));
+        if ($reminded->gt($now)) {
+            return false;
+        }
+        $x = User::select('users.name', 'users.id', 'elections.id AS election_id', 'elections.name AS election_name', 'position_user.position', 'users.reminded')
+            ->join('position_user', 'position_user.user_id', '=', 'users.id')
+            ->join('election_position', function ($query) {
+                $query->on('position_user.position', '=', 'election_position.position')
+                    ->on('election_position.election_id', '=', 'position_user.election_id');
+            })
+            ->join('elections', 'elections.id', 'position_user.election_id')
+            ->where('status', 'waiting')
+            ->where('users.id', $this->id)
+            ->where(function ($query) use ($now) {
+                $query->where(function ($query) use ($now) {
+                    $query->whereNull('election_position.acceptance_stop')
+                        ->where('elections.acceptance_stop', '>', $now);
+                })->orWhere(function ($query) use ($now) {
+                    $query->whereNotNull('election_position.acceptance_stop')
+                        ->where('election_position.acceptance_stop', '>', $now);
+                });
+            })
+            ->get();
+        
+        foreach ($x as $position) {
+            $positionIds[] = $position->position;
+        }
+        $positions = Position::dataForIds($positionIds);
+
+        $to = $this->kth_username . "@kth.se";
+        $from = "valberedning@d.kth.se";
+        $subject = "Påminnelse: Svara på dina nomineringar";
+        $html = view('emails.remind')
+            ->with('person', $this)
+            ->with('positions', $positions)
+            ->with('election', Election::find($x->first()->election_id));
+        $postData = [
+            'to' => $to,
+            'from' => $from,
+            'subject' => $subject,
+            'html' => $html,
+            'key' => env('SPAM_API_KEY')
+        ];
+        $concat = function ($array) {
+            $res = "";
+            foreach ($array as $key => $val) {
+                $res .= $key . "=" . rawurlencode($val) . "&";
+            }
+            return $res;
+        };
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $concat($postData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+        curl_close ($ch);
+
+        $this->reminded = $now;
+        $this->save();
+
+        return true;
+    }
 
     /**
      * Nominates person to position.
@@ -126,7 +233,6 @@ class User extends Authenticatable {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec($ch);
         curl_close ($ch);
-        print_r($server_output);
 
         return true;
     }

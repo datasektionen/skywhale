@@ -64,6 +64,9 @@ Route::post('admin/persons/edit/{id}', 'Admin\PersonAdminController@postEdit')		
 Route::get ('admin/persons/remove/{id}', 'Admin\PersonAdminController@getRemove')   ->middleware('admin');
 Route::get ('admin/persons/remove-confirmed/{id}', 'Admin\PersonAdminController@getRemoveConfirmed')->middleware('admin');
 
+Route::get ('admin/reminders', 'Admin\RemindersAdminController@getShow')			->middleware('admin');
+Route::post('admin/reminders', 'Admin\RemindersAdminController@postShow')			->middleware('admin');
+
 Route::get ('logout', 'AuthController@getLogout')									->middleware('auth');
 Route::get ('login', 'AuthController@getLogin')										->middleware('guest');
 Route::get ('login-complete/{token}', 'AuthController@getLoginComplete');
