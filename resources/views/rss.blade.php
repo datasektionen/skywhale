@@ -11,7 +11,7 @@
 
     <item>
       <title>{{ $event->user->name }} nominerades till {{ $positions[$event->position]->title }}</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>{{ $event->user->name }} nominerades till {{ $positions[$event->position]->title }} i valet {{ $event->election->name }}. </description>
       <author>valberedning@d.kth.se</author>
       <category>Nominering</category>
@@ -22,7 +22,7 @@
 
     <item>
       <title>{{ $event->user->name }} accepterade {{ $positions[$event->position]->title }}</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>{{ $event->user->name }} accepterade sin nominering till posten {{ $positions[$event->position]->title }} i valet {{ $event->election->name }}. </description>
       <author>valberedning@d.kth.se</author>
       <category>Svar på nominering</category>
@@ -33,7 +33,7 @@
 
     <item>
       <title>{{ $event->user->name }} tackade nej till {{ $positions[$event->position]->title }}</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>{{ $event->user->name }} tackade nej till sin nominering till posten {{ $positions[$event->position]->title }} i valet {{ $event->election->name }}. </description>
       <author>valberedning@d.kth.se</author>
       <category>Svar på nominering</category>
@@ -44,7 +44,7 @@
 
     <item>
       <title>{{ $event->user->name }} ångrade {{ $positions[$event->position]->title }}</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>{{ $event->user->name }} ångrade sitt svar på sin nominering till posten {{ $positions[$event->position]->title }} i valet {{ $event->election->name }}. </description>
       <author>valberedning@d.kth.se</author>
       <category>Svar på nominering</category>
@@ -55,7 +55,7 @@
 
     <item>
       <title>Valet {{ $event->election->name }} öppnade</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>Valet {{ $event->election->name }} öppnade.</description>
       <author>valberedning@d.kth.se</author>
       <category>Valinformation</category>
@@ -66,7 +66,7 @@
 
     <item>
       <title>Valet {{ $event->election->name }} stängde</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>Valet {{ $event->election->name }} stängde.</description>
       <author>valberedning@d.kth.se</author>
       <category>Valinformation</category>
@@ -77,7 +77,7 @@
 
     <item>
       <title>Valet {{ $event->election->name }} nådde acceptansstopp</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>Valet {{ $event->election->name }} nådde acceptansstopp.</description>
       <author>valberedning@d.kth.se</author>
       <category>Valinformation</category>
@@ -88,7 +88,7 @@
 
     <item>
       <title>Valet {{ $event->election->name }} nådde nomineringsstopp</title>
-      <link>{{ url('/') }}?{{ $event->id }}</link>
+      <link>{{ url("/") }}?{{ $event->id }}</link>
       <description>Valet {{ $event->election->name }} nådde nomineringsstopp.</description>
       <author>valberedning@d.kth.se</author>
       <category>Valinformation</category>
