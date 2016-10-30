@@ -78,7 +78,7 @@ class User extends Authenticatable {
     public function remind() {
         $tz = new DateTimeZone('Europe/Stockholm');
         $now = Carbon::now($tz);
-        if (property_exists($this, 'reminded') && $this->reminded !== null) {
+        if ($this->reminded !== null) {
             $reminded = Carbon::createFromFormat("Y-m-d H:i:s", $this->reminded, $tz);
             $reminded->add(new DateInterval('P1D'));
             if ($reminded->gt($now)) {
