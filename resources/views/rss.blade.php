@@ -7,7 +7,8 @@
   <description>Följ samtliga val på Datasektionen</description>
   @foreach ($events as $event)
 
-  @if ($event->action == "nominated")
+
+  @if ($event->action == "nominated" && $event->user != null)
 
     <item>
       <title>{{ $event->user->name }} nominerades till {{ $positions[$event->position]->title }}</title>
@@ -18,7 +19,7 @@
       <pubDate>{{ $event->created_at }}</pubDate>
     </item>
 
-  @elseif ($event->action == "accepted")
+  @elseif ($event->action == "accepted" && $event->user != null)
 
     <item>
       <title>{{ $event->user->name }} accepterade {{ $positions[$event->position]->title }}</title>
@@ -29,7 +30,7 @@
       <pubDate>{{ $event->created_at }}</pubDate>
     </item>
 
-  @elseif ($event->action == "declined")
+  @elseif ($event->action == "declined" && $event->user != null)
 
     <item>
       <title>{{ $event->user->name }} tackade nej till {{ $positions[$event->position]->title }}</title>
@@ -40,7 +41,7 @@
       <pubDate>{{ $event->created_at }}</pubDate>
     </item>
 
-  @elseif ($event->action == "regretted")
+  @elseif ($event->action == "regretted" && $event->user != null)
 
     <item>
       <title>{{ $event->user->name }} ångrade {{ $positions[$event->position]->title }}</title>
