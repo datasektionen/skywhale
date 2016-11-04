@@ -373,4 +373,12 @@ class User extends Authenticatable {
             
         parent::delete();
     }
+
+    public static function notDecidedEmail() {
+        return User::where('wants_email', 'unknown')->get();
+    }
+
+    public static function countNewUsers() {
+        return User::where('wants_email', 'unknown')->count();
+    }
 }

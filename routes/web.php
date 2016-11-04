@@ -70,6 +70,9 @@ Route::post('admin/blacklist', 'Admin\BlacklistAdminController@postRemove')			->
 Route::get ('admin/blacklist/new', 'Admin\BlacklistAdminController@getNew')			->middleware('admin');
 Route::post('admin/blacklist/new', 'Admin\BlacklistAdminController@postNew')		->middleware('admin');
 
+Route::get ('admin/whitelist', 'Admin\WhitelistAdminController@getShow')			->middleware('admin');
+Route::post('admin/whitelist', 'Admin\WhitelistAdminController@postShow')			->middleware('admin');
+
 Route::get ('admin/reminders', 'Admin\RemindersAdminController@getShow')			->middleware('admin');
 Route::post('admin/reminders', 'Admin\RemindersAdminController@postShow')			->middleware('admin');
 
