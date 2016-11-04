@@ -20,6 +20,8 @@
 				$('.declined').show();
 			}
 		});
+
+		$('.hidebox-b').prop('checked', 'checked').change();
 	});
 </script>
 @endsection
