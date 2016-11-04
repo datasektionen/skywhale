@@ -81,6 +81,9 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => ':attribute har ett ogiltigt format.',
     'min_count'            => ':attribute: Du måste välja minst :min_count.',
+    'kth_email'            => ':attribute måste vara en adress på formatet [anvnamn]@kth.se.',
+    'not_blacklisted'      => 'Kunde inte nominera personen.',
+    'is_blacklisted'       => 'Kunde inte nominera personen.',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

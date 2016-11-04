@@ -10,6 +10,7 @@
 				<li><a href="/admin/positions">Poster</a></li>
 				<li><a href="/admin/persons">Personer</a></li>
 				<li><a href="/admin/reminders">Påminnelsemejl</a></li>
+				<li><a href="/admin/blacklist">Blacklist</a></li>
 			</ul>
 		</div>
 	</div>

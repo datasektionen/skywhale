@@ -61,7 +61,7 @@ class NominationController extends BaseController {
 	public function postNominate(Request $request) {
 		$this->validate($request, [
 			'name' => 'required',
-			'email' => 'required|email|regex:/.*@kth\.se/',
+			'email' => 'required|email|kth_email|not_blacklisted',
 			'election_position' => 'required|array|minCount:1'
 		]);
 

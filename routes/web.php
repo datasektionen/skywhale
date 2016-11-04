@@ -65,6 +65,11 @@ Route::post('admin/persons/edit/{id}', 'Admin\PersonAdminController@postEdit')		
 Route::get ('admin/persons/remove/{id}', 'Admin\PersonAdminController@getRemove')   ->middleware('admin');
 Route::get ('admin/persons/remove-confirmed/{id}', 'Admin\PersonAdminController@getRemoveConfirmed')->middleware('admin');
 
+Route::get ('admin/blacklist', 'Admin\BlacklistAdminController@getShow')			->middleware('admin');
+Route::post('admin/blacklist', 'Admin\BlacklistAdminController@postRemove')			->middleware('admin');
+Route::get ('admin/blacklist/new', 'Admin\BlacklistAdminController@getNew')			->middleware('admin');
+Route::post('admin/blacklist/new', 'Admin\BlacklistAdminController@postNew')		->middleware('admin');
+
 Route::get ('admin/reminders', 'Admin\RemindersAdminController@getShow')			->middleware('admin');
 Route::post('admin/reminders', 'Admin\RemindersAdminController@postShow')			->middleware('admin');
 
