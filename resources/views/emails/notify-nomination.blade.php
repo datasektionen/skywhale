@@ -14,7 +14,7 @@
     </ul>
 </p>
 <p style="margin:0;padding:0;border:0">
-    För att kunna tacka ja till en nominering och sedan bli vald måste du vara sektionsmedlem i Konglig Datasektionen. Om du inte är det kan du enkelt bli medlem genom att betala ett medlemskap till kåren på <a href="//ths.kth.se">ths.kth.se</a>.
+    För att kunna tacka ja till en nominering och sedan bli vald måste du vara sektionsmedlem i Konglig Datasektionen. Om du inte är det kan du enkelt bli medlem genom att betala ett medlemskap till kåren på <a href="http://ths.kth.se">ths.kth.se</a>.
 </p>
 <br/>
 <p style="margin:0;padding:0;border:0">
@@ -23,5 +23,12 @@
 <br/>
 <p style="margin:0;padding:0;border:0">
     På <a href="{{ url('/') }}">valsidan</a> kan du se vilka andra som är nominerade. Se även <a href="http://dfunkt.froyo.datasektionen.se">funktionärssidan</a> för mer utförlig information om posten. Det går även bra att fråga medlemmarna i Valberedningen eller skicka eventuella frågor till <a href="mailto:valberedning@d.kth.se">valberedning@d.kth.se</a>.
+</p>
+@endsection
+
+@section('ps')
+<br/>
+<p style="margin:0;padding:0;border:0">
+    Om du i fortsättningen inte vill få ett e-postmeddelande när du nomineras klickar du på <a href="{{ url('/user/unsubscribe') }}">denna länk</a>.
 </p>
 @endsection

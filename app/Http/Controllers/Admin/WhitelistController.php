@@ -52,6 +52,7 @@ class WhitelistAdminController extends BaseController {
 					}
 					$user->wants_email = 'yes';
 					$user->save();
+					$user->notify();
 					continue;
 				case 'blacklist':
 					$user = User::find(intval($userId));
@@ -60,6 +61,7 @@ class WhitelistAdminController extends BaseController {
 					}
 					$blacklist = new Blacklist;
 					$blacklist->kth_username = $user->kth_username;
+					$blacklist->save();
 					$user->delete();
 					continue;
 			}

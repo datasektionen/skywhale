@@ -16,6 +16,8 @@ class AddColumnWantsEmailToUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->enum('wants_email', ['yes', 'no', 'unknown'])->default('unknown');
         });
+        \DB::table('users')
+            ->update(['wants_email' => 'yes']);
     }
 
     /**

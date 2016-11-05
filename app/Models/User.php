@@ -318,6 +318,10 @@ class User extends Authenticatable {
             return false;
         }
 
+        if ($this->wants_email != "yes") {
+            return true;
+        }
+
         $to = $this->kth_username . "@kth.se";
         $positions = Position::dataForIds($positionIds);
         $from = "valberedning@d.kth.se";
@@ -348,6 +352,10 @@ class User extends Authenticatable {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec($ch);
         curl_close ($ch);
+
+        foreach ($positionIds as $p) {
+            DB::table('position_user')->where('position', '=', $p)->where('user_id', '=', $this->id)->where('election_id', '=', $election->id)->update(['notified' => DB::raw('NOW()')]);
+        }
 
         return true;
     }
@@ -380,5 +388,58 @@ class User extends Authenticatable {
 
     public static function countNewUsers() {
         return User::where('wants_email', 'unknown')->count();
+    }
+
+    public function notify() {
+        // TODO Check if elections still are open, do not notify old elections
+        $positionPivot = DB::table('position_user')
+            ->where('user_id', '=', $this->id)
+            ->get();
+
+        if ($positionPivot->count() == 0) {
+            return true;
+        }
+
+        $election = Election::find($positionPivot->first()->election_id);
+
+        $positionIds = [];
+        foreach ($positionPivot as $pp) {
+            $positionIds[] = $pp->position;
+        }
+
+        $to = $this->kth_username . "@kth.se";
+        $positions = Position::dataForIds($positionIds);
+        $from = "valberedning@d.kth.se";
+        $subject = "Du har nya nomineringar";
+        $html = view('emails.notify-nomination')
+            ->with('person', $this)
+            ->with('election', $election)
+            ->with('positions', $positions);
+        $postData = [
+            'to' => $to,
+            'from' => $from,
+            'subject' => $subject,
+            'html' => $html,
+            'key' => env('SPAM_API_KEY')
+        ];
+        $concat = function ($array) {
+            $res = "";
+            foreach ($array as $key => $val) {
+                $res .= $key . "=" . rawurlencode($val) . "&";
+            }
+            return $res;
+        };
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $concat($postData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+        curl_close ($ch);
+
+        DB::table('position_user')
+            ->where('user_id', '=', $this->id)
+            ->update(['notified' => DB::raw('NOW()')]);
     }
 }

@@ -38,14 +38,22 @@
             str: "Hem",
             href: "/"
         }
+        @if (\App\Models\Election::nominateable()->count() > 0)
         ,{
             str: "Nominera",
             href: "/nominate"
         }
+        @endif
         @if (\Auth::user())
+            @if (\App\Models\Election::open()->count() > 0)
         ,{
             str: "Mina nomineringar",
             href: "/nomination/answer"
+        }
+            @endif
+        ,{
+            str: "Inställningar",
+            href: "/user/settings"
         }
         @endif
         @if (\Auth::user() && \Auth::user()->isAdmin())

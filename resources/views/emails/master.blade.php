@@ -33,6 +33,7 @@
                     <p style="margin:0;padding:0;border:0">
                         Valberedningen
                     </p>
+                    @yield('ps')
                 </div>
                 <div class="footer" style="background-color:#EE2A7B;margin:0;padding:0;border:0;text-align:center;">
                     <img src="https://www.datasektionen.se/static/gfx/Skold_Vit_Final.png" style="height:100px;width:100px;margin:30px auto 0;text-align:center;"/>

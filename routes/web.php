@@ -32,6 +32,11 @@ Route::get ('nomination/answer/decline/{uuid}', 'NominationController@getDecline
 Route::get ('nomination/answer/regret/{uuid}', 'NominationController@getRegret')	->middleware('auth');
 Route::post('nominate', 'NominationController@postNominate');
 
+Route::get ('user/settings', 'UserController@getSettings')							->middleware('auth');
+Route::post('user/settings', 'UserController@postSettings')							->middleware('auth');
+Route::get ('user/unsubscribe', 'UserController@getUnsubscribe')					->middleware('auth');
+
+
 
 /**
  * Admin routes.
