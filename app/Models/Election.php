@@ -5,6 +5,7 @@ use DateTimeZone;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
+use DateTime;
 
 /**
  * Election model. Represents an election, an event that has four timestamps
@@ -233,7 +234,9 @@ class Election extends Model {
      */
     public function nominees($position) {
         $x = DB::table('position_user')
+            ->select('users.name AS name', 'users.id AS user_id', 'status', 'uuid', 'kth_username', 'acceptance_stop')
             ->join('users', 'users.id', '=', 'position_user.user_id')
+            ->join('elections', 'elections.id', '=', 'position_user.election_id')
             ->whereNull('position_user.deleted_at')
             ->where('position_user.election_id', '=', $this->id)
             ->where('position_user.position', '=', $position->identifier)
@@ -242,7 +245,19 @@ class Election extends Model {
                 WHEN 'declined' then 3 
                 ELSE 2 
                 END"));
-        return $x;
+        $collection = $x->get();
+
+        $tz = new DateTimeZone('Europe/Stockholm');
+        $now = Carbon::now($tz);
+
+        foreach ($collection as $nomination) {
+            $acceptanceStop = Carbon::createFromFormat("Y-m-d H:i:s", $nomination->acceptance_stop, $tz);
+            if ($acceptanceStop->lt($now) && $nomination->status != 'accepted') {
+                $nomination->status = 'declined';
+            }
+        }
+        //die("Hej: " . $collection->count());
+        return $collection;
     }
 
     /**

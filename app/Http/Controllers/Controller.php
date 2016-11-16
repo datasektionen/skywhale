@@ -27,7 +27,8 @@ class Controller extends BaseController {
 	 * @return view the welcome view
 	 */
 	public function getWelcome() {
-		return view('welcome');
+		return view('welcome')
+			->with('elections', Election::open());
 	}
 
 	/**

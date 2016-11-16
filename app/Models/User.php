@@ -227,11 +227,6 @@ class User extends Authenticatable {
             return false;
         }
 
-        // Only accept answer if open
-        if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
-            return false;
-        }
-
         if ($row->status == 'waiting') {
             return false;
         }

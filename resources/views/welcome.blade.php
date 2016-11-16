@@ -27,12 +27,21 @@
 @endsection
 
 @section('content')
-	@forelse(App\Models\Election::open() as $election)
+	@forelse($elections as $election)
 		<h1>{{ $election->name }}</h1>
+
 		<div class="clear"></div>
+		
 		<p>{{ $election->description }}</p>
-		<p>Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }}, acceptansstopp är {{ date("Y-m-d H:i", strtotime($election->acceptance_stop)) }} och valet stänger {{ date("Y-m-d H:i", strtotime($election->closes)) }}.</p>
+		
+		<p>
+			Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }}, 
+			acceptansstopp är {{ date("Y-m-d H:i", strtotime($election->acceptance_stop)) }} 
+			och valet stänger {{ date("Y-m-d H:i", strtotime($election->closes)) }}.
+		</p>
+
 		<p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
+
 		<div class="checkbox" style="display: inline-block;width: 300px;">
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-a', 'id' => 'hide-declined-a-'.$election->id]) !!}
 			<label for="hide-declined-a-{{ $election->id }}">Göm ej besvarade nomineringar</label>
@@ -41,6 +50,7 @@
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b-'.$election->id]) !!}
 			<label for="hide-declined-b-{{ $election->id }}">Göm avböjda nomineringar</label>
 		</div>
+
 		<ul class="elections" id="election-{{ $election->id }}">
 			@foreach($election->positions() as $position)
 				<li>
@@ -53,9 +63,9 @@
 							Acceptansstopp är {{ date("Y-m-d H:i", strtotime($position->pivot->acceptance_stop)) }}.
 						@endif
 					</p>
-					@if($election->nominees($position)->get()->count() > 0)
+					@if($election->nominees($position)->count() > 0)
 						<ul>
-							@foreach($election->nominees($position)->get() as $nominee)
+							@foreach($election->nominees($position) as $nominee)
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : ($nominee->status == 'accepted' ? 'acccepted' : 'waiting')) }}">
 								<div class="crop" style="background-image: url(https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/100);"></div>
 								
@@ -65,7 +75,7 @@
 									Tackat nej:
 								@endif
 								
-								<a href="/person/{{ $nominee->user_id }}">{{ \App\Models\User::find($nominee->user_id)->name }}</a>
+								<a href="/person/{{ $nominee->user_id }}">{{ $nominee->name }}</a>
 								
 								@if (Auth::check() && Auth::user()->isAdmin())
 									<a href="/admin/elections/edit-nomination/{{ $nominee->uuid }}">Ändra</a>

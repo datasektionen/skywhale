@@ -166,7 +166,7 @@ class NominationController extends BaseController {
 		}
 
 		// Only accept answer if open
-		if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
+		if ($row === null) {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
 		

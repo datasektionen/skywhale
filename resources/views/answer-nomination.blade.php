@@ -34,7 +34,12 @@
                 @if($position->status === 'waiting')
                     <p>Du svarade inte.</p>
                 @elseif($position->status === 'accepted')
-                    <p>Du <b>accepterade</b>.</p>
+                    <p>
+                        Du <b>accepterade</b>. 
+                        <a href="/nomination/answer/regret/{{ $position->uuid }}">
+                            Ångra dig. (Du kommer inte kunna acceptera igen om du klickar här.)
+                        </a>
+                    </p>
                 @else
                     <p>Du <b>tackade nej</b>.</p>
                 @endif

@@ -44,7 +44,7 @@ class UserApiController extends BaseController {
 				$pos["identifier"] = $position->identifier;
 				$pos["title"] = $position->title;
 				$pos["nominees"] = array();
-				foreach ($election->nominees($position)->get() as $nominee) {
+				foreach ($election->nominees($position) as $nominee) {
 					$nom = [];
 					$nom["name"] = $nominee->name;
 					$nom["uuid"] = $nominee->uuid;
