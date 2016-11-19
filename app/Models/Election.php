@@ -234,9 +234,11 @@ class Election extends Model {
      */
     public function nominees($position) {
         $x = DB::table('position_user')
-            ->select('users.name AS name', 'users.id AS user_id', 'status', 'uuid', 'kth_username', 'acceptance_stop')
+            ->select('users.name AS name', 'users.id AS user_id', 'status', 'uuid', 'kth_username', 'elections.acceptance_stop AS acceptance_stop', 'election_position.acceptance_stop AS a_s')
             ->join('users', 'users.id', '=', 'position_user.user_id')
             ->join('elections', 'elections.id', '=', 'position_user.election_id')
+            ->join('election_position', 'elections.id', '=', 'election_position.election_id')
+            ->where('election_position.position', '=', DB::raw('position_user.position'))
             ->whereNull('position_user.deleted_at')
             ->where('position_user.election_id', '=', $this->id)
             ->where('position_user.position', '=', $position->identifier)
@@ -252,7 +254,19 @@ class Election extends Model {
 
         foreach ($collection as $nomination) {
             $acceptanceStop = Carbon::createFromFormat("Y-m-d H:i:s", $nomination->acceptance_stop, $tz);
-            if ($acceptanceStop->lt($now) && $nomination->status != 'accepted') {
+            if ($nomination->a_s != null)
+                $acceptanceStopLocal = Carbon::createFromFormat("Y-m-d H:i:s", $nomination->a_s, $tz);
+            if  (
+                    (
+                        (
+                            $nomination->a_s === null && $acceptanceStop->lt($now)
+                        ) || 
+                        (
+                            $nomination->a_s !== null && $acceptanceStopLocal->lt($now)
+                        )
+                    ) && 
+                    $nomination->status != 'accepted'
+                ) {
                 $nomination->status = 'declined';
             }
         }
