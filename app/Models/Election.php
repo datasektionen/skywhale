@@ -169,8 +169,24 @@ class Election extends Model {
     public static function nominateable($time = null) {
         if ($time === null)
             $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
+        else
+            $now = $time;
 
-        return Election::where('opens', '<', $now)->where('nomination_stop', '>', $now)->get();
+        $q = Election::where('opens', '<', $now)
+            ->where(function($query) use ($now) {
+                $query->where('nomination_stop', '>', $now)
+                    ->orWhere(function($query) use ($now) {
+                        $query->whereExists(function ($query) use ($now) {
+                            $query->select(DB::raw(1))
+                                  ->from('election_position')
+                                  ->whereRaw('election_position.election_id = elections.id')
+                                  ->whereNotNull('election_position.nomination_stop')
+                                  ->where('election_position.nomination_stop', '>', $now);
+                        });
+                    });
+            });
+
+        return $q->get();
     }
 
     /**
