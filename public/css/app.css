@@ -16,7 +16,6 @@ p {
 }
 
 
-
 input[type="text"], textarea, input[type="number"], input[type="datetime-local"] {
   width: 300px;
   max-width: 100%;

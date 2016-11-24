@@ -62,6 +62,10 @@
             href: "/admin"
         }
         @endif
+        ,{
+            str: "RSS",
+            href: "/rss"
+        }
         ]
     };
     </script>
@@ -95,26 +99,8 @@
             @yield('content')
             <div class="clear"></div>
         </div>
-        <footer>
-            <a href="http://github.com/datasektionen/skywhale">&#10084;</a> |
-            <a href="/rss">RSS</a>
-        </footer>
 
     </div>
-        {{--
-    <div id="top-bar-parent"></div>
-    <div id="top-bar-push"></div>
-    <div class="header">    
-        <div class="center">
-            @yield('action-button')
-            <h1><span>@yield('title', 'Rubrik')</span></h1>
-        </div>
-    </div>
-    <div class="wrapper">
-        @include('includes.messages')
-        @yield('content')
-    </div>
-    --}}
     
 </body>
 </html>
