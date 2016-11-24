@@ -84,3 +84,10 @@ Route::post('admin/reminders', 'Admin\RemindersAdminController@postShow')			->mi
 Route::get ('logout', 'AuthController@getLogout')									->middleware('auth');
 Route::get ('login', 'AuthController@getLogin')										->middleware('guest');
 Route::get ('login-complete/{token}', 'AuthController@getLoginComplete');
+
+
+Route::get ('js/cors/{file}', function($file) { 
+	return response(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/js/' . $file))
+		->header('Access-Control-Allow-Origin', '*')
+        ->header('Access-Control-Allow-Methods', '*');
+});

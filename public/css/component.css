@@ -1,0 +1,72 @@
+body {
+  margin: 40px;
+  padding: 0;
+  font-family: 'Lato';
+  line-height: 1.5;
+}
+
+ul.elections {
+	margin: 0 -1.6%;
+	padding: 0;
+}
+ul.elections > li {
+	padding: 0 0 15px;
+	margin: 0 1% 20px 1%;
+	list-style-type: none;
+	display: inline-block;
+	width: 30.9%;
+	background: #fcfcfc;
+	vertical-align: top;
+}
+ul.elections > li h3 {
+	margin: 0;
+	padding: 10px 20px;
+	background: #eee;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+ul.elections > li p {
+	padding: 0 20px;
+	margin: 10px 0 0;
+}
+ul.elections > li ul {
+	list-style-type: none;
+	margin: 0 20px;
+	padding: 0;
+}
+ul.elections > li ul li {
+	margin: 0;
+	padding: 0;
+}
+ul.elections > li ul li a {
+	text-decoration: underline !important;
+}
+.crop {
+	background-repeat: no-repeat;
+	background-position: 50% 0;
+	background-size: 40px;
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 5px 5px 5px -5px;
+}
+.declined {
+	opacity: 0.5;
+}
+.accepted {
+	font-weight: bold;
+}
+@media screen and (max-width: 1100px) {
+	ul.elections > li {
+		width: 47.5%;
+		margin: 0 1% 20px;
+	}
+}
+@media screen and (max-width: 700px) {
+	ul.elections > li {
+		width: 100%;
+		margin: 0 0 20px;
+	}
+}
