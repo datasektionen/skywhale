@@ -31,7 +31,7 @@ export default class Elections extends React.Component {
     }
     return (
       <div className="outer">
-        <h3>{this.state.election.name}</h3>
+        <h2>{this.state.election.name}</h2>
         <p><a href="https://val.datasektionen.se">Gå till valsidan</a> om du vill se mer detaljer.</p>
         <p>{this.state.election.description}</p>
         <ul className="elections" style={{listStyleType:'none',padding:'0',margin:'0'}}>
