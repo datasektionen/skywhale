@@ -5,7 +5,7 @@
 @section('content')
 
 <div class="center">
-	<div class="crop big" style="width: 200px; height: 200px;background-size: 200px;background-image: url(https://zfinger.datasektionen.se/user/{{ $user->kth_username }}/image/500);"></div>
+	<div class="crop big" style="width: 200px; height: 200px;background-image: url(https://zfinger.datasektionen.se/user/{{ $user->kth_username }}/image);"></div>
 	<p>Trött på bilden här ovanför? Byt på <a href="https://zfinger.datasektionen.se?q={{ $user->kth_username }}">Z-finger</a>.</p>
 	<table>
 		<tr>

@@ -48,14 +48,14 @@ class Position extends React.Component {
     var imgStyle = (imgUrl) => ({
       backgroundRepeat: 'no-repeat',
       backgroundPosition: '50% 0',
-      backgroundSize: '40px',
+      backgroundSize: 'cover',
       borderRadius: '50%',
       width: '30px',
       height: '30px',
       display: 'inline-block',
       verticalAlign: 'middle',
       margin: '3px 5px 5px 0px',
-      backgroundImage: 'url(https://zfinger.datasektionen.se/user/'+imgUrl+'/image/100)'
+      backgroundImage: 'url(https://zfinger.datasektionen.se/user/'+imgUrl+'/image)'
     });
 
     return (

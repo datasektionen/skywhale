@@ -50,7 +50,7 @@ $(document).ready(function () {
         console.log(item);
         return $("<li></li>")
             .data("item.autocomplete", item)
-            .append('<a><div class="crop" style="background-image:url(https://zfinger.datasektionen.se/user/' + item.uid + '/image/)"></div>'+ item.cn + " (" + item.uid + "@kth.se)</a>") 
+            .append('<a><div class="crop" style="background-image:url(https://zfinger.datasektionen.se/user/' + item.uid + '/image)"></div>'+ item.cn + " (" + item.uid + "@kth.se)</a>") 
             .appendTo(ul);
     };;
 });
