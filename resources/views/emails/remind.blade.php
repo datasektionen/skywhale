@@ -22,6 +22,6 @@
 </p>
 <br/>
 <p style="margin:0;padding:0;border:0">
-    På <a href="{{ url('/') }}">valsidan</a> kan du se vilka andra som är nominerade. Se även <a href="http://dfunkt.froyo.datasektionen.se">funktionärssidan</a> för mer utförlig information om posten. Det går även bra att fråga medlemmarna i Valberedningen eller skicka eventuella frågor till <a href="mailto:valberedning@d.kth.se">valberedning@d.kth.se</a>.
+    På <a href="{{ url('/') }}">valsidan</a> kan du se vilka andra som är nominerade. Se även <a href="http://dfunkt.datasektionen.se">funktionärssidan</a> för mer utförlig information om posten. Det går även bra att fråga medlemmarna i Valberedningen eller skicka eventuella frågor till <a href="mailto:valberedning@d.kth.se">valberedning@d.kth.se</a>.
 </p>
 @endsection

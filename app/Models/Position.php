@@ -63,7 +63,7 @@ class Position {
      * @return json decoded roles list
      */
     public static function all($columns = array()) {
-        $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
+        $rolesString = file_get_contents('http://dfunkt.datasektionen.se/api/roles');
         $roles = json_decode($rolesString);
         usort($roles, function ($a, $b) {
             return strcmp($a->title, $b->title);
@@ -78,7 +78,7 @@ class Position {
      * @return json decoded response from api
      */
     public static function find($identifier) {
-        $ans = file_get_contents("http://dfunkt.froyo.datasektionen.se/api/role/" . $identifier);
+        $ans = file_get_contents("http://dfunkt.datasektionen.se/api/role/" . $identifier);
         return json_decode($ans);
     }
 
@@ -89,7 +89,7 @@ class Position {
      * @return array  the roles
      */
     public static function allKey($columns = array()) {
-        $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
+        $rolesString = file_get_contents('http://dfunkt.datasektionen.se/api/roles');
         $roles = json_decode($rolesString);
 
         $res = [];
@@ -107,7 +107,7 @@ class Position {
      */
     public static function dataForIds($positions) {
         $ans = [];
-        $rolesString = file_get_contents('http://dfunkt.froyo.datasektionen.se/api/roles');
+        $rolesString = file_get_contents('http://dfunkt.datasektionen.se/api/roles');
         $roles = json_decode($rolesString);
 
         foreach ($positions as $position) {
