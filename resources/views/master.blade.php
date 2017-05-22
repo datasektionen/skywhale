@@ -20,12 +20,9 @@
     @yield('head-extra')
     <script type="text/javascript">
 
-    window.tbaas_conf = {
-        system_name: "test",
-        target_id: "methone-container-replace",
-        primary_color: "#06b",
-        secondary_color: "white",
-        bar_color: "#05a",
+    window.methone_conf = {
+        system_name: "skywhale",
+        color_sceme: "dark_blue",
         @if (\Auth::guest())
         login_text: "Logga in",
         login_href: "/login",
@@ -33,7 +30,7 @@
         login_text: "Logga ut",
         login_href: "/logout",
         @endif
-        topbar_items: [
+        links: [
         {
             str: "Hem",
             href: "/"
@@ -69,7 +66,7 @@
         ]
     };
     </script>
-    <script async src="//methone.datasektionen.se"></script>
+    <script async src="//methone.datasektionen.se/bar.js"></script>
 </head>
 <body>
     <div id="methone-container-replace"></div>
