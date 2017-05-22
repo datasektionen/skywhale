@@ -22,7 +22,7 @@
 
     window.methone_conf = {
         system_name: "skywhale",
-        color_sceme: "dark_blue",
+        color_sceme: "dark-blue",
         @if (\Auth::guest())
         login_text: "Logga in",
         login_href: "/login",
