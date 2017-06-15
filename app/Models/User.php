@@ -389,6 +389,7 @@ class User extends Authenticatable {
         // TODO Check if elections still are open, do not notify old elections
         $positionPivot = DB::table('position_user')
             ->where('user_id', '=', $this->id)
+            ->whereIn('election_id', Election::open()->pluck('id'))
             ->get();
 
         if ($positionPivot->count() == 0) {
