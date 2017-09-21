@@ -32,7 +32,7 @@
 
 		<div class="clear"></div>
 		
-		<p>{{ $election->description }}</p>
+		<p>{!! nl2br($election->description) !!}</p>
 		
 		<p>
 			Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }}, 
