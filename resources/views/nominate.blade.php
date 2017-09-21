@@ -22,7 +22,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function(result) {
-                    alert("Error");
+                    console.log("Fick datan: " + JSON.stringify(result))
                 }
             });
         },
