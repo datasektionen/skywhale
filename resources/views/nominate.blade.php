@@ -13,12 +13,12 @@ $(document).ready(function () {
         source: function(request, response) {
             $.ajax({
                 type: "GET",
-                contentType: "application/json; charset=utf-8",
+                contentType: "text/plain; charset=utf-8",
                 url: "https://hodis.datasektionen.se/users/" + request.term,
-                dataType: "json",
+                crossDomain: true,
                 success: function (data) {
                     if (data != null) {
-                        response(data.results.slice(0,8));
+                        response(data.slice(0,8));
                     }
                 },
                 error: function(result) {
