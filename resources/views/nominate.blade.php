@@ -14,7 +14,7 @@ $(document).ready(function () {
             $.ajax({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
-                url: "https://zfinger.datasektionen.se/users/" + request.term,
+                url: "https://hodis.datasektionen.se/users/" + request.term,
                 dataType: "json",
                 success: function (data) {
                     if (data != null) {
