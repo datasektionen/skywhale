@@ -21,7 +21,16 @@
 			}
 		});
 
+		$('.hidebox-c').change(function () {
+			if ($(this).prop('checked')) {
+				$('.crop').show();
+			} else {
+				$('.crop').hide();
+			}
+		});
+
 		$('.hidebox-b').prop('checked', 'checked').change();
+		$('.hidebox-c').prop('checked', false).change();
 	});
 </script>
 @endsection
@@ -46,9 +55,13 @@
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-a', 'id' => 'hide-declined-a-'.$election->id]) !!}
 			<label for="hide-declined-a-{{ $election->id }}">Göm ej besvarade nomineringar</label>
 		</div>
-		<div class="checkbox" style="display: inline-block;">
+		<div class="checkbox" style="display: inline-block;width: 300px;">
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b-'.$election->id]) !!}
 			<label for="hide-declined-b-{{ $election->id }}">Göm avböjda nomineringar</label>
+		</div>
+		<div class="checkbox" style="display: inline-block;">
+			{!! Form::checkbox('', '', false, ['class' => 'hidebox-c', 'id' => 'hide-declined-c-'.$election->id]) !!}
+			<label for="hide-declined-c-{{ $election->id }}">Visa bilder</label>
 		</div>
 
 		<ul class="elections" id="election-{{ $election->id }}">
