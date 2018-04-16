@@ -27,7 +27,7 @@ $(document).ready(function () {
             });
         },
         minLength: 3,
-        delay: 100,
+        delay: 500,
         select: function(event, ui) {
             $("#email").val(ui.item.uid + "@kth.se");
             $("#name").val(ui.item.cn);
