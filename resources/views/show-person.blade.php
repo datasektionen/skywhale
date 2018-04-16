@@ -65,7 +65,7 @@
 		</tr>
 		@empty
 		<tr>
-			<td colspan="3"></td>
+			<td colspan="3">Inga tidigare poster</td>
 		</tr>
 		@endforelse
 	</table>

@@ -38,16 +38,13 @@ class Controller extends BaseController {
 	 * @return view     the person view
 	 */
 	public function getPerson($username) {
-		if (is_int($username)) {
-			$username = User::findOrFail($username)->kth_username;
-			return redirect('/person/' + $username);
-		}
 		$user = User::where('kth_username', $username)->first();
 		if ($user == null) {
-			abort(404); // Create new user
+			$username = User::findOrFail($username)->kth_username;
+			return redirect('/person/' . $username);
 		}
 
-		$roles = json_decode(file_get_contents('http://dfunkt.datasektionen.se/api/user/kthid/jonadahl'));
+		$roles = json_decode(file_get_contents('http://dfunkt.datasektionen.se/api/user/kthid/' . $user->kth_username));
 
 		return view('show-person')->with('user', $user)->with('roles', $roles);
 	}
