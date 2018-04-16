@@ -37,13 +37,19 @@ class Controller extends BaseController {
 	 * 
 	 * @return view     the person view
 	 */
-	public function getPerson($id) {
-		$user = User::find($id);
-		if ($user === null) {
-			abort(400);
+	public function getPerson($username) {
+		if (is_int($username)) {
+			$username = User::findOrFail($username)->kth_username;
+			return redirect('/person/' + $username);
+		}
+		$user = User::where('kth_username', $username)->first();
+		if ($user == null) {
+			abort(404); // Create new user
 		}
 
-		return view('show-person')->with('user', $user);
+		$roles = json_decode(file_get_contents('http://dfunkt.datasektionen.se/api/user/kthid/jonadahl'));
+
+		return view('show-person')->with('user', $user)->with('roles', $roles);
 	}
 
 	public function getRss() {

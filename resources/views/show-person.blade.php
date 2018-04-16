@@ -35,5 +35,40 @@
 			</tr>
 		@endif
 	</table>
+
+	<h2 style="text-align: left;">Tidigare poster</h2>
+	<table style="width: 100%;">
+		<thead>
+			<tr>
+				<th>
+					Post
+				</th>
+				<th>
+					Från
+				</th>
+				<th>
+					Till
+				</th>
+			</tr>
+		</thead>
+		@forelse ($roles->mandates as $mandate) 
+		<tr>
+			<td>
+				{{ $mandate->Role->title }}
+			</td>
+			<td>
+				{{ date("Y-m-d", strtotime($mandate->start)) }}
+			</td>
+			<td>
+				{{ date("Y-m-d", strtotime($mandate->end)) }}
+			</td>
+		</tr>
+		@empty
+		<tr>
+			<td colspan="3"></td>
+		</tr>
+		@endforelse
+	</table>
+	<div style="text-align: right;margin: 10px 0;">Data hämtad från <a href="//dfunkt.datasektionen.se/user/{{ $user->kth_username }}" style="color: #9c27b0;">Dfunkt</a>.</div>
 </div>
 @endsection

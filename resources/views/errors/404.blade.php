@@ -20,27 +20,25 @@
     @yield('head-extra')
     <script type="text/javascript">
 
-    window.tbaas_conf = {
-        system_name: "test",
-        target_id: "methone-container-replace",
-        primary_color: "#06b",
-        secondary_color: "white",
-        bar_color: "#05a",
-        login_text: "Logga in",
-        login_href: "/login",
-        topbar_items: [
+    window.methone_conf = {
+        system_name: "skywhale",
+        color_scheme: "dark_blue",
+         
+        login_text: "Logga ut",
+        login_href: "/logout",
+                links: [
         {
             str: "Hem",
             href: "/"
         }
-        ,{
-            str: "Nominera",
-            href: "/nominate"
+                ,{
+            str: "RSS",
+            href: "/rss"
         }
         ]
     };
     </script>
-    <script async src="//methone.datasektionen.se"></script>
+    <script async src="//methone.datasektionen.se/bar.js"></script>
 </head>
 <body>
     <div id="methone-container-replace"></div>
