@@ -51,7 +51,7 @@
 				</th>
 			</tr>
 		</thead>
-		@forelse ($roles->mandates as $mandate) 
+		@forelse ($mandates as $mandate) 
 		<tr>
 			<td>
 				{{ $mandate->Role->title }}

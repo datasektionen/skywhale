@@ -44,9 +44,18 @@ class Controller extends BaseController {
 			return redirect('/person/' . $username);
 		}
 
-		$roles = json_decode(file_get_contents('http://dfunkt.datasektionen.se/api/user/kthid/' . $user->kth_username));
+		try {
+			$roles = @file_get_contents('http://dfunkt.datasektionen.se/api/user/kthid/' . $user->kth_username);
+			if ($roles === FALSE) {
+				$mandates = collect([]);
+			} else {
+				$mandates = json_decode($roles)->mandates;	
+			}
+		} catch (Exception $e) {
+			$mandates = collect([]);
+		}
 
-		return view('show-person')->with('user', $user)->with('roles', $roles);
+		return view('show-person')->with('user', $user)->with('mandates', $mandates);
 	}
 
 	public function getRss() {
