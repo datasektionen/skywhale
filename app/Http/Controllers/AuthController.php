@@ -51,40 +51,38 @@ class AuthController extends BaseController {
 	public function getLoginComplete($token) {
 		// Send get request to login server
 		$client = new Client();
-		$res = $client->request('GET', env('LOGIN_API_URL') . '/verify/' . $token . '.json', [
-			'form_params' => [
-				'format' => 'json',
-				'api_key' => env('LOGIN_API_KEY')
-			]
-		]);
+		$res = file_get_contents(env('LOGIN_API_URL') . '/verify/' . $token . '.json?api_key=' . env('LOGIN_API_KEY'));
+		if ($res === FALSE) {
+			return redirect('/')->with('error', 'Du loggades inte in.');
+		}
 
 		// We now have a response. If it is good, parse the json and login user
-		if ($res->getStatusCode() == 200) {
-			$body = json_decode($res->getBody());
-			$user = User::where('kth_username', $body->user)->first();
-
-			if ($user === null) {
-				// Create new user in our systems if did not exist
-				$user = new User;
-				$user->name = $body->first_name . " " . $body->last_name;
-				$user->kth_username = $body->user;
-				$user->kth_user_id = $body->ugkthid;
-				$user->year = "";
-				$user->save();
-			}
-
-			Auth::login($user);
-
-			// Check if user is admin
-			$admin = file_get_contents(env('PLS_API_URL') . '/user/' . $user->kth_username . '/skywhale/admin');
-			if ($admin === "true") {
-				Session::set('admin', Auth::user()->id);
-			} else {
-				Session::forget('admin');
-			}
-		} else {
-			Auth::logout();
+		try {
+			$body = json_decode($res);	
+		} catch (Exception $e) {
 			return redirect('/')->with('error', 'Du loggades inte in.');
+		}
+
+		$user = User::where('kth_username', $body->user)->first();
+
+		if ($user === null) {
+			// Create new user in our systems if did not exist
+			$user = new User;
+			$user->name = $body->first_name . " " . $body->last_name;
+			$user->kth_username = $body->user;
+			$user->kth_user_id = $body->ugkthid;
+			$user->year = "";
+			$user->save();
+		}
+
+		Auth::login($user);
+
+		// Check if user is admin
+		$admin = file_get_contents(env('PLS_API_URL') . '/user/' . $user->kth_username . '/skywhale/admin');
+		if ($admin === "true") {
+			Session::set('admin', Auth::user()->id);
+		} else {
+			Session::forget('admin');
 		}
 
 		return redirect()->intended('/')->with('success', 'Du loggades in.');
