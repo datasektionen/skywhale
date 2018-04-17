@@ -48,7 +48,7 @@ class AuthController extends BaseController {
 	* 
 	* @return view     the person view
 	*/
-	public function getLoginComplete($token) {
+	public function getLoginComplete($token, Request $request) {
 		// Send get request to login server
 		$client = new Client();
 		$res = file_get_contents(env('LOGIN_API_URL') . '/verify/' . $token . '.json?api_key=' . env('LOGIN_API_KEY'));
@@ -80,9 +80,9 @@ class AuthController extends BaseController {
 		// Check if user is admin
 		$admin = file_get_contents(env('PLS_API_URL') . '/user/' . $user->kth_username . '/skywhale/admin');
 		if ($admin === "true") {
-			Session::set('admin', Auth::user()->id);
+			session(['admin' => Auth::user()->id]);
 		} else {
-			Session::forget('admin');
+			$request->session()->forget('admin');
 		}
 
 		return redirect()->intended('/')->with('success', 'Du loggades in.');

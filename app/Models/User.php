@@ -152,11 +152,6 @@ class User extends Authenticatable {
             ->where('uuid', $uuid)
             ->first();
 
-        // Only own user can answer, or admin
-        if (Auth::guest() || (Auth::user()->id != $row->user_id && !Auth::user()->isAdmin())) {
-            return false;
-        }
-
         // Only accept answer if open
         if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
             return false;
@@ -187,11 +182,6 @@ class User extends Authenticatable {
             ->where('uuid', $uuid)
             ->first();
 
-        // Only own user can answer, or admin
-        if (Auth::guest() || (Auth::user()->id != $row->user_id && !Auth::user()->isAdmin())) {
-            return false;
-        }
-
         // Only accept answer if open
         if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
             return false;
@@ -221,11 +211,6 @@ class User extends Authenticatable {
         $row = \DB::table('position_user')
             ->where('uuid', $uuid)
             ->first();
-
-        // Only own user can answer, or admin
-        if (Auth::guest() || (Auth::user()->id != $row->user_id && !Auth::user()->isAdmin())) {
-            return false;
-        }
 
         if ($row->status == 'waiting') {
             return false;
@@ -353,15 +338,6 @@ class User extends Authenticatable {
         }
 
         return true;
-    }
-
-    /**
-     * Returns true if this user is admin.
-     * 
-     * @return boolean true if admin
-     */
-    public function isAdmin() {
-        return Session::has('admin') && Session::get('admin') === $this->id;
     }
 
     /**

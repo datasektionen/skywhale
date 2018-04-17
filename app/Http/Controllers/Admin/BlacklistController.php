@@ -52,8 +52,12 @@ class BlacklistAdminController extends BaseController {
 			'kth_username' => 'required|email|kth_email|not_blacklisted'
 		]);
 
+		$parts = explode("@", $request->input('kth_username'));
+		if (count($parts) < 1) {
+			return redirect()->back()->with('error', 'Ett fel uppstod.');
+		}
 		$blacklist = new Blacklist;
-		$blacklist->kth_username = explode("@", $request->input('kth_username'))[0];
+		$blacklist->kth_username = $parts[0];
 		$blacklist->save();
 
 		return redirect('/admin/blacklist')

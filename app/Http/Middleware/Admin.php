@@ -18,7 +18,7 @@ class Admin {
      * @return mixed
      */
     public function handle($request, Closure $next) {
-        if (!Auth::check() || !Auth::user()->isAdmin()) {
+        if (!Auth::check() || !($request->session()->has('admin') && $request->session()->get('admin') == Auth::user()->id)) {
             return redirect('/')->with('error', 'Du har inte behörighet att visa den här sidan.');
         }
 

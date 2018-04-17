@@ -24,7 +24,7 @@
 				{{ $user->kth_username }}@kth.se
 			</td>
 		</tr>
-		@if (Auth::check() && Auth::user()->isAdmin())
+		@if (Auth::check() && session('admin') == Auth::user()->id)
 			<tr>
 				<td>
 					Administrera:

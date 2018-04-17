@@ -115,7 +115,7 @@ class NominationController extends BaseController {
 		if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
-		
+
 		Auth::user()->accept($uuid);
 
 		return redirect()->back()->with('success', 'Du tackade ja!');

@@ -50,7 +50,7 @@
                         {{--<a href="/">&laquo; Tillbaka</a>--}}
                     </div>
                     <div class="col-md-8">
-                        <h2>Nere för underhåll</h2>
+                        <h2>Serverfel</h2>
                     </div>
                     <div class="header-right col-md-2">
                         {{--<span class="visible-lg-inline">Se p&aring;</span>--}}
@@ -63,7 +63,7 @@
             </div>
         </header>
         <div id="content">
-            <p>Kommer snart tillbaka! Kanske. Säg till annars.</p>
+            <p><a href="https://github.com/datasektionen/skywhale/issues/new" class="primary-action">Skapa ett issue på GitHub</a>, så ska vi fixa det här så fort som möjligt.</p>
             <div class="clear"></div>
         </div>
         <footer>

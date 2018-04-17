@@ -90,7 +90,7 @@
 								
 								<a href="/person/{{ $nominee->kth_username }}">{{ $nominee->name }}</a>
 								
-								@if (Auth::check() && Auth::user()->isAdmin())
+								@if (Auth::check() && session('admin') == Auth::user()->id)
 									<a href="/admin/elections/edit-nomination/{{ $nominee->uuid }}">Ändra</a>
 								@endif
 							</li>

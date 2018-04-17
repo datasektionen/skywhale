@@ -69,7 +69,7 @@
             href: "/user/settings"
         }
         @endif
-        @if (\Auth::user() && \Auth::user()->isAdmin())
+        @if (\Auth::user() && \Auth::user()->id == session('admin'))
         ,{
             str: "Administrera",
             href: "/admin"
