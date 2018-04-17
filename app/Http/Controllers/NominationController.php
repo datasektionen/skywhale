@@ -66,17 +66,40 @@ class NominationController extends BaseController {
 		]);
 
 		// Try to get user form kth_username
-		$kth_username = explode("@", $request->input('email'))[0];
+		$kth_username = strtolower(explode("@", $request->input('email'))[0]);
 		$user = User::where('kth_username', '=', $kth_username)->first();
 
 		// If no success, create one in the database
 		if ($user === null) {
+			$hodis = file_get_contents(env('HODIS_API_URL') . '/uid/' . $kth_username);
+			if ($hodis === FALSE) {
+				return redirect('/')->with('error', $kth_username . ' kunde inte hittas.');
+			}
+			try {
+				$body = json_decode($hodis);
+			} catch (Exception $e) {
+				return redirect('/')->with('error', $kth_username . ' kunde inte hittas.');
+			}
 			$user = new User;
-			$user->name = $request->input('name');
-			$user->kth_user_id = ""; // TODO Get data from API
-			$user->kth_username = explode('@', $request->input('email'))[0];
-			$user->year = $request->input('year', '');
+			$user->name = $body->cn;
+			$user->kth_user_id = strtolower($body->ugKthid);
+			$user->kth_username = strtolower($body->uid);
+			$user->year = $request->input('year', $body->year);
 			$user->save();
+
+			if ($body->year == 0) {
+				$curl = curl_init(env('HODIS_API_URL') . '/uid/' . $body->uid . '?api_key=' . env('HODIS_API_KEY'));
+			    curl_setopt_array($curl, array(
+				    CURLOPT_POST => TRUE,
+				    CURLOPT_RETURNTRANSFER => TRUE,
+				    CURLOPT_POSTFIELDS => [
+				    	'year' => $request->input('year', '')
+				    ]
+				));
+			    $response = curl_exec($curl);
+			    dd($response);
+			    curl_close($curl);
+			}
 		}
 
 		if ((empty($user->year) || strlen($user->year) < 2) && $request->has('year') && strlen($request->input('year')) >= 2) {

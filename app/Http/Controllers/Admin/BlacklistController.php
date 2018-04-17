@@ -57,7 +57,7 @@ class BlacklistAdminController extends BaseController {
 			return redirect()->back()->with('error', 'Ett fel uppstod.');
 		}
 		$blacklist = new Blacklist;
-		$blacklist->kth_username = $parts[0];
+		$blacklist->kth_username = strtolower($parts[0]);
 		$blacklist->save();
 
 		return redirect('/admin/blacklist')
