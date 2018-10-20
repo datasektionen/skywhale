@@ -59,6 +59,10 @@ class WhitelistAdminController extends BaseController {
 					if ($user === null) {
 						continue;
 					}
+					if (Blacklist::isBlacklisted($user->kth_username)) {
+						$user->delete();
+						continue;
+					}
 					$blacklist = new Blacklist;
 					$blacklist->kth_username = $user->kth_username;
 					$blacklist->save();
