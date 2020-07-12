@@ -62,6 +62,7 @@ class Controller extends BaseController {
 		return response(view('rss')
 			->with('positions', Position::allKey())
 			->with('events', Event::orderBy('id', 'DESC')->limit(100)->get()))
-			->header('Content-Type', 'application/rss+xml; charset=utf-8');
+			->header('Content-Type', 'application/rss+xml; charset=utf-8')
+			->header('X-Robots-Tag: noindex, nofollow', true);
 	}
 }
