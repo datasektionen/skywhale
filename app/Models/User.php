@@ -111,7 +111,7 @@ class User extends Authenticatable {
         $positions = Position::dataForIds($positionIds);
 
         $to = $this->kth_username . "@kth.se";
-        $from = "valberedning@d.kth.se";
+        $from = "valberedning@datasektionen.se";
         $subject = "Påminnelse: Svara på dina nomineringar";
         $html = view('emails.remind')
             ->with('person', $this)
@@ -304,7 +304,7 @@ class User extends Authenticatable {
 
         $to = $this->kth_username . "@kth.se";
         $positions = Position::dataForIds($positionIds);
-        $from = "valberedning@d.kth.se";
+        $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";
         $html = view('emails.notify-nomination')
             ->with('person', $this)
@@ -381,7 +381,7 @@ class User extends Authenticatable {
 
         $to = $this->kth_username . "@kth.se";
         $positions = Position::dataForIds($positionIds);
-        $from = "valberedning@d.kth.se";
+        $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";
         $html = view('emails.notify-nomination')
             ->with('person', $this)
