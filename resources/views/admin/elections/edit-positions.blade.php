@@ -48,20 +48,20 @@ $(document).ready(function () {
         <tr>
             <td>{{ $position->title }}</td>
             <td>
-                {!! Form::input('datetime-local', 'nomination_stop_' . $position->identifier, str_replace(" ", "T", $position->pivot->nomination_stop), ['class' => $position->pivot->nomination_stop === null ? 'inactive' : '']) !!}
+                {!! Form::input('datetime-local', 'nomination_stop_' . urlencode($position->identifier), str_replace(" ", "T", $position->pivot->nomination_stop), ['class' => $position->pivot->nomination_stop === null ? 'inactive' : '']) !!}
             </td>
             <td>
                 <div class="checkbox">
-                    {!! Form::checkbox('nomination_stop_null[]', $position->identifier, $position->pivot->nomination_stop === null, ['id' => 'n_s_u_' . $position->identifier ]) !!}
+                    {!! Form::checkbox('nomination_stop_null[]', urlencode($position->identifier), $position->pivot->nomination_stop === null, ['id' => 'n_s_u_' . $position->identifier ]) !!}
                     <label for="n_s_u_{{ $position->identifier }}"></label>
                 </div>
             </td>
             <td>
-                {!! Form::input('datetime-local', 'acceptance_stop_' . $position->identifier, str_replace(" ", "T", $position->pivot->acceptance_stop), ['class' => $position->pivot->acceptance_stop === null ? 'inactive' : '']) !!}
+                {!! Form::input('datetime-local', 'acceptance_stop_' . urlencode($position->identifier), str_replace(" ", "T", $position->pivot->acceptance_stop), ['class' => $position->pivot->acceptance_stop === null ? 'inactive' : '']) !!}
             </td>
             <td>
                 <div class="checkbox">
-                    {!! Form::checkbox('acceptance_stop_null[]', $position->identifier, $position->pivot->acceptance_stop === null, ['id' => 'a_s_u_' . $position->identifier ]) !!}
+                    {!! Form::checkbox('acceptance_stop_null[]', urlencode($position->identifier), $position->pivot->acceptance_stop === null, ['id' => 'a_s_u_' . $position->identifier ]) !!}
                     <label for="a_s_u_{{ $position->identifier }}"></label>
                 </div>
             </td>
@@ -71,7 +71,7 @@ $(document).ready(function () {
     <div class="form-entry">
         <div class="input">
             {!! Form::hidden('election', $election->id) !!}
-            {!! Form::submit('Updatera', NULL) !!}
+            {!! Form::submit('Uppdatera', NULL) !!}
         </div>
     </div>
 </div>
