@@ -202,6 +202,8 @@ class Election extends Model {
             ->where('election_position.election_id', $this->id)
             ->first();
 
+        if (!$row) return false;
+
         $tz = new DateTimeZone('Europe/Stockholm');
         $now = Carbon::now($tz);
         $opens = Carbon::createFromFormat("Y-m-d H:i:s", $this->opens, $tz);
