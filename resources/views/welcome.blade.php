@@ -36,6 +36,21 @@
 @endsection
 
 @section('content')
+	@if(count($elections) > 0)
+		<div class="checkbox" style="display: inline-block;width: 300px;">
+			{!! Form::checkbox('', '', false, ['class' => 'hidebox-a', 'id' => 'hide-declined-a']) !!}
+			<label for="hide-declined-a">Göm ej besvarade nomineringar</label>
+		</div>
+		<div class="checkbox" style="display: inline-block;width: 300px;">
+			{!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b']) !!}
+			<label for="hide-declined-b">Göm avböjda nomineringar</label>
+		</div>
+		<div class="checkbox" style="display: inline-block;">
+			{!! Form::checkbox('', '', false, ['class' => 'hidebox-c', 'id' => 'hide-declined-c']) !!}
+			<label for="hide-declined-c">Visa bilder</label>
+		</div>
+	@endif
+
 	@forelse($elections as $election)
 		<h1>{{ $election->name }}</h1>
 
@@ -50,19 +65,6 @@
 		</p>
 
 		<p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
-
-		<div class="checkbox" style="display: inline-block;width: 300px;">
-			{!! Form::checkbox('', '', false, ['class' => 'hidebox-a', 'id' => 'hide-declined-a-'.$election->id]) !!}
-			<label for="hide-declined-a-{{ $election->id }}">Göm ej besvarade nomineringar</label>
-		</div>
-		<div class="checkbox" style="display: inline-block;width: 300px;">
-			{!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b-'.$election->id]) !!}
-			<label for="hide-declined-b-{{ $election->id }}">Göm avböjda nomineringar</label>
-		</div>
-		<div class="checkbox" style="display: inline-block;">
-			{!! Form::checkbox('', '', false, ['class' => 'hidebox-c', 'id' => 'hide-declined-c-'.$election->id]) !!}
-			<label for="hide-declined-c-{{ $election->id }}">Visa bilder</label>
-		</div>
 
 		<ul class="elections" id="election-{{ $election->id }}">
 			@foreach($election->positions() as $position)
