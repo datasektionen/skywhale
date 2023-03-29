@@ -175,15 +175,16 @@ class ElectionAdminController extends BaseController {
 
 		// Save new information
 		foreach ($election->positionsPivot() as $pivot) {
+			$urlposition = urlencode($pivot->position);
 			$election->setNominationStop(
-				$pivot->position, 
-				$request->input('nomination_stop_' . $pivot->position),
-				$request->has('nomination_stop_null') && in_array($pivot->position, $request->input('nomination_stop_null'))
+				$pivot->position,
+				$request->input('nomination_stop_' . $urlposition),
+				$request->has('nomination_stop_null') && in_array($urlposition, $request->input('nomination_stop_null'))
 			);
 			$election->setAcceptanceStop(
-				$pivot->position, 
-				$request->input('acceptance_stop_' . $pivot->position),
-				$request->has('acceptance_stop_null') && in_array($pivot->position, $request->input('acceptance_stop_null'))
+				$pivot->position,
+				$request->input('acceptance_stop_' . $urlposition),
+				$request->has('acceptance_stop_null') && in_array($urlposition, $request->input('acceptance_stop_null'))
 			);
 		}
 
