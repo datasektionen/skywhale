@@ -23,9 +23,9 @@
 
 		$('.hidebox-c').change(function () {
 			if ($(this).prop('checked')) {
-				$('.crop').show();
+				$('.crop').removeClass('hidden');
 			} else {
-				$('.crop').hide();
+				$('.crop').addClass('hidden');
 			}
 		});
 
@@ -82,7 +82,7 @@
 						<ul>
 							@foreach($election->nominees($position) as $nominee)
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : ($nominee->status == 'accepted' ? 'acccepted' : 'waiting')) }}">
-								<div class="crop" style="background-image: url(https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50);"></div>
+								<div class="crop hidden" style="background-image: url(https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50);"></div>
 
 								@if ($nominee->status == 'accepted')
 									Accepterat:
