@@ -300,10 +300,9 @@ ul.elections > li ul li {
 ul.elections > li ul li a {
   text-decoration: underline !important;
 }
-.crop {
-  background-repeat: no-repeat;
-  background-position: 50% 0;
-  background-size: cover;
+.profile-img {
+  object-position: 50% 0;
+  object-fit: cover;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -437,7 +436,7 @@ ul.pagination li.active span {
     width: 47.5%;
     margin: 0 1% 20px;
   }
-  .crop.big {
+  .profile-img.big {
     margin: 0 auto;
     display: block;
   }
@@ -474,7 +473,7 @@ ul.pagination li.active span {
     width: 100%;
     margin: 0 0 20px;
   }
-  .crop.big {
+  .profile-img.big {
     margin: 0 auto;
     display: block;
   }

@@ -23,9 +23,9 @@
 
 		$('.hidebox-c').change(function () {
 			if ($(this).prop('checked')) {
-				$('.crop').removeClass('hidden');
+				$('.profile-img').removeClass('hidden');
 			} else {
-				$('.crop').addClass('hidden');
+				$('.profile-img').addClass('hidden');
 			}
 		});
 
@@ -82,7 +82,7 @@
 						<ul>
 							@foreach($election->nominees($position) as $nominee)
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : ($nominee->status == 'accepted' ? 'acccepted' : 'waiting')) }}">
-								<image loading="lazy" class="crop hidden" src="https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50" />
+								<img loading="lazy" class="profile-img hidden" src="https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50" />
 
 								@if ($nominee->status == 'accepted')
 									Accepterat:
