@@ -43,7 +43,7 @@ $(document).ready(function () {
             $("#name").val(ui.item.cn);
             if (ui.item.year)
                 $("#year").val(ui.item.year);
-            else 
+            else
                 $("#year").hide();
             return false;
         }
@@ -51,7 +51,7 @@ $(document).ready(function () {
         console.log(item);
         return $("<li></li>")
             .data("item.autocomplete", item)
-            .append('<a><div class="crop" style="background-image:url(https://zfinger.datasektionen.se/user/' + item.uid + '/image)"></div>'+ item.cn + " (" + item.uid + "@kth.se)</a>") 
+            .append('<a><img loading="lazy" class="profile-img" src="https://zfinger.datasektionen.se/user/' + item.uid + '/image" />'+ item.cn + " (" + item.uid + "@kth.se)</a>")
             .appendTo(ul);
     };
     $('form').disableAutoFill();
