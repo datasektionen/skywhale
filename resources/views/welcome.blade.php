@@ -55,12 +55,12 @@
 		<h1>{{ $election->name }}</h1>
 
 		<div class="clear"></div>
-		
+
 		<p>{!! nl2br($election->description) !!}</p>
-		
+
 		<p>
-			Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }}, 
-			acceptansstopp är {{ date("Y-m-d H:i", strtotime($election->acceptance_stop)) }} 
+			Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }},
+			acceptansstopp är {{ date("Y-m-d H:i", strtotime($election->acceptance_stop)) }}
 			och valet stänger {{ date("Y-m-d H:i", strtotime($election->closes)) }}.
 		</p>
 
@@ -83,15 +83,15 @@
 							@foreach($election->nominees($position) as $nominee)
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : ($nominee->status == 'accepted' ? 'acccepted' : 'waiting')) }}">
 								<div class="crop" style="background-image: url(https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50);"></div>
-								
+
 								@if ($nominee->status == 'accepted')
 									Accepterat:
 								@elseif ($nominee->status == 'declined')
 									Tackat nej:
 								@endif
-								
+
 								<a href="/person/{{ $nominee->kth_username }}">{{ $nominee->name }}</a>
-								
+
 								@if (Auth::check() && session('admin') == Auth::user()->id)
 									<a href="/admin/elections/edit-nomination/{{ $nominee->uuid }}">Ändra</a>
 								@endif
