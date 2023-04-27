@@ -3,7 +3,7 @@
 @section('title', 'Påminnelsemejl')
 
 @section('admin-content')
-{!! Form::open(['url' => URL::to(Request::path(), [], true)]) !!}
+{!! Form::open(['url' => URL::to(Request::path(), [], Request::secure())]) !!}
 <p>Personer som inte har svarat på minst en aktuell nominering visas i tabellen nedan. Du kan bara påminna personer som du inte påmint inom de 24 senaste timmarna.</p>
 <table>
 	<tr>
