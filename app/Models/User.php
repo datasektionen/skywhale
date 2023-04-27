@@ -238,7 +238,7 @@ class User extends Authenticatable {
      * @param int $positionId The id of the position to nominate to
      * @return true if successful, false otherwise
      */
-    public function nominate($electionId, $positionId) {
+    private function nominateToPosition($electionId, $positionId) {
         $election = Election::find($electionId);
 
         if ($election === null)
@@ -272,27 +272,24 @@ class User extends Authenticatable {
     }
 
     /**
-     * Nominates user to a bunch of positions.
-     * 
-     * @param int $electionId The id of the election to nominate to
-     * @param [int] $positionIds The ids of the positions to nominate to
+     * Nominates user to a position.
+     *
+     * @param int $electionPosition The id of the position to nominate to
      * @return void
      */
-    public function bulkNominate($electionPositions) {
+    public function nominate($electionPosition) {
         $positionIds = [];
         $shouldSendMail = false;
-        foreach ($electionPositions as $electionPosition) {
-            $parts = explode("_", $electionPosition);
-            if (count($parts) != 2) {
-                continue;
-            }
-            $election = Election::find($parts[0]);
-            if ($election === null) {
-                continue;
-            }
-            $positionIds[] = $parts[1];
-            $shouldSendMail = $this->nominate($election->id, $parts[1]) || $shouldSendMail;
+        $parts = explode("_", $electionPosition);
+        if (count($parts) != 2) {
+            return;
         }
+        $election = Election::find($parts[0]);
+        if ($election === null) {
+            return;
+        }
+        $positionIds[] = $parts[1];
+        $shouldSendMail = $this->nominateToPosition($election->id, $parts[1]) || $shouldSendMail;
 
         if (!$shouldSendMail) {
             return false;

@@ -62,7 +62,7 @@ class NominationController extends BaseController {
 		$this->validate($request, [
 			'name' => 'required',
 			'email' => 'required|email|kth_email|not_blacklisted',
-			'election_position' => 'required|array|minCount:1'
+			'election_position' => 'required'
 		]);
 
 		// Try to get user form kth_username
@@ -107,9 +107,8 @@ class NominationController extends BaseController {
 			$user->save();
 		}
 
-		// And finally nominate to all posts
-		// bulkNominate should also send mail to user
-		if (!$user->bulkNominate($request->input('election_position'))) {
+		// And finally nominate to the post
+		if (!$user->nominate($request->input('election_position'))) {
 			return redirect('/')->with('error', $user->name . ' nominerades inte.');
 		}
 

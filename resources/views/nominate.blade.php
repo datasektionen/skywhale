@@ -98,7 +98,7 @@ $(document).ready(function () {
                 @foreach ($election as $position)
                     <div class="radio">
                         {{ Form::radio(
-                            'election_position[]',
+                            'election_position',
                             $position->pivot->election_id . '_' . $position->identifier,
                             false,
                             array('id' => 'position-' . $position->pivot->election_id . '_' . $position->identifier )
