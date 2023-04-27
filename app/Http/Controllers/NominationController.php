@@ -81,7 +81,7 @@ class NominationController extends BaseController {
 				return redirect('/')->with('error', $kth_username . ' kunde inte hittas.');
 			}
 			$user = new User;
-			$user->name = $body->cn;
+			$user->name = $body->displayName;
 			$user->kth_user_id = strtolower($body->ugKthid);
 			$user->kth_username = strtolower($body->uid);
 			$user->year = $request->input('year', $body->year);

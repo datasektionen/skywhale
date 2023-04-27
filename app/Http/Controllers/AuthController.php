@@ -68,7 +68,7 @@ class AuthController extends BaseController {
 		if ($user === null) {
 			// Create new user in our systems if did not exist
 			$user = new User;
-			$user->name = $body->first_name . " " . $body->last_name;
+			$user->name = $body->displayName;
 			$user->kth_username = strtolower($body->user);
 			$user->kth_user_id = strtolower($body->ugkthid);
 			$user->year = "";
