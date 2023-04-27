@@ -96,8 +96,13 @@ $(document).ready(function () {
                     <h4>{{ $election->first()->pivot->name }}</h4>
                 @endif
                 @foreach ($election as $position)
-                    <div class="checkbox">
-                        {{ Form::checkbox('election_position[]', $position->pivot->election_id . '_' . $position->identifier, false, array('id' => 'position-' . $position->pivot->election_id . '_' . $position->identifier )) }} 
+                    <div class="radio">
+                        {{ Form::radio(
+                            'election_position[]',
+                            $position->pivot->election_id . '_' . $position->identifier,
+                            false,
+                            array('id' => 'position-' . $position->pivot->election_id . '_' . $position->identifier )
+                        ) }}
                         <label for="position-{{ $position->pivot->election_id . '_' . $position->identifier }}">{{ $position->title }}</label>
                     </div>
                 @endforeach
