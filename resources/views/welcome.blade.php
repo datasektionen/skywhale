@@ -90,7 +90,7 @@
 									Tackat nej:
 								@endif
 
-								<a href="/person/{{ $nominee->kth_username }}">{{ $nominee->name }}</a>
+								<a href="/person/{{ $nominee->kth_username }}">{{ $nominee->name }} ({{ $nominee->kth_username }})</a>
 
 								@if (Auth::check() && session('admin') == Auth::user()->id)
 									<a href="/admin/elections/edit-nomination/{{ $nominee->uuid }}">Ändra</a>
