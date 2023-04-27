@@ -55,9 +55,11 @@ class Controller extends BaseController {
 			$mandates = collect([]);
 		}
 
-        usort($mandates, function ($a, $b) {
-            return strcmp($b->start, $a->start);
-        });
+        if (is_array($mandates)) {
+            usort($mandates, function ($a, $b) {
+                return strcmp($b->start, $a->start);
+            });
+        }
 
 		return view('show-person')->with('user', $user)->with('mandates', $mandates);
 	}
