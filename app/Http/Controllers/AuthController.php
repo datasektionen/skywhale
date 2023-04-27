@@ -58,7 +58,7 @@ class AuthController extends BaseController {
 
 		// We now have a response. If it is good, parse the json and login user
 		try {
-			$body = json_decode($res);	
+			$body = json_decode($res);
 		} catch (Exception $e) {
 			return redirect('/')->with('error', 'Du loggades inte in.');
 		}
