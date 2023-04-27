@@ -49,11 +49,15 @@ class Controller extends BaseController {
 			if ($roles === FALSE) {
 				$mandates = collect([]);
 			} else {
-				$mandates = json_decode($roles)->mandates;	
+				$mandates = json_decode($roles)->mandates;
 			}
 		} catch (Exception $e) {
 			$mandates = collect([]);
 		}
+
+        usort($mandates, function ($a, $b) {
+            return strcmp($b->start, $a->start);
+        });
 
 		return view('show-person')->with('user', $user)->with('mandates', $mandates);
 	}
