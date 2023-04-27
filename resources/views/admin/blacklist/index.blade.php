@@ -7,7 +7,7 @@
 @endsection
 
 @section('admin-content')
-{!! Form::open(['url' => URL::to(Request::path(), [], true)]) !!}
+{!! Form::open(['url' => URL::to(Request::path(), [], Request::secure())]) !!}
 <p>Blacklisten innehåller KTH-användarnamn som inte kan nomineras till poster.</p>
 <table>
 	<tr>

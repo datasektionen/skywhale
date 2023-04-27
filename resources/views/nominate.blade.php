@@ -72,7 +72,7 @@ $(document).ready(function () {
     <p>Det finns inga öppna val att nominera i.</p>
 @else
 
-{!! Form::open(['url' => URL::to(Request::path(), [], true)]) !!}
+{!! Form::open(['url' => URL::to(Request::path(), [], Request::secure())]) !!}
 <div class="form">
     <div class="form-entry">
         <span class="description">

@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-{!! Form::model($person, ['url' => URL::to(Request::path(), [], true)]) !!}
+{!! Form::model($person, ['url' => URL::to(Request::path(), [], Request::secure())]) !!}
 <div class="form">
     <div class="form-entry">
         <span class="description">
