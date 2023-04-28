@@ -88,7 +88,7 @@ $(document).ready(function () {
 
     <div class="form-entry">
         <span class="description">
-            Till vilka poster?
+            Till vilken post?
         </span>
         <div class="input">
             @foreach ($positions as $election)
