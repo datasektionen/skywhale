@@ -75,7 +75,7 @@ $(document).ready(function () {
     <div class="form-entry">
         <span class="description">
             Vem vill du nominera?<br>
-            <span class="desc">Börja skriv ett namn så kommer en lista där du kan välja personer. Om du hellre vill skriva manuellt kan du kolla <a href="https://zfinger.datasektionen.se">Z-finger</a> för att hitta KTH-mejl.</span>
+            <span class="desc">Börja skriv ett namn så kommer en lista där du kan välja personer.
         </span>
         <div class="input">
             {!! Form::text('name', NULL, array('placeholder' => 'Namn', 'id' => 'name', 'autocomplete' => 'off')) !!}
