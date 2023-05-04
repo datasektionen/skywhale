@@ -10,6 +10,17 @@ $(document).ready(function () {
         $("#year").show();
     });
 
+    function autoComplete(ui) {
+        $("#email").val(ui.item.uid + "@kth.se");
+        $("#name").val(ui.item.cn);
+        if (ui.item.tag) {
+            $("#year").text(ui.item.tag);
+            $("#year").show();
+        } else {
+            $("#year").hide();
+        }
+    }
+
     $('#name').autocomplete({
         source: function(request, response) {
             $.ajax({
@@ -23,32 +34,21 @@ $(document).ready(function () {
                     }
                 },
                 error: function(result) {
-                    console.log("Fick datan: " + JSON.stringify(result))
+                    console.error("Fick datan: " + JSON.stringify(result))
                 }
             });
         },
         minLength: 3,
         delay: 500,
         select: function(event, ui) {
-            $("#email").val(ui.item.uid + "@kth.se");
-            $("#name").val(ui.item.cn);
-            if (ui.item.year)
-                $("#year").val(ui.item.year);
-            else 
-                $("#year").hide();
+            autoComplete(ui);
             return false;
         },
         focus: function(event, ui) {
-            $("#email").val(ui.item.uid + "@kth.se");
-            $("#name").val(ui.item.cn);
-            if (ui.item.year)
-                $("#year").val(ui.item.year);
-            else
-                $("#year").hide();
+            autoComplete(ui);
             return false;
         }
     }).data("ui-autocomplete")._renderItem = function(ul, item) {
-        console.log(item);
         return $("<li></li>")
             .data("item.autocomplete", item)
             .append('<a><img loading="lazy" class="profile-img" src="https://zfinger.datasektionen.se/user/' + item.uid + '/image" />'+ item.cn + " (" + item.uid + "@kth.se)</a>")
@@ -82,7 +82,7 @@ $(document).ready(function () {
         <div class="input">
             {!! Form::text('name', NULL, array('placeholder' => 'Namn', 'id' => 'name')) !!}
             {!! Form::text('email', NULL, array('placeholder' => 'KTH-mejladress', 'id' => 'email')) !!}
-            {!! Form::text('year', NULL, array('placeholder' => 'Årskurs', 'id' => 'year', 'class' => 'small')) !!}
+            <p id="year"></p>
         </div>
     </div>
 

@@ -41,7 +41,7 @@
             Årskurs:
         </span>
         <div class="input">
-            {!! Form::text('year', NULL, array('placeholder' => 'Ex D-13')) !!}
+            {!! Form::text('year', NULL, array('placeholder' => 'Ex D13')) !!}
         </div>
     </div>
 

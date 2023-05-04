@@ -66,12 +66,18 @@ class AuthController extends BaseController {
 		$user = User::where('kth_username', $body->user)->first();
 
 		if ($user === null) {
+            try {
+                $hodis = file_get_contents(env('HODIS_API_URL') . '/ugkthid/' . $body->ugkthid);
+                $hodis = json_decode($hodis);
+            } catch (Exception $e) {
+                return redirect('/')->with('error', 'Du loggades inte in.');
+            }
 			// Create new user in our systems if did not exist
 			$user = new User;
-			$user->name = $body->first_name . " " . $body->last_name;
-			$user->kth_username = strtolower($body->user);
+			$user->name = $hodis->displayName;
 			$user->kth_user_id = strtolower($body->ugkthid);
-			$user->year = "";
+			$user->kth_username = strtolower($body->user);
+			$user->year = $hodis->tag;
 			$user->save();
 		}
 
