@@ -22,7 +22,7 @@ class NominationController extends BaseController {
 
 	/**
 	 * Shows the page for nomination.
-	 * 
+	 *
 	 * @return view the nomination view
 	 */
 	public function getNominate() {
@@ -32,7 +32,7 @@ class NominationController extends BaseController {
 
 	/**
 	 * Lets user answer to nominations. Displays a view with the different nominations.
-	 * 
+	 *
 	 * @param  Request $request the request sent
 	 * @return view             the nominations view
 	 */
@@ -54,7 +54,7 @@ class NominationController extends BaseController {
 	 * 		- name the name of the person nominated
 	 * 		- election the id of the election of nomination
 	 * 		- positions array with the ids of the positions of nomination
-	 * 
+	 *
 	 * @param  Request $request the request object
 	 * @return redirection           back if unsuccessful with error message, to '/' if successful
 	 */
@@ -84,26 +84,7 @@ class NominationController extends BaseController {
 			$user->name = $body->cn;
 			$user->kth_user_id = strtolower($body->ugKthid);
 			$user->kth_username = strtolower($body->uid);
-			$user->year = $request->input('year', $body->year);
-			$user->save();
-
-			if ($body->year == 0) {
-				$curl = curl_init(env('HODIS_API_URL') . '/uid/' . $body->uid . '?api_key=' . env('HODIS_API_KEY'));
-			    curl_setopt_array($curl, array(
-				    CURLOPT_POST => TRUE,
-				    CURLOPT_RETURNTRANSFER => TRUE,
-				    CURLOPT_POSTFIELDS => [
-				    	'year' => $request->input('year', '')
-				    ]
-				));
-			    $response = curl_exec($curl);
-			    dd($response);
-			    curl_close($curl);
-			}
-		}
-
-		if ((empty($user->year) || strlen($user->year) < 2) && $request->has('year') && strlen($request->input('year')) >= 2) {
-			$user->year = $request->input('year');
+			$user->year = $body->tag;
 			$user->save();
 		}
 
@@ -118,7 +99,7 @@ class NominationController extends BaseController {
 
 	/**
 	 * Accepts nomination for user.
-	 * 
+	 *
 	 * @param  string $uuid the uuid of the nomination to accept
 	 * @return redirect     to last page with success message
 	 */
@@ -145,7 +126,7 @@ class NominationController extends BaseController {
 
 	/**
 	 * Declines nomination for user.
-	 * 
+	 *
 	 * @param  string $uuid the uuid of the nomination to decline
 	 * @return redirect     to last page with success message
 	 */
@@ -164,7 +145,7 @@ class NominationController extends BaseController {
 		if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
-		
+
 		Auth::user()->decline($uuid);
 
 		return redirect()->back()->with('success', 'Du tackade nej!');
@@ -172,7 +153,7 @@ class NominationController extends BaseController {
 
 	/**
 	 * Set nomination to waiting for user.
-	 * 
+	 *
 	 * @param  string $uuid the uuid of the nomination to regret
 	 * @return redirect     to last page with success message
 	 */
@@ -191,7 +172,7 @@ class NominationController extends BaseController {
 		if ($row === null) {
 			return redirect()->back()->with('error', 'Du kan inte längre svara på denna nominering.');
 		}
-		
+
 		Auth::user()->regret($uuid);
 
 		return redirect()->back()->with('success', 'Du ångrade dig!');
