@@ -3,7 +3,6 @@
 @section('title', 'Nominera')
 
 @section('head-extra')
-<script src="https://terrylinooo.github.io/jquery.disableAutoFill/assets/js/jquery.disableAutoFill.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
     $('#email').on('input', function () {
@@ -54,7 +53,6 @@ $(document).ready(function () {
             .append('<a><img loading="lazy" class="profile-img" src="https://zfinger.datasektionen.se/user/' + item.uid + '/image" />'+ item.cn + " (" + item.uid + "@kth.se)</a>")
             .appendTo(ul);
     };
-    $('form').disableAutoFill();
 });
 </script>
 <style type="text/css">
@@ -68,7 +66,7 @@ $(document).ready(function () {
 @endsection
 
 @section('content')
-@if ($positions->flatten()->count() == 0) 
+@if ($positions->flatten()->count() == 0)
     <p>Det finns inga öppna val att nominera i.</p>
 @else
 
@@ -80,8 +78,8 @@ $(document).ready(function () {
             <span class="desc">Börja skriv ett namn så kommer en lista där du kan välja personer. Om du hellre vill skriva manuellt kan du kolla <a href="https://zfinger.datasektionen.se">Z-finger</a> för att hitta KTH-mejl.</span>
         </span>
         <div class="input">
-            {!! Form::text('name', NULL, array('placeholder' => 'Namn', 'id' => 'name')) !!}
-            {!! Form::text('email', NULL, array('placeholder' => 'KTH-mejladress', 'id' => 'email')) !!}
+            {!! Form::text('name', NULL, array('placeholder' => 'Namn', 'id' => 'name', 'autocomplete' => 'off')) !!}
+            {!! Form::text('email', NULL, array('placeholder' => 'KTH-mejladress', 'id' => 'email', 'autocomplete' => 'off')) !!}
             <p id="year"></p>
         </div>
     </div>
