@@ -10,7 +10,8 @@
         "laravelcollective/html": "5.*",
         "webpatser/laravel-uuid": "^2.0",
         "guzzlehttp/guzzle": "~6.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "laravel/tinker": "^1.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
@@ -61,7 +62,10 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "kylekatarnls/update-helper": false
+        }
     },
     "extra": {
         "heroku": {
