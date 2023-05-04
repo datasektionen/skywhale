@@ -176,6 +176,10 @@ class ElectionAdminController extends BaseController {
 		// Save new information
 		foreach ($election->positionsPivot() as $pivot) {
 			$urlposition = urlencode($pivot->position);
+			$election->setPositionCount(
+				$pivot->position,
+				$request->input('count_' . $urlposition, 1),
+			);
 			$election->setNominationStop(
 				$pivot->position,
 				$request->input('nomination_stop_' . $urlposition),
