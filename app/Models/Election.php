@@ -16,7 +16,7 @@ use DateTime;
  */
 class Election extends Model {
     use SoftDeletes;
-    
+
     /**
      * The table associated with the model.
      *
@@ -36,7 +36,7 @@ class Election extends Model {
             ->select('elections.name', 'election_position.*')
             ->join('elections', 'elections.id', '=', 'election_position.election_id')
             ->where('election_id', $this->id);
-        
+
         if ($onlyNominateable) {
             $db = $db->where(function ($query) use ($now) {
                 $query->where(function ($query) use ($now) {
@@ -47,7 +47,7 @@ class Election extends Model {
                         ->where('election_position.nomination_stop', '>', $now);
                 });
             });
-        }        
+        }
 
         $rows = $db->get();
 
@@ -119,7 +119,7 @@ class Election extends Model {
             return false;
 
         DB::insert(
-            'INSERT INTO election_position (position, election_id) values (?, ?)', 
+            'INSERT INTO election_position (position, election_id) values (?, ?)',
             [
                 $identifier,
                 $this->id
@@ -191,7 +191,7 @@ class Election extends Model {
 
     /**
      * Returns true if this election accepts anwers right now.
-     * 
+     *
      * @return boolean true if users can accept positions right now, false otherwise
      */
     public function acceptsAnswers($uuid) {
@@ -211,13 +211,13 @@ class Election extends Model {
         if (property_exists($row, 'acceptance_stop') && $row->acceptance_stop !== null)
             $specStop = Carbon::createFromFormat("Y-m-d H:i:s", $row->acceptance_stop, $tz);
 
-        return 
-            $opens->lt($now) 
+        return
+            $opens->lt($now)
             && (
-                (   
+                (
                     !isset($specStop) && $stop->gt($now)
                 )
-                || 
+                ||
                 (
                     isset($specStop) && $specStop->gt($now)
                 )
@@ -226,8 +226,8 @@ class Election extends Model {
 
     /**
      * Gets all positions open for election in the given elections.
-     * 
-     * @param  [Election] $elections List of elections to consider 
+     *
+     * @param  [Election] $elections List of elections to consider
      * @return [Position]            List of positions for the current elections
      */
     public static function positionsForElections($elections) {
@@ -260,10 +260,10 @@ class Election extends Model {
             ->whereNull('position_user.deleted_at')
             ->where('position_user.election_id', '=', $this->id)
             ->where('position_user.position', '=', $position->identifier)
-            ->orderBy(DB::raw(" CASE status 
-                WHEN 'accepted' then 1 
-                WHEN 'declined' then 3 
-                ELSE 2 
+            ->orderBy(DB::raw(" CASE status
+                WHEN 'accepted' then 1
+                WHEN 'declined' then 3
+                ELSE 2
                 END"));
         $collection = $x->get();
 
@@ -278,11 +278,11 @@ class Election extends Model {
                     (
                         (
                             $nomination->a_s === null && $acceptanceStop->lt($now)
-                        ) || 
+                        ) ||
                         (
                             $nomination->a_s !== null && $acceptanceStopLocal->lt($now)
                         )
-                    ) && 
+                    ) &&
                     $nomination->status != 'accepted'
                 ) {
                 $nomination->status = 'declined';
@@ -294,7 +294,7 @@ class Election extends Model {
 
     /**
      * Cascade deletion posts and nominations.
-     * 
+     *
      * @return void
      */
     public function delete() {
@@ -305,35 +305,42 @@ class Election extends Model {
         DB::table('election_position')
             ->where('election_id', $this->id)
             ->delete();
-            
+
         parent::delete();
+    }
+
+    public function setPositionCount($positionIdentifier, $count) {
+        DB::table('election_position')
+            ->where('election_id', $this->id)
+            ->where('position', $positionIdentifier)
+            ->update(['count' => $count]);
     }
 
     /**
      * Sets the nomination stop for position.
-     * 
-     * @param string $postitionIdentidifer the position
+     *
+     * @param string $positionIdentifier the position
      * @param string(Y-m-d H:i) $value the datetime
      * @param bool $null true if should be null
      */
-    public function setNominationStop($postitionIdentidifer, $value, $null) {
+    public function setNominationStop($positionIdentifier, $value, $null) {
         DB::table('election_position')
             ->where('election_id', $this->id)
-            ->where('position', $postitionIdentidifer)
+            ->where('position', $positionIdentifier)
             ->update(['nomination_stop' => $null ? null : date("Y-m-d H:i:s", strtotime($value))]);
     }
 
     /**
      * Sets the acceptance stop for position.
-     * 
-     * @param string $postitionIdentidifer the position
+     *
+     * @param string $positionIdentifier the position
      * @param string(Y-m-d H:i) $value the datetime
      * @param bool $null true if should be null
      */
-    public function setAcceptanceStop($postitionIdentidifer, $value, $null) {
+    public function setAcceptanceStop($positionIdentifier, $value, $null) {
         DB::table('election_position')
             ->where('election_id', $this->id)
-            ->where('position', $postitionIdentidifer)
+            ->where('position', $positionIdentifier)
             ->update(['acceptance_stop' => $null ? null : date("Y-m-d H:i:s", strtotime($value))]);
     }
 

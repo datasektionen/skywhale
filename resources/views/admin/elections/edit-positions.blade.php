@@ -34,11 +34,13 @@ $(document).ready(function () {
     <table>
         <tr style='background:#eee'>
             <th>Post</th>
+            <th></th>
             <th colspan="2" style="text-align: center">Nomineringsstopp</th>
             <th colspan="2" style="text-align: center">Acceptansstopp</th>
         </tr>
         <tr style='background:#eee'>
             <th></th>
+            <th>Antal</th>
             <th>Datum</th>
             <th>Standard</th>
             <th>Datum</th>
@@ -47,6 +49,7 @@ $(document).ready(function () {
         @foreach ($positions as $position)
         <tr>
             <td>{{ $position->title }}</td>
+            <td>{!! Form::number('count_' . urlencode($position->identifier), $position->pivot->count, ['class' => 'position-count']) !!}</td>
             <td>
                 {!! Form::input('datetime-local', 'nomination_stop_' . urlencode($position->identifier), str_replace(" ", "T", $position->pivot->nomination_stop), ['class' => $position->pivot->nomination_stop === null ? 'inactive' : '']) !!}
             </td>

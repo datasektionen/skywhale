@@ -189,7 +189,13 @@ table .checkbox {
 input[type=checkbox] {
   visibility: hidden;
 }
-
+input.position-count {
+  width: 50px;
+}
+span.position-count {
+  font-style: italic;
+  color: #79c;
+}
 
 
 

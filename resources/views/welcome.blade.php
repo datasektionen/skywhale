@@ -69,7 +69,12 @@
 		<ul class="elections" id="election-{{ $election->id }}">
 			@foreach($election->positions() as $position)
 				<li>
-					<h3>{{ $position->title }}</h3>
+					<h3>
+						{{ $position->title }}
+						@if($position->pivot->count > 1)
+							<span class="position-count">×{{ $position->pivot->count }}</span>
+						@endif
+					</h3>
 					<p>
 						@if ($position->pivot->nomination_stop !== null)
 							Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($position->pivot->nomination_stop)) }}.
