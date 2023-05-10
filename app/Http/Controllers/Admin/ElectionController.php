@@ -289,7 +289,7 @@ class ElectionAdminController extends BaseController {
 		}
 
 		if ($request->input('status') === 'accepted' && $row->status != 'accepted') {
-			$user->accept($uuid);
+			$user->accept($uuid, true);
 		} else if ($request->input('status') === 'declined' && $row->status != 'declined') {
 			$user->decline($uuid);
 		} else if ($request->input('status') === 'waiting' && $row->status != 'waiting') {
