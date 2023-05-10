@@ -146,85 +146,45 @@ class User extends Authenticatable {
         return true;
     }
 
-    public function accept($uuid) {
-        // Get election and see if acceptance stop has been
-        $row = \DB::table('position_user')
-            ->where('uuid', $uuid)
-            ->first();
-
-        // Only accept answer if open
-        if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
-            return false;
-        }
-
-        if ($row->status == 'accepted') {
-            return false;
-        }
-        
-        // Change status to accepted
-        \DB::table('position_user')
-            ->where('uuid', $uuid)
-            ->update(['status' => 'accepted']);
-
-        $event = new Event;
-        $event->user_id = $row->user_id;
-        $event->election_id = $row->election_id;
-        $event->action = "accepted";
-        $event->position = $row->position;
-        $event->save();
-
-        return true;
+    public function accept($uuid, $ignoreAcceptanceStop = false) {
+        return $this->setNominationStatus($uuid, "accepted", "accepted", !$ignoreAcceptanceStop);
     }
 
     public function decline($uuid) {
-        // Get election and see if acceptance stop has been
-        $row = \DB::table('position_user')
-            ->where('uuid', $uuid)
-            ->first();
-
-        // Only accept answer if open
-        if ($row === null || !Election::find($row->election_id)->acceptsAnswers($uuid)) {
-            return false;
-        }
-
-        if ($row->status == 'declined') {
-            return false;
-        }
-        
-        // Change status to declined
-        \DB::table('position_user')
-            ->where('uuid', $uuid)
-            ->update(['status' => 'declined']);
-
-        $event = new Event;
-        $event->user_id = $row->user_id;
-        $event->election_id = $row->election_id;
-        $event->action = "declined";
-        $event->position = $row->position;
-        $event->save();
-
-        return true;
+        return $this->setNominationStatus($uuid, "declined", "declined", false);
     }
 
     public function regret($uuid) {
+        return $this->setNominationStatus($uuid, "waiting", "regretted", false);
+    }
+
+    private function setNominationStatus($uuid, $value, $eventValue, $rejectAfterAcceptanceStop) {
         // Get election and see if acceptance stop has been
         $row = \DB::table('position_user')
             ->where('uuid', $uuid)
             ->first();
 
-        if ($row->status == 'waiting') {
+        if ($row === null) {
             return false;
         }
-        
+
+        if ($rejectAfterAcceptanceStop && !Election::find($row->election_id)->acceptsAnswers($uuid)) {
+            return false;
+        }
+
+        if ($row->status == $value) {
+            return false;
+        }
+
         // Change status to waiting
         \DB::table('position_user')
             ->where('uuid', $uuid)
-            ->update(['status' => 'waiting']);
+            ->update(['status' => $value]);
 
         $event = new Event;
         $event->user_id = $row->user_id;
         $event->election_id = $row->election_id;
-        $event->action = "regretted";
+        $event->action = $eventValue;
         $event->position = $row->position;
         $event->save();
 
