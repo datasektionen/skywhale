@@ -39,11 +39,11 @@
 
     window.methone_conf = {
         system_name: "skywhale",
-        color_scheme: "dark_blue",
+        color_scheme: "lime",
         @if (\Auth::guest())
         login_text: "Logga in",
         login_href: "/login",
-        @else 
+        @else
         login_text: "Logga ut",
         login_href: "/logout",
         @endif
@@ -115,6 +115,6 @@
         </div>
 
     </div>
-    
+
 </body>
 </html>
