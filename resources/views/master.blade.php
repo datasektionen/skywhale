@@ -87,7 +87,7 @@
 </head>
 <body>
     <div id="methone-container-replace"></div>
-    <div id="application" class="dark-blue">
+    <div id="application" class="lime">
         <header>
             <div class="header-inner">
                 <div class="row">
