@@ -23,8 +23,8 @@
 
     window.methone_conf = {
         system_name: "skywhale",
-        color_scheme: "dark_blue",
-         
+        color_scheme: "lime",
+
         login_text: "Logga ut",
         login_href: "/logout",
                 links: [
@@ -72,6 +72,6 @@
         </footer>
 
     </div>
-    
+
 </body>
 </html>
