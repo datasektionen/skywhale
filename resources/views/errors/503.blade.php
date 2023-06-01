@@ -23,7 +23,7 @@
 
     window.methone_conf = {
         system_name: "skywhale",
-        color_scheme: "lime",
+        color_scheme: "dark_blue",
 
         login_text: "Logga ut",
         login_href: "/logout",
@@ -43,7 +43,7 @@
 </head>
 <body>
     <div id="methone-container-replace"></div>
-    <div id="application" class="lime">
+    <div id="application" class="dark-blue">
         <header>
             <div class="header-inner">
                 <div class="row">
