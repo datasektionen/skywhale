@@ -64,7 +64,7 @@
             Poster som kan väljas
         </span>
         <div class="input">
-            @foreach (\App\Models\Position::all() as $position)
+            @foreach (\App\Models\Position::active() as $position)
                 <div class="checkbox">
                     {{ Form::checkbox('positions[]', $position->identifier, false, array('id' => 'position-' . $position->identifier )) }} 
                     <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>
