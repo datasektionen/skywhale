@@ -12,7 +12,7 @@ use DB;
 class Position {
     /**
      * Returns all nominations for the specified user.
-     * 
+     *
      * @param  int    $userId        the id of the user to get nominations for
      * @param  [Election]  $openElections A list of elections, will default to all open ones if null or not given
      * @return DB query              querying for all relevant rows in position_user
@@ -35,14 +35,14 @@ class Position {
 
     /**
      * Get all nominated positions for given user in given elections.
-     * 
+     *
      * @param  int         $userId        the id of the user to get nominations for
      * @param  [Election]  $openElections A list of elections, will default to all open ones if null or not given
      * @return [Position]                 A list of Positions connected with the user and election
      */
     public static function forUser($user_id, $openElections = null) {
         $nominations = Position::nominationsForUser($user_id, $openElections)->get();
-        
+
         $positions = Position::allKey();
 
         $res = [];
@@ -52,18 +52,18 @@ class Position {
             $obj->electionObject = Election::find($nomination->election_id);
             $res[] = $obj;
         }
-        
+
         return $res;
     }
 
     /**
-     * Get all positions from API.
-     * 
+     * Get all active positions from API.
+     *
      * @param  array  $columns
      * @return json decoded roles list
      */
-    public static function all($columns = array()) {
-        $rolesString = file_get_contents('http://dfunkt.datasektionen.se/api/roles');
+    public static function active($columns = array()) {
+        $rolesString = file_get_contents('http://dfunkt.datasektionen.se/api/active-roles');
         $roles = json_decode($rolesString);
         usort($roles, function ($a, $b) {
             return strcmp($a->title, $b->title);
@@ -84,12 +84,12 @@ class Position {
 
     /**
      * Get all positions from API with their dfunkt identifier as key.
-     * 
+     *
      * @param  array  $columns
      * @return array  the roles
      */
     public static function allKey($columns = array()) {
-        $rolesString = file_get_contents('http://dfunkt.datasektionen.se/api/roles');
+        $rolesString = file_get_contents('http://dfunkt.datasektionen.se/api/active-roles');
         $roles = json_decode($rolesString);
 
         $res = [];

@@ -27,7 +27,7 @@ class PositionAdminController extends BaseController {
 	 * @return view the view with all the poisitions
 	 */
 	public function getShow() {
-		$p = Position::all();
+		$p = Position::active();
 		$positions = new LengthAwarePaginator($p, count($p), 20);
 		return view('admin.positions.index')->with('positions', $positions);
 	}
