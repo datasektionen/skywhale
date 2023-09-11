@@ -5,7 +5,6 @@
 @section('content')
 
 <div class="center">
-	<p>Trött på bilden här ovanför? Byt på <a href="https://zfinger.datasektionen.se?q={{ $user->kth_username }}">Z-finger</a>.</p>
 	<table>
 		<tr>
 			<td>
