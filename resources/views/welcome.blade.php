@@ -21,13 +21,6 @@
 			}
 		});
 
-		$('.hidebox-c').change(function () {
-			if ($(this).prop('checked')) {
-				$('.profile-img').removeClass('hidden');
-			} else {
-				$('.profile-img').addClass('hidden');
-			}
-		});
 
 		$('.hidebox-b').prop('checked', 'checked').change();
 		$('.hidebox-c').prop('checked', false).change();
