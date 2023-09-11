@@ -87,7 +87,6 @@
 						<ul>
 							@foreach($election->nominees($position) as $nominee)
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : ($nominee->status == 'accepted' ? 'acccepted' : 'waiting')) }}">
-								<img loading="lazy" class="profile-img hidden" src="https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50" />
 
 								@if ($nominee->status == 'accepted')
 									Accepterat:
