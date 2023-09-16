@@ -21,7 +21,7 @@
 			}
 		});
 
-        $('.hidebox-c').change(function () {
+		$('.hidebox-c').change(function () {
 			if ($(this).prop('checked')) {
 				$('.profile-img').removeClass('hidden');
 			} else {
@@ -41,12 +41,10 @@
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-a', 'id' => 'hide-declined-a']) !!}
 			<label for="hide-declined-a">Göm ej besvarade nomineringar</label>
 		</div>
-        @if(Auth::check() && session('admin') == Auth::user()->id)
-            <div class="checkbox" style="display: inline-block;width: 300px;">
-                {!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b']) !!}
-                <label for="hide-declined-b">Göm avböjda nomineringar</label>
-            </div>
-        @endif
+		<div class="checkbox" style="display: inline-block;width: 300px;">
+			{!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b']) !!}
+			<label for="hide-declined-b">Göm avböjda nomineringar</label>
+		</div>
 		<div class="checkbox" style="display: inline-block;">
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-c', 'id' => 'hide-declined-c']) !!}
 			<label for="hide-declined-c">Visa bilder</label>
@@ -88,9 +86,8 @@
 					@if($election->nominees($position)->count() > 0)
 						<ul>
 							@foreach($election->nominees($position) as $nominee)
-                            @if($nominee->status != 'declined' || (Auth::check() && session('admin') == Auth::user()->id))
 							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : ($nominee->status == 'accepted' ? 'acccepted' : 'waiting')) }}">
-                                <img loading="lazy" class="profile-img hidden" src="https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50" />
+								<img loading="lazy" class="profile-img hidden" src="https://zfinger.datasektionen.se/user/{{ \App\Models\User::find($nominee->user_id)->kth_username }}/image/50" />
 
 								@if ($nominee->status == 'accepted')
 									Accepterat:
@@ -104,7 +101,6 @@
 									<a href="/admin/elections/edit-nomination/{{ $nominee->uuid }}">Ändra</a>
 								@endif
 							</li>
-                            @endif
 							@endforeach
 						</ul>
 					@else

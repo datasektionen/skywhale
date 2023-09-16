@@ -50,7 +50,7 @@ $(document).ready(function () {
     }).data("ui-autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
             .data("item.autocomplete", item)
-            .append("<a>" + item.cn + " (" + item.uid + "@kth.se)</a>")
+            .append('<a><img loading="lazy" class="profile-img" src="https://zfinger.datasektionen.se/user/' + item.uid + '/image" />'+ item.cn + " (" + item.uid + "@kth.se)</a>")
             .appendTo(ul);
     };
 });
