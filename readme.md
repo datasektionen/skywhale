@@ -26,6 +26,7 @@ The following endpoints are based on the above URL.
 
   LOGIN_API_KEY=
   LOGIN_API_URL=https://login2.datasektionen.se
+  LOGIN_FRONTEND_URL=https://login2.datasektionen.se
   PLS_API_URL=http://pls.froyo.datasektionen.se/api
   ZFINGER_API_URL=https://zfinger.datasektionen.se
   SPAM_API_KEY=
