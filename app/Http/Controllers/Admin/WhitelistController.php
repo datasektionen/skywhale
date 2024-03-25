@@ -44,30 +44,27 @@ class WhitelistAdminController extends BaseController {
 		]);
 
 		foreach ($request->input('responses') as $userId => $response) {
-			switch ($response) {
-				case 'accept':
-					$user = User::find(intval($userId));
-					if ($user === null) {
-						continue;
-					}
-					$user->wants_email = 'yes';
-					$user->save();
-					$user->notify();
+			if ($response == 'accept') {
+				$user = User::find(intval($userId));
+				if ($user === null) {
 					continue;
-				case 'blacklist':
-					$user = User::find(intval($userId));
-					if ($user === null) {
-						continue;
-					}
-					if (Blacklist::isBlacklisted($user->kth_username)) {
-						$user->delete();
-						continue;
-					}
-					$blacklist = new Blacklist;
-					$blacklist->kth_username = $user->kth_username;
-					$blacklist->save();
+				}
+				$user->wants_email = 'yes';
+				$user->save();
+				$user->notify();
+			} else if ($response == 'blacklist') {
+				$user = User::find(intval($userId));
+				if ($user === null) {
+					continue;
+				}
+				if (Blacklist::isBlacklisted($user->kth_username)) {
 					$user->delete();
 					continue;
+				}
+				$blacklist = new Blacklist;
+				$blacklist->kth_username = $user->kth_username;
+				$blacklist->save();
+				$user->delete();
 			}
 		}
 
