@@ -8,7 +8,7 @@ RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY nginx_app.conf /etc/nginx/http.d/default.conf
-RUN sed -i 's/;clear_env/clear_env/' /etc/php7/php-fpm.d/www.conf
+RUN sed -i 's/;clear_env/clear_env/' /etc/php7/php-fpm.d/www.conf # Gives PHP access to environment variables
 
 RUN : \
     && addgroup -S www \
@@ -21,6 +21,9 @@ USER www
 WORKDIR /app
 COPY --chown=www:www . /app
 
+# With cache, build goes brrrrrr
+# Unless specifying `--no-scripts`, someone thought it would be funny to connect to the database
+# right after installing dependencies.
 RUN --mount=type=cache,target=/app/vendor/ composer install --no-scripts --no-dev && cp -r vendor _vendor
 RUN ln -s _vendor vendor
 
