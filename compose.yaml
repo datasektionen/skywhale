@@ -1,0 +1,43 @@
+services:
+  app:
+    build: .
+    command: sh -c 'php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000'
+    ports: [ 8000:8000 ]
+    env_file: .env
+    init: true
+    environment:
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_DATABASE=skywhale
+      - DB_USERNAME=skywhale
+      - DB_PASSWORD=skywhale
+      - LOGIN_API_URL=http://login:7002
+      - PLS_API_URL=http://login:7001/api
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore: [vendor/]
+        - action: rebuild
+          path: composer.json
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=skywhale
+      - POSTGRES_USER=skywhale
+      - POSTGRES_DB=skywhale
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "sh -c 'pg_isready -d skywhale -U skywhale'"
+      interval: 1s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+  login:
+    image: ghcr.io/datasektionen/nyckeln-under-dorrmattan
+    ports: [ 7002:7002 ]
