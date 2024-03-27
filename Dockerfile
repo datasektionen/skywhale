@@ -16,16 +16,14 @@ RUN : \
     && chown www:www /var/log/php7 \
     && :
 
-USER www
-
 WORKDIR /app
-COPY --chown=www:www . /app
+COPY . /app
 
 # With cache, build goes brrrrrr
 # Unless specifying `--no-scripts`, someone thought it would be funny to connect to the database
 # right after installing dependencies.
 RUN --mount=type=cache,target=/app/vendor/ composer install --no-scripts --no-dev && cp -r vendor _vendor
-RUN ln -s _vendor vendor
+RUN ln -s _vendor vendor && chown -R www:www /app
 
 EXPOSE 8000
 
