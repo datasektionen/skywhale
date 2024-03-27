@@ -1,5 +1,5 @@
 # Skywhale
-PHP (<3) Laravel application that handles elections. An election is an event with starting and ending date (also containing dates for nomination and acceptance stops). An election has at least one position open for election. 
+PHP (</3) Laravel application that handles elections. An election is an event with starting and ending date (also containing dates for nomination and acceptance stops). An election has at least one position open for election. 
 
 ## API
 There is an API for Skywhale. The API is located at ```/api``` (http://val.datasektionen.se/api).
@@ -7,38 +7,39 @@ There is an API for Skywhale. The API is located at ```/api``` (http://val.datas
 ### API endpoints
 The following endpoints are based on the above URL.
 ```
-  GET /elections          Returns all the current elections as JSON
+GET /elections          Returns all the current elections as JSON
 ```
 
 ## Required environment variables
 ```
-  APP_ENV=production
-  APP_KEY=12345678901234567890abcdefabcdef
-  APP_DEBUG=false
-  APP_LOG_LEVEL=debug
-  APP_URL=
+APP_ENV=production
+APP_KEY=12345678901234567890abcdefabcdef
+APP_DEBUG=false
+APP_LOG_LEVEL=debug
+APP_URL=
 
-  DB_CONNECTION=
-  DB_HOST=
-  DB_DATABASE=
-  DB_USERNAME=
-  DB_PASSWORD=
+DB_CONNECTION=
+DB_HOST=
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
 
-  LOGIN_API_KEY=
-  LOGIN_API_URL=https://login2.datasektionen.se
-  LOGIN_FRONTEND_URL=https://login2.datasektionen.se
-  PLS_API_URL=http://pls.froyo.datasektionen.se/api
-  ZFINGER_API_URL=https://zfinger.datasektionen.se
-  SPAM_API_KEY=
-  SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
+LOGIN_API_KEY=
+LOGIN_API_URL=https://login2.datasektionen.se
+LOGIN_FRONTEND_URL=https://login2.datasektionen.se
+PLS_API_URL=http://pls.froyo.datasektionen.se/api
+ZFINGER_API_URL=https://zfinger.datasektionen.se
+SPAM_API_KEY=
+SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
 ```
 
 ## Roadmap
 Random features are implemented at a random speed. Post an [issue](https://github.com/datasektionen/skywhale/issues), and maybe it will be implemented. One day.
 
 ## Installation and setup
-To setup the app, a web server is needed. The installation depends on your web server. One option is to user [Laravel Homestead](https://laravel.com/docs/4.2/homestead). 
+`docker compose watch`
 
+If you want to run this without docker, make sure you install composer version 1 (not 2, which is the latest at the moment).
 
 ### Laravel PHP Framework
 
