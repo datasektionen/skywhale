@@ -25,19 +25,20 @@ DB_USERNAME=
 DB_PASSWORD=
 
 LOGIN_API_KEY=
-LOGIN_API_URL=https://login2.datasektionen.se
-LOGIN_FRONTEND_URL=https://login2.datasektionen.se
-PLS_API_URL=http://pls.froyo.datasektionen.se/api
+LOGIN_API_URL=https://login.datasektionen.se
+LOGIN_FRONTEND_URL=https://login.datasektionen.se
+PLS_API_URL=http://pls.datasektionen.se/api
 ZFINGER_API_URL=https://zfinger.datasektionen.se
 SPAM_API_KEY=
 SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
+HODIS_API_URL=https://hodis.datasektionen.se
 ```
 
 ## Roadmap
 Random features are implemented at a random speed. Post an [issue](https://github.com/datasektionen/skywhale/issues), and maybe it will be implemented. One day.
 
 ## Installation and setup
-`docker compose watch`
+`touch .env; docker compose watch`
 
 If you want to run this without docker, make sure you install composer version 1 (not 2, which is the latest at the moment).
 
