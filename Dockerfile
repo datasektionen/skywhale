@@ -1,7 +1,7 @@
 FROM alpine:3.15
 
 RUN apk --no-cache add php7 php7-mbstring php7-pdo php7-openssl php7-json php7-phar php7-fileinfo \
-    php7-dom php7-tokenizer php7-xml php7-xmlwriter php7-session php7-pgsql php7-pdo_pgsql php7-fpm \
+    php7-dom php7-tokenizer php7-xml php7-xmlwriter php7-session php7-pgsql php7-pdo_pgsql php7-fpm php7-curl \
     git zip nginx
 
 RUN php -r 'copy("https://getcomposer.org/installer", "php://stdout");' | \
