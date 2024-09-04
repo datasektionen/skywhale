@@ -11,13 +11,9 @@ job "skywhale" {
       port     = "http"
       provider = "nomad"
       tags = [
-        "traefik-external.enable=true",
-        "traefik-external.http.routers.skywhale.rule=Host(`val.datasektionen.se`)",
-        "traefik-external.http.routers.skywhale.entrypoints=websecure",
-        "traefik-external.http.routers.skywhale.tls.certresolver=default",
-
-        "traefik-internal.enable=true",
-        "traefik-internal.http.routers.skywhale.rule=Host(`skywhale.nomad.dsekt.internal`)",
+        "traefik.enable=true",
+        "traefik.http.routers.calypso.rule=Host(`val.datasektionen.se`)",
+        "traefik.http.routers.calypso.tls.certresolver=default",
       ]
     }
 
