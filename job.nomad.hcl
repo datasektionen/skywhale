@@ -12,8 +12,8 @@ job "skywhale" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.calypso.rule=Host(`val.datasektionen.se`)",
-        "traefik.http.routers.calypso.tls.certresolver=default",
+        "traefik.http.routers.skywhale.rule=Host(`val.datasektionen.se`)",
+        "traefik.http.routers.skywhale.tls.certresolver=default",
       ]
     }
 
