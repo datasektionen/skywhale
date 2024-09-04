@@ -16,3 +16,4 @@ composer.phar
 /public/packages
 .env
 /public/js/component.js
+/skywhale.sql
