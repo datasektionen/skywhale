@@ -10,7 +10,8 @@
         "laravelcollective/html": "5.*",
         "webpatser/laravel-uuid": "^2.0",
         "guzzlehttp/guzzle": "~6.0",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "fideloper/proxy": "^3.3"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
