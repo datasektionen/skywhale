@@ -24,16 +24,16 @@ return [
      * how many proxies that client's request has
      * subsequently passed through.
      */
-    'proxies' => [
-        '10.83.0.0/16',
-        '172.17.0.0/16',
-    ],
+    // 'proxies' => [
+    //     '10.83.0.0/16',
+    //     '172.17.0.0/16',
+    // ],
 
     /*
      * Or, to trust all proxies that connect
      * directly to your server, uncomment this:
      */
-     # 'proxies' => '*',
+    'proxies' => '*',
 
     /*
      * Or, to trust ALL proxies, including those that
