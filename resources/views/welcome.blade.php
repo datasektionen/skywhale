@@ -41,7 +41,7 @@
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-a', 'id' => 'hide-declined-a']) !!}
 			<label for="hide-declined-a">Göm ej besvarade nomineringar</label>
 		</div>
-		<div class="checkbox" style="display: /* inline-block */ none;width: 300px;">
+		<div class="checkbox" style="display: inline-block;width: 300px;">
 			{!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b']) !!}
 			<label for="hide-declined-b">Göm avböjda nomineringar</label>
 		</div>
