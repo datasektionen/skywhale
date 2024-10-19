@@ -2,7 +2,7 @@
 PHP (</3) Laravel application that handles elections. An election is an event with starting and ending date (also containing dates for nomination and acceptance stops). An election has at least one position open for election. 
 
 ## API
-There is an API for Skywhale. The API is located at ```/api``` (http://val.datasektionen.se/api).
+There is an API for Skywhale. The API is located at ```/api``` (https://val.datasektionen.se/api).
 
 ### API endpoints
 The following endpoints are based on the above URL.
@@ -27,7 +27,7 @@ DB_PASSWORD=
 LOGIN_API_KEY=
 LOGIN_API_URL=https://login.datasektionen.se
 LOGIN_FRONTEND_URL=https://login.datasektionen.se
-PLS_API_URL=http://pls.datasektionen.se/api
+PLS_API_URL=https://pls.datasektionen.se/api
 ZFINGER_API_URL=https://zfinger.datasektionen.se
 SPAM_API_KEY=
 SPAM_API_URL=https://spam.datasektionen.se/api/sendmail

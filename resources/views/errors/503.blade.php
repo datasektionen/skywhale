@@ -68,7 +68,7 @@
             <div class="clear"></div>
         </div>
         <footer>
-            <a href="http://github.com/datasektionen/skywhale" class="footer">&#10084;</a>
+            <a href="https://github.com/datasektionen/skywhale" class="footer">&#10084;</a>
         </footer>
 
     </div>
