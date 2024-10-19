@@ -9,7 +9,7 @@ Den {{ date("j/n Y", strtotime($election->closes)) }} äger {{ $election->name }
 * {{ $position->title }}
 @endforeach
 
-För att kunna tacka ja till en nominering och sedan bli vald måste du vara sektionsmedlem i Konglig Datasektionen. Om du inte är det kan du enkelt bli medlem genom att betala ett medlemskap till kåren på [ths.kth.se](http://ths.kth.se).
+För att kunna tacka ja till en nominering och sedan bli vald måste du vara sektionsmedlem i Konglig Datasektionen. Om du inte är det kan du enkelt bli medlem genom att betala ett medlemskap till kåren på [thskth.se](https://thskth.se).
 
 [Du svarar på din nominering genom att trycka på denna länk.]({{ url('/nomination/answer') }}) Vi ser gärna att du svarar så fort du har bestämt dig för att underlätta i vårt arbete, dock är sista dagen att acceptera nomineringen {{ date("j/n Y",strtotime($election->acceptance_stop)-(86399/2)) }}.
 
