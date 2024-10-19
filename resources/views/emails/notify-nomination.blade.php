@@ -13,7 +13,7 @@ För att kunna tacka ja till en nominering och sedan bli vald måste du vara sek
 
 [Du svarar på din nominering genom att trycka på denna länk.]({{ url('/nomination/answer') }}) Vi ser gärna att du svarar så fort du har bestämt dig för att underlätta i vårt arbete, dock är sista dagen att acceptera nomineringen {{ date("j/n Y",strtotime($election->acceptance_stop)-(86399/2)) }}.
 
-På [valsidan]({{ url('/') }}) kan du se vilka andra som är nominerade. Se även [funktionärssidan](http://dfunkt.datasektionen.se) för mer utförlig information om posten. Det går även bra att fråga medlemmarna i Valberedningen eller skicka eventuella frågor till [valberedning@d.kth.se](mailto:valberedning@d.kth.se).
+På [valsidan]({{ url('/') }}) kan du se vilka andra som är nominerade. Se även [funktionärssidan](https://dfunkt.datasektionen.se) för mer utförlig information om posten. Det går även bra att fråga medlemmarna i Valberedningen eller skicka eventuella frågor till [valberedning@datasektionen.se](mailto:valberedning@datasektionen.se).
 @endsection
 
 @section('ps')
