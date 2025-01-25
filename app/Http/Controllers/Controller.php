@@ -45,7 +45,7 @@ class Controller extends BaseController {
 		}
 
 		try {
-			$roles = @file_get_contents('http://dfunkt.datasektionen.se/api/user/kthid/' . $user->kth_username);
+			$roles = @file_get_contents('https://dfunkt.datasektionen.se/api/user/kthid/' . $user->kth_username);
 			if ($roles === FALSE) {
 				$mandates = collect([]);
 			} else {
