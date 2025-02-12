@@ -39,7 +39,7 @@
         ]
     };
     </script>
-    <script async src="//methone.datasektionen.se/bar.js"></script>
+    <script defer src="//methone.datasektionen.se/bar.js"></script>
 </head>
 <body>
     <div id="methone-container-replace"></div>
