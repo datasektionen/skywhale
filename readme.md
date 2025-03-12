@@ -25,8 +25,8 @@ DB_USERNAME=
 DB_PASSWORD=
 
 LOGIN_API_KEY=
-LOGIN_API_URL=https://login.datasektionen.se
-LOGIN_FRONTEND_URL=https://login.datasektionen.se
+LOGIN_API_URL=https://sso.datasektionen.se/legacyapi
+LOGIN_FRONTEND_URL=https://sso.datasektionen.se/legacyapi
 PLS_API_URL=https://pls.datasektionen.se/api
 ZFINGER_API_URL=https://zfinger.datasektionen.se
 SPAM_API_KEY=
