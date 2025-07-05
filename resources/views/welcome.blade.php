@@ -29,6 +29,7 @@
 			}
 		});
 
+		$('.hidebox-a').prop('checked', 'checked').change();
 		$('.hidebox-b').prop('checked', 'checked').change();
 		$('.hidebox-c').prop('checked', false).change();
 	});
