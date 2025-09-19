@@ -3,7 +3,6 @@ services:
     build: .
     command: sh -c 'php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000'
     ports: [ 8000:8000 ]
-    env_file: .env
     init: true
     environment:
       - APP_ENV=development
@@ -16,9 +15,10 @@ services:
       - DB_DATABASE=skywhale
       - DB_USERNAME=skywhale
       - DB_PASSWORD=skywhale
-      - LOGIN_API_URL=http://login:7002
+      - LOGIN_API_URL=http://nyckeln:7002
       - LOGIN_FRONTEND_URL=http://localhost:7002
-      - PLS_API_URL=http://login:7001/api
+      - HIVE_API_KEY=test
+      - HIVE_API_URL=http://nyckeln:7004/api/v1
       - HODIS_API_URL=https://hodis.datasektionen.se
     depends_on:
       db:
@@ -45,6 +45,48 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-  login:
-    image: ghcr.io/datasektionen/nyckeln-under-dorrmattan
-    ports: [ 7002:7002 ]
+  nyckeln:
+    image: ghcr.io/datasektionen/nyckeln-under-dorrmattan:latest
+    configs:
+      - source: nyckeln.yaml
+        target: /config.yaml
+    ports:
+      - 7001:7001
+      - 7002:7002
+      - 7003:7003
+      - 7004:7004
+
+configs:
+  nyckeln.yaml:
+    content: |
+      clients:
+        - id: "client-id" # use this in your oidc client
+          secret: "client-secret" # use this in your oidc client
+          redirect_uris: # URIs of your oidc client
+            [
+              "http://localhost:4000/oidcc/callback",
+              "http://localhost:4000/oidcc/authorize",
+            ]
+
+      users:
+        - ug_kth_id: some-id
+          kth_id: turetek
+          email: turetek@kth.se
+          first_name: Ture
+          family_name: Teknolog
+          hive_tags:
+            - id: personal_email
+              content: turetek@gmail.com
+
+      hive:
+        groups:
+          - name: Valberedningens Ordförande
+            id: valberedning-ordf
+            domain: example.com
+            members:
+              - turetek
+            tags:
+              - id: mandate
+            permissions:
+              - id: admin
+                scope: null
