@@ -30,6 +30,7 @@ job "skywhale" {
 {{ with nomadVar "nomad/jobs/skywhale" }}
 APP_KEY={{ .app_key }}
 LOGIN_API_KEY={{ .login_api_key }}
+HIVE_API_KEY={{ .hive_api_key }}
 SPAM_API_KEY={{ .spam_api_key }}
 DB_PASSWORD={{ .database_password }}
 {{ end }}
@@ -37,7 +38,7 @@ PORT={{ env "NOMAD_PORT_http" }}
 LOGIN_API_URL=https://login.datasektionen.se
 LOGIN_FRONTEND_URL=https://login.datasektionen.se
 HODIS_API_URL=https://hodis.datasektionen.se
-PLS_API_URL=https://pls.datasektionen.se/api
+HIVE_API_URL=https://pls.datasektionen.se/api
 ZFINGER_API_URL=https://zfinger.datasektionen.se
 SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
 DB_CONNECTION=pgsql

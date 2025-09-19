@@ -84,7 +84,18 @@ class AuthController extends BaseController {
 		Auth::login($user);
 
 		// Check if user is admin
-		$admin = file_get_contents(env('PLS_API_URL') . '/user/' . $user->kth_username . '/skywhale/admin');
+        $opts = [
+            'http' => [
+                'method' => "GET",
+                'header' => "Authorization: Bearer " . env('HIVE_API_KEY')
+            ]
+        ];
+
+        $context = stream_context_create($opts);
+
+
+		$admin = file_get_contents(env('HIVE_API_URL') . '/user/' . $user->kth_username . '/permission/admin', false, $context);
+        $admin = str_replace(["\n"], '', $admin);
 		if ($admin === "true") {
 			session(['admin' => Auth::user()->id]);
 		} else {
