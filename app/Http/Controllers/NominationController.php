@@ -71,20 +71,19 @@ class NominationController extends BaseController {
 
 		// If no success, create one in the database
 		if ($user === null) {
-			$hodis = file_get_contents(env('HODIS_API_URL') . '/uid/' . $kth_username);
-			if ($hodis === FALSE) {
+            $response = file_get_contents(env('SSO_API_URL') . '/api/users?format=single&u=' . $kth_username);
+			if ($respones === FALSE) {
 				return redirect('/')->with('error', $kth_username . ' kunde inte hittas.');
 			}
 			try {
-				$body = json_decode($hodis);
+				$body = json_decode($response);
 			} catch (Exception $e) {
 				return redirect('/')->with('error', $kth_username . ' kunde inte hittas.');
 			}
 			$user = new User;
-			$user->name = $body->displayName;
-			$user->kth_user_id = strtolower($body->ugKthid);
-			$user->kth_username = strtolower($body->uid);
-			$user->year = $body->tag;
+			$user->name = $body->first_name . " " . $body->family_name;
+			$user->kth_username = strtolower($body->kthid);
+			$user->year = $body->year_tag;
 			$user->save();
 		}
 

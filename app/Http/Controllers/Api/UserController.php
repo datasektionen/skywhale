@@ -50,6 +50,7 @@ class UserApiController extends BaseController {
 					$nom["uuid"] = $nominee->uuid;
 					$nom["kth_username"] = $nominee->kth_username;
 					$nom["status"] = $nominee->status;
+                    $nom["picture"] = \App\Models\User::picture($nominee->kth_username);
 					$pos["nominees"][] = $nom;
 				}
 				$x["positions"][] = $pos;
@@ -60,27 +61,31 @@ class UserApiController extends BaseController {
 	}
 
 	/**
-	 * Searches for user in zfinger.
+	 * Searches for user in sso.
 	 * 
 	 * @param  Request $request the request that must contain the get parameter term
-	 * @return string the zfinger response
+	 * @return string the sso response
 	 */
 	public function getSearch(Request $request) {
 		$this->validate($request, [
 			'term' => 'required'
 		]);
 
-		$url = env("ZFINGER_API_URL") . "/users/" . rawurlencode($request->input('term'));
+		$url = env('SSO_API_URL') . '/api/search?query=' . rawurlencode($request->input('term'));
 		$get = file_get_contents($url);
 		$obj = json_decode($get);
 		$res = [];
 
-		foreach ($obj->results as $entry) {
+		foreach ($obj as $entry) {
 			$a = new \stdClass;
-			$a->id = $entry->uid;
-			$a->label = $entry->givenName . " " . $entry->sn . " (" . $entry->uid . "@kth.se)";
-			$a->value = $entry->givenName . " " . $entry->sn;
-			$a->name = $entry->givenName . " " . $entry->sn;
+			$a->id = $entry->kthid;
+			$a->label = $entry->firstName . " " . $entry->familyName . " (" . $entry->kthid . "@kth.se)";
+			$a->value = $entry->firstName . " " . $entry->familyName;
+			$a->name = $entry->firstName . " " . $entry->familyName;
+            $a->picture = \App\Models\User::picture($entry->kthid);
+            if (property_exists($entry, 'yearTag')) {
+                $a->year = $entry->yearTag;
+            }
 			$res[] = $a;
 		}
 		return response()->json($res);

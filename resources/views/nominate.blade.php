@@ -10,10 +10,10 @@ $(document).ready(function () {
     });
 
     function autoComplete(ui) {
-        $("#email").val(ui.item.uid + "@kth.se");
-        $("#name").val(ui.item.cn);
-        if (ui.item.tag) {
-            $("#year").text(ui.item.tag);
+        $("#email").val(ui.item.id + "@kth.se");
+        $("#name").val(ui.item.name);
+        if (ui.item.year) {
+            $("#year").text(ui.item.year);
             $("#year").show();
         } else {
             $("#year").hide();
@@ -25,8 +25,7 @@ $(document).ready(function () {
             $.ajax({
                 type: "GET",
                 contentType: "text/plain; charset=utf-8",
-                url: "https://hodis.datasektionen.se/users/" + request.term,
-                crossDomain: true,
+                url: "/api/user/search?term=" + request.term,
                 success: function (data) {
                     if (data != null) {
                         response(data.slice(0,8));
@@ -50,7 +49,7 @@ $(document).ready(function () {
     }).data("ui-autocomplete")._renderItem = function(ul, item) {
         return $("<li></li>")
             .data("item.autocomplete", item)
-            .append('<a><img loading="lazy" class="profile-img" src="https://zfinger.datasektionen.se/user/' + item.uid + '/image" />'+ item.cn + " (" + item.uid + "@kth.se)</a>")
+            .append('<a><img loading="lazy" class="profile-img" src="' + item.picture + '" />'+ item.label + "</a>")
             .appendTo(ul);
     };
 });

@@ -371,4 +371,18 @@ class User extends Authenticatable {
             ->where('user_id', '=', $this->id)
             ->update(['notified' => DB::raw('NOW()')]);
     }
+
+    public static function picture($kthid) {
+        $opts = [
+            'http' => [
+                'method' => "GET",
+                'header' => "Authorization: Bearer " . env('RFINGER_API_KEY')
+            ]
+        ];
+
+        $context = stream_context_create($opts);
+
+
+		return file_get_contents(env('RFINGER_API_URL') . $kthid, false, $context);
+    }
 }

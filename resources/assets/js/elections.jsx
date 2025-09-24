@@ -55,7 +55,7 @@ class Position extends React.Component {
       display: 'inline-block',
       verticalAlign: 'middle',
       margin: '3px 5px 5px 0px',
-      backgroundImage: 'url(https://zfinger.datasektionen.se/user/'+imgUrl+'/image)'
+      backgroundImage: 'url('+imgUrl+')'
     });
 
     return (
@@ -66,7 +66,7 @@ class Position extends React.Component {
           {this.props.position.nominees.filter(nominee => nominee.status !== 'declined').map(
             nominee => 
               <li style={{listStyleType:'none',padding:'0',margin:'0'}} key={nominee.uuid} className={nominee.status}>
-                <div style={imgStyle(nominee.kth_username)}></div>
+                <div style={imgStyle(nominee.picture)}></div>
                 &nbsp;{nominee.status === 'accepted' ? 'Accepterat: ' : (nominee.status === 'declined' ? 'Tackat nej: ' : '')}
                 {nominee.name} 
               </li>

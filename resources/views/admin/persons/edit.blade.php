@@ -20,15 +20,6 @@
 
     <div class="form-entry">
         <span class="description">
-            KTH-användarid:
-        </span>
-        <div class="input">
-            {!! Form::text('kth_user_id', NULL, array('placeholder' => 'KTH-kth_user_id')) !!}
-        </div>
-    </div>
-
-    <div class="form-entry">
-        <span class="description">
             KTH-användarnamn:
         </span>
         <div class="input">
