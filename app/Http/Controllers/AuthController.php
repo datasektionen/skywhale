@@ -67,17 +67,19 @@ class AuthController extends BaseController {
 
 		if ($user === null) {
             try {
-                $hodis = file_get_contents(env('HODIS_API_URL') . '/ugkthid/' . $body->ugkthid);
-                $hodis = json_decode($hodis);
+                $ssoUser = file_get_contents(env('SSO_API_URL') . '/api/users?format=single&u=' . $body->user);
+                $ssoUser = json_decode($ssoUser);
+                if (!property_exists($ssoUser, 'yearTag')) {
+                    $ssoUser->yearTag = "";
+                }
             } catch (Exception $e) {
                 return redirect('/')->with('error', 'Du loggades inte in.');
             }
 			// Create new user in our systems if did not exist
 			$user = new User;
-			$user->name = $hodis->displayName;
-			$user->kth_user_id = strtolower($body->ugkthid);
+			$user->name = $ssoUser->firstName . " " . $ssoUser->familyName;
 			$user->kth_username = strtolower($body->user);
-			$user->year = $hodis->tag;
+			$user->year = $ssoUser->yearTag;
 			$user->save();
 		}
 

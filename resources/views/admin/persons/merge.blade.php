@@ -34,15 +34,6 @@
 
             <div class="form-entry">
                 <span class="description">
-                    KTH-id
-                </span>
-                <div class="input">
-                    {!! Form::text('kth_user_id', isset($info['kth_user_id']) ? $info['kth_user_id'] : '', array('placeholder' => 'uXXXXXXXX')) !!}
-                </div>
-            </div>
-
-            <div class="form-entry">
-                <span class="description">
                     KTH-mejl
                 </span>
                 <div class="input">

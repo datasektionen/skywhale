@@ -74,7 +74,6 @@ class PersonAdminController extends BaseController {
 
 		$person = new User;
 		$person->name = $request->input('name');
-		$person->kth_user_id = $request->input('kth_user_id');
 		$person->kth_username = $request->input('kth_username');
 		$person->year = $request->input('year');
 		$person->save();
@@ -145,7 +144,6 @@ class PersonAdminController extends BaseController {
 			// Save user to array and maybe build on $info
 			$users[] = $user;
 			if (strlen($user->name) > 0) 		 $info['name'] = $user->name;
-			if (strlen($user->kth_user_id) > 0)  $info['kth_user_id'] = $user->kth_user_id;
 			if (strlen($user->kth_username) > 0) $info['kth_username'] = $user->kth_username;
 			if (strlen($user->year) > 0)		 $info['year'] = $user->year;
 		}
@@ -173,7 +171,6 @@ class PersonAdminController extends BaseController {
 		$validator = \Validator::make($request->all(), [
 			'name' => 'required',
 			'kth_username' => 'required|email|regex:/[^@]*@kth\.se/',
-			'kth_user_id' => '',
 			'year' => ''
 		]);
 
@@ -188,7 +185,6 @@ class PersonAdminController extends BaseController {
 		$person = new User;
 		$person->name = $request->input('name');
 		$person->kth_username = explode("@", $request->input('kth_username'))[0];
-		$person->kth_user_id = $request->input('kth_user_id');
 		$person->year = $request->input('year');
 		$person->save();
 		

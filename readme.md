@@ -27,12 +27,13 @@ DB_PASSWORD=
 LOGIN_API_KEY=
 LOGIN_API_URL=https://sso.datasektionen.se/legacyapi
 LOGIN_FRONTEND_URL=https://sso.datasektionen.se/legacyapi
-HIVE_API_URL=https://pls.datasektionen.se/api
+SSO_API_URL=https://sso.datasektionen.se
+HIVE_API_URL=https://pls.datasektionen.se/api/v1
 HIVE_API_KEY=
-ZFINGER_API_URL=https://zfinger.datasektionen.se
+RFINGER_API_URL=https://rfinger.datasektionen.se/api
+RFINGER_API_KEY=
 SPAM_API_KEY=
 SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
-HODIS_API_URL=https://hodis.datasektionen.se
 ```
 
 ## Roadmap

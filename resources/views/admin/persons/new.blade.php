@@ -16,15 +16,6 @@
 
     <div class="form-entry">
         <span class="description">
-            KTH-id
-        </span>
-        <div class="input">
-            {!! Form::text('kth_user_id', NULL, array('placeholder' => 'uXXXXXXXX')) !!}
-        </div>
-    </div>
-
-    <div class="form-entry">
-        <span class="description">
             KTH-mejl
         </span>
         <div class="input">

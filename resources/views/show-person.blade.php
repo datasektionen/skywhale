@@ -5,8 +5,8 @@
 @section('content')
 
 <div class="center">
-	<img class="profile-img big" src="https://zfinger.datasektionen.se/user/{{ $user->kth_username }}/image" style="width: 200px; height: 200px;" />
-	<p>Trött på bilden här ovanför? Byt på <a href="https://zfinger.datasektionen.se?q={{ $user->kth_username }}">Z-finger</a>.</p>
+	<img class="profile-img big" src="{{ $user->picture() }}" style="width: 200px; height: 200px;" />
+	<p>Trött på bilden här ovanför? Byt på <a href="https://rfinger.datasektionen.se>"R-finger</a>.</p>
 	<table>
 		<tr>
 			<td>
