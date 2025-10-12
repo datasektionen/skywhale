@@ -28,7 +28,7 @@ class AuthController extends BaseController {
 
     function __construct() {
         $this->oidc = new OpenIDConnectClient(
-            env('OIDC_PROVIDER'),
+            env('SSO_API_URL'),
             env('OIDC_ID'),
             env('OIDC_SECRET')
         );
@@ -71,7 +71,7 @@ class AuthController extends BaseController {
 
 		if ($user === null) {
             try {
-                $ssoUser = file_get_contents(env('OIDC_PROVIDER') . '/api/users?format=single&u=' . $kthid);
+                $ssoUser = file_get_contents(env('SSO_API_URL') . '/api/users?format=single&u=' . $kthid);
                 $ssoUser = json_decode($ssoUser);
                 if (!property_exists($ssoUser, 'yearTag')) {
                     $ssoUser->yearTag = "";
