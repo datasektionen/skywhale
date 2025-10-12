@@ -29,16 +29,16 @@ job "skywhale" {
         data        = <<ENV
 {{ with nomadVar "nomad/jobs/skywhale" }}
 APP_KEY={{ .app_key }}
-LOGIN_API_KEY={{ .login_api_key }}
+OIDC_SECRET={{ .oidc_secret }}
 HIVE_API_KEY={{ .hive_api_key }}
 SPAM_API_KEY={{ .spam_api_key }}
 RFINGER_API_KEY={{ .rfinger_api_key }}
 DB_PASSWORD={{ .database_password }}
 {{ end }}
 PORT={{ env "NOMAD_PORT_http" }}
-LOGIN_API_URL=https://login.datasektionen.se
-LOGIN_FRONTEND_URL=https://login.datasektionen.se
-SSO_API_URL=http://sso.nomad.dsekt.internal
+OIDC_PROVIDER=http://sso.nomad.dsekt.internal
+OIDC_ID=skywhale
+REDIRECT_URL=https://val.datasektionen.se/login-complete
 HIVE_API_URL=https://hive.nomad.dsekt.internal/api/v1
 RFINGER_API_URL=https://rfinger.datasektionen.se/api
 SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
