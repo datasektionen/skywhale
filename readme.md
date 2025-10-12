@@ -24,10 +24,10 @@ DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 
-LOGIN_API_KEY=
-LOGIN_API_URL=https://sso.datasektionen.se/legacyapi
-LOGIN_FRONTEND_URL=https://sso.datasektionen.se/legacyapi
-SSO_API_URL=https://sso.datasektionen.se
+OIDC_PROVIDER=https://sso.datasektionen.se
+OIDC_ID=
+OIDC_SECRET=
+REDIRECT_URL=
 HIVE_API_URL=https://pls.datasektionen.se/api/v1
 HIVE_API_KEY=
 RFINGER_API_URL=https://rfinger.datasektionen.se/api

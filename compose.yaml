@@ -1,7 +1,6 @@
 services:
   app:
     build: .
-    command: sh -c 'php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000'
     ports: [ 8000:8000 ]
     init: true
     environment:
@@ -15,13 +14,15 @@ services:
       - DB_DATABASE=skywhale
       - DB_USERNAME=skywhale
       - DB_PASSWORD=skywhale
-      - LOGIN_API_URL=http://nyckeln:7002
-      - LOGIN_FRONTEND_URL=http://localhost:7002
-      - SSO_API_URL=http://nyckeln:7003
+      - OIDC_PROVIDER=http://nyckeln:7003
+      - OIDC_ID=client-id
+      - OIDC_SECRET=client-secret
+      - REDIRECT_URL=http://localhost:8000/login-complete
       - HIVE_API_KEY=test
       - HIVE_API_URL=http://nyckeln:7004/api/v1
       - RFINGER_API_URL=https://rfinger.datasektionen.se/api/
       - RFINGER_API_KEY=
+      - PORT=8000
     depends_on:
       db:
         condition: service_healthy
@@ -64,11 +65,8 @@ configs:
       clients:
         - id: "client-id" # use this in your oidc client
           secret: "client-secret" # use this in your oidc client
-          redirect_uris: # URIs of your oidc client
-            [
-              "http://localhost:4000/oidcc/callback",
-              "http://localhost:4000/oidcc/authorize",
-            ]
+          redirect_uris:
+            - "http://localhost:8000/login-complete"
 
       users:
         - ug_kth_id: some-id

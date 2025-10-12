@@ -9,18 +9,31 @@ use GuzzleHttp\Client;
 use Auth;
 use Session;
 
+use Jumbojett\OpenIDConnectClient;
+
 use App\Models\Election;
 use App\Models\Position;
 use App\Models\User;
 
 /**
-* Authentication controller. Handles login via login2.datasektionen.se.
+* Authentication controller. Handles login via sso.datasektionen.se.
 *
-* @author Jonas Dahl <jonas@jdahl.se>
-* @version 2016-10-14
+* @author Jonas Dahl <jonas@jdahl.se>, Viktor Ekby <viktoe@datasektionen.se>
+* @version 2025-10-12
 */
 class AuthController extends BaseController {
 	use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    private OpenIDConnectClient $oidc;
+
+    function __construct() {
+        $this->oidc = new OpenIDConnectClient(
+            env('OIDC_PROVIDER'),
+            env('OIDC_ID'),
+            env('OIDC_SECRET')
+        );
+        $this->oidc->setRedirectURL(env('REDIRECT_URL'));
+    }
 
 	/**
 	* The logout url. Redirects to main page with success message.
@@ -34,40 +47,31 @@ class AuthController extends BaseController {
 	}
 
 	/**
-	* The login page. Just redirects to login2.
+	* The login page. Just redirects to sso.
 	* 
-	* @return redirect to login2.datasektionen.se
+	* @return redirect to sso.datasektionen.se
 	*/
 	public function getLogin(Request $request) {
-		return redirect(env('LOGIN_FRONTEND_URL') . '/login?callback=' . url('/login-complete') . '/');
-	}
+        $this->oidc->authenticate();
+    }
 
 	/**
 	* Show a person.
-	* @param  int $id the id of the person to show
 	* 
-	* @return view     the person view
+	* @return view the person view
 	*/
-	public function getLoginComplete($token, Request $request) {
-		// Send get request to login server
-		$client = new Client();
-		$res = file_get_contents(env('LOGIN_API_URL') . '/verify/' . $token . '.json?api_key=' . env('LOGIN_API_KEY'));
-		if ($res === FALSE) {
+	public function getLoginComplete(Request $request) {
+        if ($this->oidc->authenticate() === FALSE) {
 			return redirect('/')->with('error', 'Du loggades inte in.');
 		}
 
-		// We now have a response. If it is good, parse the json and login user
-		try {
-			$body = json_decode($res);
-		} catch (Exception $e) {
-			return redirect('/')->with('error', 'Du loggades inte in.');
-		}
+        $kthid = $this->oidc->getVerifiedClaims('sub');
 
-		$user = User::where('kth_username', $body->user)->first();
+		$user = User::where('kth_username', $kthid)->first();
 
 		if ($user === null) {
             try {
-                $ssoUser = file_get_contents(env('SSO_API_URL') . '/api/users?format=single&u=' . $body->user);
+                $ssoUser = file_get_contents(env('OIDC_PROVIDER') . '/api/users?format=single&u=' . $kthid);
                 $ssoUser = json_decode($ssoUser);
                 if (!property_exists($ssoUser, 'yearTag')) {
                     $ssoUser->yearTag = "";
@@ -78,7 +82,7 @@ class AuthController extends BaseController {
 			// Create new user in our systems if did not exist
 			$user = new User;
 			$user->name = $ssoUser->firstName . " " . $ssoUser->familyName;
-			$user->kth_username = strtolower($body->user);
+			$user->kth_username = strtolower($kthid);
 			$user->year = $ssoUser->yearTag;
 			$user->save();
 		}

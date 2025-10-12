@@ -11,7 +11,8 @@
         "webpatser/laravel-uuid": "^2.0",
         "guzzlehttp/guzzle": "~6.0",
         "doctrine/dbal": "^2.5",
-        "fideloper/proxy": "^3.3"
+        "fideloper/proxy": "^3.3",
+        "jumbojett/openid-connect-php": "*"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
@@ -62,7 +63,13 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "platform": {
+            "php": "7.4"
+        },
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     },
     "extra": {
         "heroku": {
