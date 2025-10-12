@@ -14,7 +14,7 @@ services:
       - DB_DATABASE=skywhale
       - DB_USERNAME=skywhale
       - DB_PASSWORD=skywhale
-      - OIDC_PROVIDER=http://nyckeln:7003
+      - SSO_API_URL=http://nyckeln:7003
       - OIDC_ID=client-id
       - OIDC_SECRET=client-secret
       - REDIRECT_URL=http://localhost:8000/login-complete

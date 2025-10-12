@@ -24,7 +24,7 @@ DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 
-OIDC_PROVIDER=https://sso.datasektionen.se
+SSO_API_URL=https://sso.datasektionen.se
 OIDC_ID=
 OIDC_SECRET=
 REDIRECT_URL=
