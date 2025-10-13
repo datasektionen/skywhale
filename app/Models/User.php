@@ -383,7 +383,7 @@ class User extends Authenticatable {
 
         $context = stream_context_create($opts);
 
-        $link = file_get_contents(env('RFINGER_API_URL') . $kthid, false, $context);
+        $link = file_get_contents(env('RFINGER_API_URL') . '/' . $kthid, false, $context);
 
         file_put_contents("/var/log/php7/log.log", "end get picture\n");
 
