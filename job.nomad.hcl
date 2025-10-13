@@ -27,7 +27,7 @@ job "skywhale-dev" {
 
       template {
         data        = <<ENV
-{{ with nomadVar "nomad/jobs/skywhale" }}
+{{ with nomadVar "nomad/jobs/skywhale-dev" }}
 APP_KEY={{ .app_key }}
 OIDC_SECRET={{ .oidc_secret }}
 HIVE_API_KEY={{ .hive_api_key }}
