@@ -373,6 +373,7 @@ class User extends Authenticatable {
     }
 
     public static function picture($kthid) {
+        file_put_contents("/var/log/php7/log.log", "begin get picture\n");
         $opts = [
             'http' => [
                 'method' => "GET",
@@ -382,7 +383,10 @@ class User extends Authenticatable {
 
         $context = stream_context_create($opts);
 
+        $link = file_get_contents(env('RFINGER_API_URL') . $kthid, false, $context);
 
-		return file_get_contents(env('RFINGER_API_URL') . $kthid, false, $context);
+        file_put_contents("/var/log/php7/log.log", "end get picture\n");
+
+		return $link;
     }
 }

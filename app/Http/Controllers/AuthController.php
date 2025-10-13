@@ -27,12 +27,14 @@ class AuthController extends BaseController {
     private OpenIDConnectClient $oidc;
 
     function __construct() {
+        file_put_contents("/var/log/php7/log.log", "begin auth controler constructor\n");
         $this->oidc = new OpenIDConnectClient(
             env('SSO_API_URL'),
             env('OIDC_ID'),
             env('OIDC_SECRET')
         );
         $this->oidc->setRedirectURL(env('REDIRECT_URL'));
+        file_put_contents("/var/log/php7/log.log", "end auth controler constructor\n");
     }
 
 	/**
@@ -52,7 +54,9 @@ class AuthController extends BaseController {
 	* @return redirect to sso.datasektionen.se
 	*/
 	public function getLogin(Request $request) {
+        file_put_contents("/var/log/php7/log.log", "begin login redirect\n");
         $this->oidc->authenticate();
+        file_put_contents("/var/log/php7/log.log", "end login redirect\n");
     }
 
 	/**
@@ -61,9 +65,11 @@ class AuthController extends BaseController {
 	* @return view the person view
 	*/
 	public function getLoginComplete(Request $request) {
+        file_put_contents("/var/log/php7/log.log", "begin login complete\n");
         if ($this->oidc->authenticate() === FALSE) {
 			return redirect('/')->with('error', 'Du loggades inte in.');
 		}
+        file_put_contents("/var/log/php7/log.log", "oidc complete\n");
 
         $kthid = $this->oidc->getVerifiedClaims('sub');
 
@@ -89,6 +95,8 @@ class AuthController extends BaseController {
 
 		Auth::login($user);
 
+        file_put_contents("/var/log/php7/log.log", "begin hive\n");
+
 		// Check if user is admin
         $opts = [
             'http' => [
@@ -107,6 +115,8 @@ class AuthController extends BaseController {
 		} else {
 			$request->session()->forget('admin');
 		}
+
+        file_put_contents("/var/log/php7/log.log", "end hive\n");
 
 		return redirect()->intended('/')->with('success', 'Du loggades in.');
 	}
