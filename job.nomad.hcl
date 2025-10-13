@@ -12,8 +12,8 @@ job "skywhale-dev" {
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.skywhale.rule=Host(`val.betasektionen.se`)",
-        "traefik.http.routers.skywhale.tls.certresolver=default",
+        "traefik.http.routers.skywhale-dev.rule=Host(`val.betasektionen.se`)",
+        "traefik.http.routers.skywhale-dev.tls.certresolver=default",
       ]
     }
 
