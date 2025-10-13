@@ -1,3 +1,7 @@
+@php
+    file_put_contents("/var/log/php7/log.log", "test");
+@endphp
+
 @extends('master')
 
 @section('title', 'Val')
