@@ -1,18 +1,18 @@
-job "skywhale" {
-  type = "service"
+job "skywhale-dev" {
+  type = "service-dev"
 
-  group "skywhale" {
+  group "skywhale-dev" {
     network {
       port "http" { }
     }
 
     service {
-      name     = "skywhale"
+      name     = "skywhale-dev"
       port     = "http"
       provider = "nomad"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.skywhale.rule=Host(`val.datasektionen.se`)",
+        "traefik.http.routers.skywhale.rule=Host(`val.betasektionen.se`)",
         "traefik.http.routers.skywhale.tls.certresolver=default",
       ]
     }
@@ -38,7 +38,7 @@ DB_PASSWORD={{ .database_password }}
 PORT={{ env "NOMAD_PORT_http" }}
 SSO_API_URL=http://sso.nomad.dsekt.internal
 OIDC_ID=skywhale
-REDIRECT_URL=https://val.datasektionen.se/login-complete
+REDIRECT_URL=https://val.betasektionen.se/login-complete
 HIVE_API_URL=https://hive.nomad.dsekt.internal/api/v1
 RFINGER_API_URL=https://rfinger.datasektionen.se/api
 SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
@@ -46,9 +46,9 @@ DB_CONNECTION=pgsql
 DB_USERNAME=skywhale
 DB_HOST=postgres.dsekt.internal
 DB_DATABASE=skywhale
-APP_URL=https://val.datasektionen.se
-APP_ENV=production
-APP_DEBUG=false
+APP_URL=https://val.betasektionen.se
+APP_ENV=development
+APP_DEBUG=true
 ENV
         destination = "local/.env"
         env         = true
