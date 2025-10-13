@@ -1,6 +1,7 @@
 services:
   app:
-    build: .
+    build:
+      dockerfile: Dockerfile.dev
     ports: [ 8000:8000 ]
     init: true
     environment:
