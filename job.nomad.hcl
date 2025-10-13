@@ -1,5 +1,5 @@
 job "skywhale-dev" {
-  type = "service-dev"
+  type = "service"
 
   group "skywhale-dev" {
     network {
