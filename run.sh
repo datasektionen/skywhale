@@ -2,6 +2,8 @@
 
 sed -i "s/LISTEN_PORT/$PORT/g" /etc/nginx/http.d/default.conf
 
+echo "listening on port $PORT"
+
 su www -c 'php artisan config:cache'
 su www -c 'php artisan migrate --force'
 
