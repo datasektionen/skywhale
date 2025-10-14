@@ -36,10 +36,10 @@ RFINGER_API_KEY={{ .rfinger_api_key }}
 DB_PASSWORD={{ .database_password }}
 {{ end }}
 PORT={{ env "NOMAD_PORT_http" }}
-SSO_API_URL=http://sso.nomad.dsekt.internal
+SSO_API_URL=http://sso.nomad.dsekt.internal/op
 OIDC_ID=skywhale
 REDIRECT_URL=https://val.datasektionen.se/login-complete
-HIVE_API_URL=https://hive.nomad.dsekt.internal/api/v1
+HIVE_API_URL=http://hive.nomad.dsekt.internal/api/v1
 RFINGER_API_URL=https://rfinger.datasektionen.se/api
 SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
 DB_CONNECTION=pgsql
