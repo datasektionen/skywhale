@@ -1,6 +1,6 @@
 FROM alpine:3.15
 
-RUN apk --no-cache add php7 php7-mbstring php7-pdo php7-openssl php7-json php7-phar php7-fileinfo \
+RUN apk --no-cache add php7 php7-mbstring php7-pdo php7-openssl php7-json php7-phar php7-pecl-apcu php7-fileinfo \
     php7-dom php7-tokenizer php7-xml php7-xmlwriter php7-session php7-pgsql php7-pdo_pgsql php7-fpm php7-curl \
     git zip nginx
 
@@ -25,6 +25,7 @@ COPY . /app
 # right after installing dependencies.
 RUN --mount=type=cache,target=/app/vendor/ composer install --no-scripts --no-dev && cp -r vendor _vendor
 RUN ln -s _vendor vendor && chown -R www:www /app
+RUN echo "extension=apcu.so" > php.ini
 
 EXPOSE 8000
 

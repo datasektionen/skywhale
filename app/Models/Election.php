@@ -156,7 +156,38 @@ class Election extends Model {
         if ($time === null)
             $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
 
-        return Election::where('opens', '<', $now)->where('closes', '>', $now)->get();
+        $elections = Election::where('opens', '<', $now)->where('closes', '>', $now)->get();
+        $nominees = [];
+
+        foreach ($elections as $election) {
+            $positions = $election->positions();
+            foreach ($positions as $position) {
+                foreach($election->nominees($position) as $nominee) {
+                    $nominees[] = $nominee->kth_username;
+                }
+            }
+        }
+
+        $opts = [
+            'http' => [
+                'method' => "GET",
+                'header' => array(
+                    'Authorization: Bearer ' . env('RFINGER_API_KEY'),
+                    'Content-type: application/json',
+                ),
+                'content' => json_encode($nominees)
+            ]
+        ];
+
+        $context = stream_context_create($opts);
+
+		$response = file_get_contents(env('RFINGER_API_URL') . '/batch', false, $context);
+
+        foreach (json_decode($response) as $user => $link) {
+            acpu_store($user, $link, 3600);
+        }
+
+        return $elections;
     }
 
     /**

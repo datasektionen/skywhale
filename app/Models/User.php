@@ -373,20 +373,25 @@ class User extends Authenticatable {
     }
 
     public static function picture($kthid) {
-        file_put_contents("/var/log/php7/log.log", "begin get picture\n");
-        $opts = [
-            'http' => [
-                'method' => "GET",
-                'header' => "Authorization: Bearer " . env('RFINGER_API_KEY')
-            ]
-        ];
+        $cache = apcu_fetch($kthid);
 
-        $context = stream_context_create($opts);
+        if ($cache === FALSE) {
+            $opts = [
+                'http' => [
+                    'method' => "GET",
+                    'header' => "Authorization: Bearer " . env('RFINGER_API_KEY')
+                ]
+            ];
 
-        $link = file_get_contents(env('RFINGER_API_URL') . '/' . $kthid, false, $context);
+            $context = stream_context_create($opts);
 
-        file_put_contents("/var/log/php7/log.log", "end get picture\n");
+            $link = file_get_contents(env('RFINGER_API_URL') . '/' . $kthid, false, $context);
 
-		return $link;
+            apcu_store($kthid, $link, 3600);
+
+            return $link;
+        } else {
+            return $cache;
+        }
     }
 }
