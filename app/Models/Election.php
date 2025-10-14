@@ -184,7 +184,7 @@ class Election extends Model {
 		$response = file_get_contents(env('RFINGER_API_URL') . '/batch', false, $context);
 
         foreach (json_decode($response) as $user => $link) {
-            acpu_store($user, $link, 3600);
+            apcu_store($user, $link, 3600);
         }
 
         return $elections;
