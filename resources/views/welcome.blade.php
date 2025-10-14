@@ -1,5 +1,6 @@
 @php
-    $elections = Election::where('opens', '<', $now)->where('closes', '>', $now)->get();
+    $now = \Carbon\Carbon::now(new DateTimeZone('Europe/Stockholm'));
+    $elections = \App\Models\Election::where('opens', '<', $now)->where('closes', '>', $now)->get();
     $nominees = [];
 
     foreach ($elections as $election) {
