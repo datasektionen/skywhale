@@ -385,7 +385,7 @@ class User extends Authenticatable {
 
             $context = stream_context_create($opts);
 
-            $link =  file_get_contents(env('RFINGER_API_URL') . $kthid, false, $context);
+            $link =  file_get_contents(env('RFINGER_API_URL') . '/' . $kthid, false, $context);
 
             apcu_store($kthid, $link, 3600);
 
