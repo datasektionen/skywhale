@@ -72,7 +72,7 @@ class NominationController extends BaseController {
 		// If no success, create one in the database
 		if ($user === null) {
             $response = file_get_contents(env('SSO_API_URL') . '/api/users?format=single&u=' . $kth_username);
-			if ($respones === FALSE) {
+			if ($respone === FALSE) {
 				return redirect('/')->with('error', $kth_username . ' kunde inte hittas.');
 			}
 			try {
@@ -81,9 +81,9 @@ class NominationController extends BaseController {
 				return redirect('/')->with('error', $kth_username . ' kunde inte hittas.');
 			}
 			$user = new User;
-			$user->name = $body->first_name . " " . $body->family_name;
-			$user->kth_username = strtolower($body->kthid);
-			$user->year = $body->year_tag;
+			$user->name = $body->firstName . " " . $body->familyName;
+			$user->kth_username = $kth_username;
+			$user->year = $body->yearTag;
 			$user->save();
 		}
 
