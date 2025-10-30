@@ -37,6 +37,7 @@ DB_PASSWORD={{ .database_password }}
 {{ end }}
 PORT={{ env "NOMAD_PORT_http" }}
 SSO_API_URL=http://sso.nomad.dsekt.internal
+OIDC_PROVIDER=http://sso.nomad.dsekt.internal/op
 OIDC_ID=skywhale
 REDIRECT_URL=https://val.datasektionen.se/login-complete
 HIVE_API_URL=http://hive.nomad.dsekt.internal/api/v1

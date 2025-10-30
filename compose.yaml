@@ -6,7 +6,7 @@ services:
     init: true
     environment:
       - APP_ENV=development
-      - APP_KEY=12345678901234567890abcdefabcdea
+      - APP_KEY=12345678901234567890abcdefabcdef
       - APP_DEBUG=true
       - APP_LOG_LEVEL=debug
       - APP_URL=http://localhost:8000/
@@ -15,14 +15,15 @@ services:
       - DB_DATABASE=skywhale
       - DB_USERNAME=skywhale
       - DB_PASSWORD=skywhale
-      - SSO_API_URL=http://nyckeln:7003
+      - SSO_API_URL=http://localhost:7003
+      - OIDC_PROVIDER=http://localhost:7003
       - OIDC_ID=client-id
       - OIDC_SECRET=client-secret
       - REDIRECT_URL=http://localhost:8000/login-complete
-      - HIVE_API_KEY=test
+      - HIVE_API_KEY=hive-secret
       - HIVE_API_URL=http://nyckeln:7004/api/v1
-      - RFINGER_API_URL=https://rfinger.datasektionen.se/api/
-      - RFINGER_API_KEY=
+      - RFINGER_API_URL=http://dock:9003/api
+      - RFINGER_API_KEY=rfinger-secret
       - PORT=8000
     depends_on:
       db:
@@ -55,19 +56,42 @@ services:
       - source: nyckeln.yaml
         target: /config.yaml
     ports:
-      - 7001:7001
-      - 7002:7002
       - 7003:7003
       - 7004:7004
+  dock:
+    image: ghcr.io/datasektionen/dock:latest
+    configs:
+      - source: dock.yaml
+        target: /config.yaml
+    ports:
+      - 9003:9003
 
 configs:
+  dock.yaml:
+    content: |
+      rfinger:
+        default: http://localhost:9003
+        pictures:
+          turetek:
+            regular: https://thskth.se/wp-content/uploads/2023/06/ths-logo-bla-01-300x294-1.png
+            small: https://thskth.se/wp-content/uploads/2019/12/ths-logo-svart-01.png
+          diadat:
+            regular: https://dsekt-assets.s3.amazonaws.com/logotyp
+            small: https://dsekt-assets.s3.amazonaws.com/logotyp
+          marmed:
+            regular: https://storage.googleapis.com/medieteknik-static/static/logos/logo.webp
+            small: https://storage.googleapis.com/medieteknik-static/static/logos/logo.webp
+          karklu:
+            regular: https://dsekt-assets.s3.amazonaws.com/website/namnder/dkm.svg
+            small: https://dsekt-assets.s3.amazonaws.com/website/namnder/dkm.svg
+
   nyckeln.yaml:
     content: |
       clients:
-        - id: "client-id" # use this in your oidc client
-          secret: "client-secret" # use this in your oidc client
+        - id: client-id
+          secret: client-secret
           redirect_uris:
-            - "http://localhost:8000/login-complete"
+            - http://localhost:8000/login-complete
 
       users:
         - ug_kth_id: some-id
@@ -75,10 +99,25 @@ configs:
           email: turetek@kth.se
           first_name: Ture
           family_name: Teknolog
-          year_tag: D-00
-          hive_tags:
-            - id: personal_email
-              content: turetek@gmail.com
+          year_tag: D-83
+        - ug_kth_id: some-other-id
+          kth_id: diadat
+          email: diadat@kth.se
+          first_name: Diana
+          family_name: Datalog
+          year_tag: D-83
+        - ug_kth_id: yet-anouther-id
+          kth_id: marmed
+          email: marmed@kth.se
+          first_name: Martin
+          family_name: Median
+          year_tag: M-00
+        - ug_kth_id: even-more
+          kth_id: karklu
+          email: karklu@kth.se
+          first_name: Karin
+          family_name: Klubbare
+          year_tag: D-85
 
       hive:
         groups:
@@ -87,8 +126,5 @@ configs:
             domain: example.com
             members:
               - turetek
-            tags:
-              - id: mandate
             permissions:
               - id: admin
-                scope: null

@@ -28,7 +28,7 @@ class AuthController extends BaseController {
 
     function __construct() {
         $this->oidc = new OpenIDConnectClient(
-            env('SSO_API_URL') . '/op',
+            env('OIDC_PROVIDER'),
             env('OIDC_ID'),
             env('OIDC_SECRET')
         );
