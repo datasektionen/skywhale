@@ -15,7 +15,7 @@
     if (count($nominees) !== 0) {
         $opts = [
             'http' => [
-                'method' => "GET",
+                'method' => "POST",
                 'header' => array(
                     'Authorization: Bearer ' . env('RFINGER_API_KEY'),
                     'Content-type: application/json',
