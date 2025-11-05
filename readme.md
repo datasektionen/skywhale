@@ -33,7 +33,7 @@ HIVE_API_KEY=
 RFINGER_API_URL=https://rfinger.datasektionen.se/api
 RFINGER_API_KEY=
 SPAM_API_KEY=
-SPAM_API_URL=https://spam.datasektionen.se/api/sendmail
+SPAM_API_URL=https://spam.datasektionen.se/api/legacy/sendmail
 ```
 
 ## Roadmap

@@ -113,7 +113,7 @@ class User extends Authenticatable {
         $to = $this->kth_username . "@kth.se";
         $from = "valberedning@datasektionen.se";
         $subject = "Påminnelse: Svara på dina nomineringar";
-        $html = view('emails.remind')
+        $content = view('emails.remind')
             ->with('person', $this)
             ->with('positions', $positions)
             ->with('election', Election::find($x->first()->election_id));
@@ -121,7 +121,7 @@ class User extends Authenticatable {
             'to' => $to,
             'from' => $from,
             'subject' => $subject,
-            'html' => $html,
+            'content' => $content,
             'key' => env('SPAM_API_KEY')
         ];
         $concat = function ($array) {
@@ -263,7 +263,7 @@ class User extends Authenticatable {
         $positions = Position::dataForIds($positionIds);
         $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";
-        $html = view('emails.notify-nomination')
+        $content = view('emails.notify-nomination')
             ->with('person', $this)
             ->with('election', $election)
             ->with('positions', $positions);
@@ -271,7 +271,7 @@ class User extends Authenticatable {
             'to' => $to,
             'from' => $from,
             'subject' => $subject,
-            'html' => $html,
+            'content' => $content,
             'key' => env('SPAM_API_KEY')
         ];
         $concat = function ($array) {
@@ -340,7 +340,7 @@ class User extends Authenticatable {
         $positions = Position::dataForIds($positionIds);
         $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";
-        $html = view('emails.notify-nomination')
+        $content = view('emails.notify-nomination')
             ->with('person', $this)
             ->with('election', $election)
             ->with('positions', $positions);
@@ -348,7 +348,7 @@ class User extends Authenticatable {
             'to' => $to,
             'from' => $from,
             'subject' => $subject,
-            'html' => $html,
+            'content' => $content,
             'key' => env('SPAM_API_KEY')
         ];
         $concat = function ($array) {
