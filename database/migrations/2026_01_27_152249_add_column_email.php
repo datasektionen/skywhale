@@ -14,7 +14,7 @@ class AddColumnEmail extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('email');
+            $table->string('email')->nullable();
         });
     }
 

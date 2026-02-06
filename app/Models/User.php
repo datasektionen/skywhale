@@ -110,7 +110,15 @@ class User extends Authenticatable {
         }
         $positions = Position::dataForIds($positionIds);
 
-        $to = $this->email;
+        $email = ""
+
+        if ($this->email == null) {
+            $email = $this->kth_username . "@kth.se";
+        } else {
+            $email = $this->email;
+        }
+
+        $to = $email
         $from = "valberedning@datasektionen.se";
         $subject = "Påminnelse: Svara på dina nomineringar";
         $content = view('emails.remind')
@@ -259,7 +267,15 @@ class User extends Authenticatable {
             return true;
         }
 
-        $to = $this->email;
+        $email = ""
+
+        if ($this->email == null) {
+            $email = $this->kth_username . "@kth.se";
+        } else {
+            $email = $this->email;
+        }
+
+        $to = $email;
         $positions = Position::dataForIds($positionIds);
         $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";
@@ -336,7 +352,15 @@ class User extends Authenticatable {
             $positionIds[] = $pp->position;
         }
 
-        $to = $this->email;
+        $email = ""
+
+        if ($this->email == null) {
+            $email = $this->kth_username . "@kth.se";
+        } else {
+            $email = $this->email;
+        }
+
+        $to = $email;
         $positions = Position::dataForIds($positionIds);
         $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";
