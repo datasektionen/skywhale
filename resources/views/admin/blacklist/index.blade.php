@@ -12,7 +12,7 @@
 <table>
 	<tr>
 		<th></th>
-		<th>KTH-mejl</th>
+		<th>KTHID</th>
 	</tr>
 	@foreach ($blacklist as $blackentry) 
 		<tr>
@@ -22,7 +22,7 @@
 					<label for="u{{ $blackentry->id }}"></label>
 				</div>
 			</td>
-			<td>{{ $blackentry->kth_username }}@kth.se</td>
+			<td>{{ $blackentry->kth_username }}</td>
 		</tr>
 	@endforeach
 </table>

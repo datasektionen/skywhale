@@ -10,8 +10,8 @@ $(document).ready(function () {
     });
 
     function autoComplete(ui) {
-        $("#email").val(ui.item.id + "@kth.se");
-        $("#name").val(ui.item.name);
+        $("#kth_username").val(ui.item.id);
+        $("#name").text(ui.item.name);
         if (ui.item.year) {
             $("#year").text(ui.item.year);
             $("#year").show();
@@ -20,7 +20,7 @@ $(document).ready(function () {
         }
     }
 
-    $('#name').autocomplete({
+    $('#kth_username').autocomplete({
         source: function(request, response) {
             $.ajax({
                 type: "GET",
@@ -73,16 +73,15 @@ $(document).ready(function () {
 <div class="form">
     <div class="form-entry">
         <span class="description">
-            Vem vill du nominera?<br>
+            Sök på personer att nominera?<br>
             <span class="desc">Börja skriv ett namn så kommer en lista där du kan välja personer.</span>
         </span>
         <div class="input">
-            {!! Form::text('name', NULL, array('placeholder' => 'Namn', 'id' => 'name', 'autocomplete' => 'off')) !!}
-            {!! Form::text('email', NULL, array('placeholder' => 'KTH-mejladress', 'id' => 'email', 'autocomplete' => 'off')) !!}
+            {!! Form::text('kth_username', NULL, array('placeholder' => 'Name/KTHID', 'id' => 'kth_username', 'autocomplete' => 'off')) !!}
+            <p id="name"></p>
             <p id="year"></p>
         </div>
     </div>
-
     <div class="form-entry">
         <span class="description">
             Till vilken post?
