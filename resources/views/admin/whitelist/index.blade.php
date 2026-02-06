@@ -13,7 +13,7 @@
 	</tr>
 	@foreach ($whitelist as $whiteentry) 
 		<tr>
-			<td>{{ $whiteentry->kth_username }}@kth.se</td>
+			<td>{{ $whiteentry->email }}</td>
 			<td>
 				<div class="radio">
 					{!! Form::radio('responses[' . $whiteentry->id . ']', "accept", false, ['id' => 'u' . $whiteentry->id]) !!}

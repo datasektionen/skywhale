@@ -110,7 +110,7 @@ class User extends Authenticatable {
         }
         $positions = Position::dataForIds($positionIds);
 
-        $to = $this->kth_username . "@kth.se";
+        $to = $this->email;
         $from = "valberedning@datasektionen.se";
         $subject = "Påminnelse: Svara på dina nomineringar";
         $content = view('emails.remind')
@@ -259,7 +259,7 @@ class User extends Authenticatable {
             return true;
         }
 
-        $to = $this->kth_username . "@kth.se";
+        $to = $this->email;
         $positions = Position::dataForIds($positionIds);
         $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";
@@ -336,7 +336,7 @@ class User extends Authenticatable {
             $positionIds[] = $pp->position;
         }
 
-        $to = $this->kth_username . "@kth.se";
+        $to = $this->email;
         $positions = Position::dataForIds($positionIds);
         $from = "valberedning@datasektionen.se";
         $subject = "Du har nya nomineringar";

@@ -60,13 +60,12 @@ class NominationController extends BaseController {
 	 */
 	public function postNominate(Request $request) {
 		$this->validate($request, [
-			'name' => 'required',
-			'email' => 'required|email|kth_email|not_blacklisted',
+			'kth_username' => 'required',
 			'election_position' => 'required'
 		]);
 
 		// Try to get user form kth_username
-		$kth_username = strtolower(explode("@", $request->input('email'))[0]);
+		$kth_username = $request->input('kth_username');
 		$user = User::where('kth_username', '=', $kth_username)->first();
 
 		// If no success, create one in the database
