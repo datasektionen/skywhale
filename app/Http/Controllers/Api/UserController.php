@@ -71,7 +71,7 @@ class UserApiController extends BaseController {
 			'term' => 'required'
 		]);
 
-		$url = env('SSO_API_URL') . '/api/search?query=' . rawurlencode($request->input('term'));
+		$url = env('SSO_API_URL') . '/api/search?picture=thumbnail&query=' . rawurlencode($request->input('term'));
 		$get = file_get_contents($url);
 		$obj = json_decode($get);
 		$res = [];
@@ -79,10 +79,11 @@ class UserApiController extends BaseController {
 		foreach ($obj as $entry) {
 			$a = new \stdClass;
 			$a->id = $entry->kthid;
-			$a->label = $entry->firstName . " " . $entry->familyName . " (" . $entry->kthid . "@kth.se)";
+			$a->label = $entry->firstName . " " . $entry->familyName . " (" . $entry->email . ")";
 			$a->value = $entry->firstName . " " . $entry->familyName;
 			$a->name = $entry->firstName . " " . $entry->familyName;
-            $a->picture = \App\Models\User::picture($entry->kthid);
+            $a->email = $entry->email;
+            $a->picture = $entry->picture;
             if (property_exists($entry, 'yearTag')) {
                 $a->year = $entry->yearTag;
             }

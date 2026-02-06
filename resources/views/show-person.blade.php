@@ -21,7 +21,7 @@
 				E-postadress:
 			</td>
 			<td>
-				{{ $user->kth_username }}@kth.se
+				{{ $user->email }}
 			</td>
 		</tr>
 		@if (Auth::check() && session('admin') == Auth::user()->id)
