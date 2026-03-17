@@ -82,6 +82,7 @@ class NominationController extends BaseController {
 			$user = new User;
 			$user->name = $body->firstName . " " . $body->familyName;
 			$user->kth_username = $kth_username;
+            $user->email = $body->email;
 			$user->year = $body->yearTag;
 			$user->save();
 		}
