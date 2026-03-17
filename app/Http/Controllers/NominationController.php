@@ -83,7 +83,11 @@ class NominationController extends BaseController {
 			$user->name = $body->firstName . " " . $body->familyName;
 			$user->kth_username = $kth_username;
             $user->email = $body->email;
-			$user->year = $body->yearTag;
+            if (property_exists($body, "yearTag")) {
+                $user->year = $body->yearTag;
+            } else {
+                $user->year = "";
+            }
 			$user->save();
 		}
 
