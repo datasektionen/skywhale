@@ -6,7 +6,9 @@
 
 <div class="center">
 	<img class="profile-img big" src="{{ \App\Models\User::picture($user->kth_username) }}" style="width: 200px; height: 200px;" />
-	<p>Trött på bilden här ovanför? Byt på <a href="https://rfinger.datasektionen.se">R-finger</a>.</p>
+	@if (\Auth::user() && \Auth::user()->kth_username == $user->kth_username)
+		<p>Trött på bilden här ovanför? Byt på <a href="https://rfinger.datasektionen.se">R-finger</a>.</p>
+	@endif
 	<table>
 		<tr>
 			<td>
