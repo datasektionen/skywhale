@@ -196,7 +196,7 @@ class User extends Authenticatable {
      *
      * @param int $electionId The id of the election to nominate to
      * @param int $positionId The id of the position to nominate to
-     * @return true if successful, false otherwise
+     * @return true if successful, already_nominated if user has already been nominated, false otherwise
      */
     private function nominateToPosition($electionId, $positionId) {
         $election = Election::find($electionId);
@@ -209,7 +209,7 @@ class User extends Authenticatable {
             ->where('position', $positionId)
             ->where('election_id', $election->id)
             ->get()->count() > 0)
-            return false;
+            return "already_nominated";
 
         DB::insert('INSERT INTO position_user (user_id, position, election_id, status, uuid, deleted_at) values (?, ?, ?, ?, ?, ?)', [
             $this->id,
@@ -249,7 +249,11 @@ class User extends Authenticatable {
             return;
         }
         $positionIds[] = $parts[1];
-        $shouldSendMail = $this->nominateToPosition($election->id, $parts[1]) || $shouldSendMail;
+        $check_added = $this->nominateToPosition($election->id, $parts[1]);
+        if($check_added === "already_nominated"){
+            return "already_nominated";
+        }
+        $shouldSendMail = $check_added || $shouldSendMail;
 
         if (!$shouldSendMail) {
             return false;
