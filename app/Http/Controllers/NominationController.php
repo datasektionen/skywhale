@@ -94,7 +94,11 @@ class NominationController extends BaseController {
 		$position_id = substr($request->input('election_position'), strpos($request->input('election_position'), '_') + 1);
 		$post_name = Position::find($position_id)->role->title;
 		// And finally nominate to the post
-		if (!$user->nominate($request->input('election_position'))) {
+		$check_success = $user->nominate($request->input('election_position'));
+		if($check_success === "already_nominated"){
+			return redirect('/nominate')->with('error', $user->name . ' är redan nominerad till ' . $post_name . '.');
+		}
+		else if (!$check_success) {
 			return redirect('/nominate')->with('error', $user->name . ' nominerades inte till ' . $post_name . '.');
 		}
 
