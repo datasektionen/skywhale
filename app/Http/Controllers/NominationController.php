@@ -91,7 +91,8 @@ class NominationController extends BaseController {
 			$user->save();
 		}
 		//return redirect('/nominate')->with('error', $user->name . ' nominerades inte till ' . substr($request->input('election_position'), 2) . '.');
-		$post_name = Position::find(substr($request->input('election_position'), 2))->role->title;
+		$position_id = substr($request->input('election_position'), strpos($request->input('election_position'), '_') + 1);
+		$post_name = Position::find($position_id)->role->title;
 		// And finally nominate to the post
 		if (!$user->nominate($request->input('election_position'))) {
 			return redirect('/nominate')->with('error', $user->name . ' nominerades inte till ' . $post_name . '.');
