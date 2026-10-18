@@ -8,6 +8,8 @@
 	<img class="profile-img big" src="{{ \App\Models\User::picture($user->kth_username) }}" style="width: 200px; height: 200px;" />
 	@if (\Auth::user() && \Auth::user()->kth_username == $user->kth_username)
 		<p>Trött på bilden här ovanför? Byt på <a href="https://rfinger.datasektionen.se">R-finger</a>.</p>
+	@else
+		<p></p>
 	@endif
 	<table>
 		<tr>
