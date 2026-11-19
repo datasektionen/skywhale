@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (error) {
                 console.error('Fel vid hämtning av användare:', error);
+                response([]);
             }
         },
         minLength: 3,
@@ -80,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     @if ($positions->flatten()->isEmpty())
         <p>Det finns inga öppna val att nominera i.</p>
     @else
-        <form method="POST" action="{{ url()->current() }}">
+        <form method="POST"  action="{{ request()->getPathInfo() }}">
             @csrf
 
             <div class="form">

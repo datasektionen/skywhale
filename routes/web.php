@@ -23,7 +23,7 @@ Route::get('/rss', [Controller::class, 'getRss']);
 Route::get('person/{id}', [Controller::class, 'getPerson']);
 
 Route::get('nominate', [NominationController::class, 'getNominate']);
-Route::get('nomination/answer', [NominationController::class, 'getNominationAnswer'])->middleware(Authenticate::class,);
+Route::get('nomination/answer', [NominationController::class, 'getNominationAnswer'])->middleware(Authenticate::class);
 Route::get('nomination/answer/accept/{uuid}', [NominationController::class, 'getAccept'])->middleware(Authenticate::class);
 Route::get('nomination/answer/decline/{uuid}', [NominationController::class, 'getDecline'])->middleware(Authenticate::class);
 Route::get('nomination/answer/regret/{uuid}', [NominationController::class, 'getRegret'])->middleware(Authenticate::class);
@@ -81,7 +81,6 @@ Route::post('admin/reminders', [RemindersAdminController::class, 'postShow'])->m
 Route::get('logout', [AuthController::class, 'getLogout'])->middleware(Authenticate::class);
 Route::get('login', [AuthController::class, 'getLogin'])->middleware('guest');
 Route::get('login-complete', [AuthController::class, 'getLoginComplete']);
-
 
 Route::get('js/cors/{file}', function($file) {
 	return response(file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/js/' . $file))

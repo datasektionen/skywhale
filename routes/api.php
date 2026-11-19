@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Election;
-use App\Models\Position;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\UserApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,5 +14,5 @@ use App\Models\Position;
 |
 */
 
-Route::get('/elections', 'Api\UserApiController@getElections');
-Route::get('/user/search', 'Api\UserApiController@getSearch');
+Route::get('/elections', [UserApiController::class, 'getElections']);
+Route::get('/user/search', [UserApiController::class, 'getSearch'])->middleware('web', 'auth');
