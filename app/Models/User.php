@@ -1,46 +1,27 @@
 <?php namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Webpatser\Uuid\Uuid;
-use Session;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use GuzzleHttp\Client;
 use Carbon\Carbon;
 use DateTimeZone;
 use DateInterval;
-use Auth;
+use Illuminate\Support\Str;
 
 /**
  * User model. Represents a user.
- *
- * @author Jonas Dahl
- * @version 2016-10-14
  */
 class User extends Authenticatable {
-    use Notifiable, SoftDeletes;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-    'name', 'email', 'password',
-    ];
-
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-    'password', 'remember_token',
+        'remember_token',
     ];
 
-    public static function notAnswered() {
+    public static function notAnswered(): Collection {
         $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
 
         $x = User::select('users.name', 'users.id', 'elections.name AS election_name', 'position_user.position', 'users.reminded')
@@ -66,7 +47,7 @@ class User extends Authenticatable {
         return $x;
     }
 
-    public static function notAnsweredAggregated() {
+    public static function notAnsweredAggregated(): array {
         $usersPositions = User::notAnswered();
         $res = [];
         foreach ($usersPositions as $up) {
@@ -75,7 +56,7 @@ class User extends Authenticatable {
         return $res;
     }
 
-    public function remind() {
+    public function remind(): bool {
         $tz = new DateTimeZone('Europe/Stockholm');
         $now = Carbon::now($tz);
         if ($this->reminded !== null) {
@@ -104,7 +85,7 @@ class User extends Authenticatable {
                 });
             })
             ->get();
-        
+
         foreach ($x as $position) {
             $positionIds[] = $position->position;
         }
@@ -131,7 +112,7 @@ class User extends Authenticatable {
             }
             return $res;
         };
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -146,21 +127,21 @@ class User extends Authenticatable {
         return true;
     }
 
-    public function accept($uuid, $ignoreAcceptanceStop = false) {
+    public function accept(string $uuid, bool $ignoreAcceptanceStop = false): bool {
         return $this->setNominationStatus($uuid, "accepted", "accepted", !$ignoreAcceptanceStop);
     }
 
-    public function decline($uuid) {
+    public function decline(string $uuid): bool {
         return $this->setNominationStatus($uuid, "declined", "declined", false);
     }
 
-    public function regret($uuid) {
+    public function regret(string $uuid): bool {
         return $this->setNominationStatus($uuid, "waiting", "regretted", false);
     }
 
-    private function setNominationStatus($uuid, $value, $eventValue, $rejectAfterAcceptanceStop) {
+    private function setNominationStatus(string $uuid, string $value, string $eventValue, bool $rejectAfterAcceptanceStop): bool {
         // Get election and see if acceptance stop has been
-        $row = \DB::table('position_user')
+        $row = DB::table('position_user')
             ->where('uuid', $uuid)
             ->first();
 
@@ -177,7 +158,7 @@ class User extends Authenticatable {
         }
 
         // Change status to waiting
-        \DB::table('position_user')
+        DB::table('position_user')
             ->where('uuid', $uuid)
             ->update(['status' => $value]);
 
@@ -198,7 +179,7 @@ class User extends Authenticatable {
      * @param int $positionId The id of the position to nominate to
      * @return true if successful, already_nominated if user has already been nominated, false otherwise
      */
-    private function nominateToPosition($electionId, $positionId) {
+    private function nominateToPosition($electionId, $positionId): bool | string {
         $election = Election::find($electionId);
 
         if ($election === null)
@@ -216,7 +197,7 @@ class User extends Authenticatable {
             $positionId,
             $election->id,
             'waiting',
-            Uuid::generate()->string,
+            Str::uuid()->toString(),
             null
         ]);
 
@@ -237,16 +218,16 @@ class User extends Authenticatable {
      * @param int $electionPosition The id of the position to nominate to
      * @return void
      */
-    public function nominate($electionPosition) {
+    public function nominate($electionPosition): null | string | bool {
         $positionIds = [];
         $shouldSendMail = false;
         $parts = explode("_", $electionPosition);
         if (count($parts) != 2) {
-            return;
+            return null;
         }
         $election = Election::find($parts[0]);
         if ($election === null) {
-            return;
+            return null;
         }
         $positionIds[] = $parts[1];
         $check_added = $this->nominateToPosition($election->id, $parts[1]);
@@ -285,7 +266,7 @@ class User extends Authenticatable {
             }
             return $res;
         };
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -303,26 +284,26 @@ class User extends Authenticatable {
 
     /**
      * Cascade deletion to nominations.
-     * 
+     *
      * @return void
      */
-    public function delete() {
+    public function delete(): void {
         DB::table('position_user')
             ->where('user_id', $this->id)
             ->delete();
-            
+
         parent::delete();
     }
 
-    public static function notDecidedEmail() {
+    public static function notDecidedEmail(): Collection {
         return User::where('wants_email', 'unknown')->get();
     }
 
-    public static function countNewUsers() {
+    public static function countNewUsers(): int {
         return User::where('wants_email', 'unknown')->count();
     }
 
-    public function notify() {
+    public function notify(): bool {
         // TODO Check if elections still are open, do not notify old elections
         $positionPivot = DB::table('position_user')
             ->where('user_id', '=', $this->id)
@@ -362,7 +343,7 @@ class User extends Authenticatable {
             }
             return $res;
         };
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, env('SPAM_API_URL'));
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -376,7 +357,7 @@ class User extends Authenticatable {
             ->update(['notified' => DB::raw('NOW()')]);
     }
 
-    public static function picture($kthid) {
+    public static function picture(string $kthid): string {
         $cache = apcu_fetch($kthid);
 
         if ($cache === FALSE) {

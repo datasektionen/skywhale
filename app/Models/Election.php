@@ -3,33 +3,38 @@
 use Carbon\Carbon;
 use DateTimeZone;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
-use DateTime;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Election model. Represents an election, an event that has four timestamps
  * for opening, closing, nomination stop and acceptation stop.
- *
- * @author Jonas Dahl
- * @version 2016-10-14
  */
 class Election extends Model {
-    use SoftDeletes;
-
     /**
-     * The table associated with the model.
+     * Get the attributes that should be cast.
      *
-     * @var string
+     * @return array<string, string>
      */
-    protected $table = 'elections';
+    protected function casts(): array
+    {
+        return [
+            'opens' => 'datetime',
+            'closes' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+            'acceptance_stop' => 'datetime',
+            'nomination_stop' => 'datetime',
+        ];
+    }
 
     /**
      * The Positions open for voting in this election.
      *
      * @return relation
      */
-    public function positions($onlyNominateable = false) {
+    public function positions(bool $onlyNominateable = false): Collection {
         $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
 
         $db = DB::table('election_position')
@@ -73,7 +78,7 @@ class Election extends Model {
      *
      * @return relation
      */
-    public function positionsPivot() {
+    public function positionsPivot(): Collection {
         $rows = DB::select('SELECT * FROM election_position WHERE election_id = ?', [
             $this->id
         ]);
@@ -91,7 +96,7 @@ class Election extends Model {
      *
      * @return relation
      */
-    public function positionIds() {
+    public function positionIds(): array {
         $rows = DB::select('SELECT * FROM election_position WHERE election_id = ?', [
             $this->id
         ]);
@@ -110,7 +115,7 @@ class Election extends Model {
      * @param $identifier the position identifier from dfunct
      * @return true always and ever <3
      */
-    public function addPosition($identifier) {
+    public function addPosition($identifier): bool {
         $count = DB::table('election_position')
             ->where('position', $identifier)
             ->where('election_id', $this->id)
@@ -133,7 +138,7 @@ class Election extends Model {
      *
      * @return true always and ever <3
      */
-    public function removeAllPositions($except = null) {
+    public function removeAllPositions(array $except = null): true {
         if ($except == null) {
             $except = collect([]);
         }
@@ -152,7 +157,7 @@ class Election extends Model {
      * @param  $time the timestep to consider (default: now())
      * @return All elections that are open right now
      */
-    public static function open($time = null) {
+    public static function open($time = null): Collection {
         if ($time === null)
             $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
 
@@ -166,7 +171,7 @@ class Election extends Model {
      * @param  $time the timestep to consider (default: now())
      * @return All nominateable elections
      */
-    public static function nominateable($time = null) {
+    public static function nominateable(Carbon $time = null): Collection {
         if ($time === null)
             $now = Carbon::now(new DateTimeZone('Europe/Stockholm'));
         else
@@ -194,7 +199,7 @@ class Election extends Model {
      *
      * @return boolean true if users can accept positions right now, false otherwise
      */
-    public function acceptsAnswers($uuid) {
+    public function acceptsAnswers(string $uuid): bool {
         $row = DB::table('position_user')
             ->select('election_position.acceptance_stop')
             ->join('election_position', 'election_position.position', '=', 'position_user.position')
@@ -230,7 +235,7 @@ class Election extends Model {
      * @param  [Election] $elections List of elections to consider
      * @return [Position]            List of positions for the current elections
      */
-    public static function positionsForElections($elections) {
+    public static function positionsForElections(array $elections): array {
         $positions = [];
         foreach ($elections as $election) {
             $rows = DB::select('SELECT * FROM election_position WHERE election_id = ?', [
@@ -250,7 +255,7 @@ class Election extends Model {
      * @param  $position The position we want to know nominees of
      * @return relation
      */
-    public function nominees($position) {
+    public function nominees(Position|\stdClass $position): Collection {
         $x = DB::table('position_user')
             ->select('users.name AS name', 'users.id AS user_id', 'status', 'uuid', 'kth_username', 'elections.acceptance_stop AS acceptance_stop', 'election_position.acceptance_stop AS a_s')
             ->join('users', 'users.id', '=', 'position_user.user_id')
@@ -297,7 +302,7 @@ class Election extends Model {
      *
      * @return void
      */
-    public function delete() {
+    public function delete(): void {
         DB::table('position_user')
             ->where('election_id', $this->id)
             ->delete();
@@ -309,7 +314,7 @@ class Election extends Model {
         parent::delete();
     }
 
-    public function setPositionCount($positionIdentifier, $count) {
+    public function setPositionCount(string $positionIdentifier, int $count): void {
         DB::table('election_position')
             ->where('election_id', $this->id)
             ->where('position', $positionIdentifier)
@@ -323,7 +328,7 @@ class Election extends Model {
      * @param string(Y-m-d H:i) $value the datetime
      * @param bool $null true if should be null
      */
-    public function setNominationStop($positionIdentifier, $value, $null) {
+    public function setNominationStop(string $positionIdentifier, string|null $value, bool $null): void {
         DB::table('election_position')
             ->where('election_id', $this->id)
             ->where('position', $positionIdentifier)
@@ -337,13 +342,12 @@ class Election extends Model {
      * @param string(Y-m-d H:i) $value the datetime
      * @param bool $null true if should be null
      */
-    public function setAcceptanceStop($positionIdentifier, $value, $null) {
+    public function setAcceptanceStop(string $positionIdentifier, string|null $value, bool $null): void {
         DB::table('election_position')
             ->where('election_id', $this->id)
             ->where('position', $positionIdentifier)
             ->update(['acceptance_stop' => $null ? null : date("Y-m-d H:i:s", strtotime($value))]);
     }
-
 
     /**
      * @deprecated 2016-10-16 bad name
@@ -358,10 +362,4 @@ class Election extends Model {
         return $positions;
     }
 
-    /**
-     * @deprecated 2016-10-16 bad name
-     */
-    public static function positionsForAllNominateableElections() {
-        return Election::positionsForElections(Election::nominateable());
-    }
 }

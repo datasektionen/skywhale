@@ -1,11 +1,9 @@
 #!/bin/sh
 
-sed -i "s/LISTEN_PORT/$PORT/g" /etc/nginx/http.d/default.conf
+su-exec www-data php artisan config:cache
+su-exec www-data php artisan migrate --force
 
-su www -c 'php artisan config:cache'
-su www -c 'php artisan migrate --force'
-
-su www -c 'php-fpm7 -F' &
+php-fpm -F &
 nginx -g 'daemon off;' &
 
 wait -n

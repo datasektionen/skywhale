@@ -3,40 +3,63 @@
 @section('title', 'Skapa ny person')
 
 @section('content')
-{!! Form::open(['url' => URL::to(Request::path(), [], Request::secure())]) !!}
-<div class="form">
-    <div class="form-entry">
-        <span class="description">
-            Namn:
-        </span>
-        <div class="input">
-            {!! Form::text('name', NULL, array('placeholder' => 'Namn')) !!}
-        </div>
-    </div>
+    <form method="POST" action="{{ url()->current() }}">
+        @csrf
 
-    <div class="form-entry">
-        <span class="description">
-            KTH-mejl
-        </span>
-        <div class="input">
-            {!! Form::text('kth_username', NULL, array('placeholder' => 'xxxxxxxx@kth.se')) !!}
-        </div>
-    </div>
+        <div class="form">
+            <div class="form-entry">
+                <label for="name" class="description">Namn:</label>
+                <div class="input">
+                    <input
+                        type="text"
+                        name="name"
+                        id="name"
+                        value="{{ old('name') }}"
+                        placeholder="Namn"
+                    >
+                    @error('name')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
 
-    <div class="form-entry">
-        <span class="description">
-            Årskurs
-        </span>
-        <div class="input">
-            {!! Form::text('year', NULL, array('placeholder' => 'DXX')) !!}
-        </div>
-    </div>
+            <div class="form-entry">
+                <label for="kth_username" class="description">KTH-mejl</label>
+                <div class="input">
+                    <input
+                        type="email"
+                        name="kth_username"
+                        id="kth_username"
+                        value="{{ old('kth_username') }}"
+                        placeholder="xxxxxxxx@kth.se"
+                    >
+                    @error('kth_username')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
 
-    <div class="form-entry">
-        <div class="input">
-            {!! Form::submit('Skapa person', NULL) !!}
+            <div class="form-entry">
+                <label for="year" class="description">Årskurs</label>
+                <div class="input">
+                    <input
+                        type="text"
+                        name="year"
+                        id="year"
+                        value="{{ old('year') }}"
+                        placeholder="DXX"
+                    >
+                    @error('year')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-entry">
+                <div class="input">
+                    <button type="submit">Skapa person</button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-{!! Form::close() !!}
+    </form>
 @endsection

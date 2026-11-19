@@ -1,18 +1,16 @@
 <?php namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use Auth;
-use Session;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Jumbojett\OpenIDConnectClient;
 
-use App\Models\Election;
-use App\Models\Position;
 use App\Models\User;
 
 /**
@@ -38,30 +36,30 @@ class AuthController extends BaseController {
 
 	/**
 	* The logout url. Redirects to main page with success message.
-	* 
+	*
 	* @return view the welcome view
 	*/
-	public function getLogout() {
+	public function getLogout(): RedirectResponse {
 		Auth::logout();
-		\Session::forget('admin');
+		Session::forget('admin');
 		return redirect('/')->with('success', 'Du är nu utloggad från valsystemet.');
 	}
 
 	/**
 	* The login page. Just redirects to sso.
-	* 
+	*
 	* @return redirect to sso.datasektionen.se
 	*/
-	public function getLogin(Request $request) {
+	public function getLogin(Request $request): void {
         $this->oidc->authenticate();
     }
 
 	/**
 	* Show a person.
-	* 
+	*
 	* @return view the person view
 	*/
-	public function getLoginComplete(Request $request) {
+	public function getLoginComplete(Request $request): RedirectResponse {
         if ($this->oidc->authenticate() === FALSE) {
 			return redirect('/')->with('error', 'Du loggades inte in.');
 		}

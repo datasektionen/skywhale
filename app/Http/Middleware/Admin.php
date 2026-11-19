@@ -1,13 +1,17 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use Closure;
-use Auth;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Handles admin requests. If user is not admin, send to '/'.
  *
  * @author Jonas Dahl <jonas@jdahl.se>
- * @version 2016-10-14 
+ * @version 2016-10-14
  */
 class Admin {
     /**
@@ -17,7 +21,7 @@ class Admin {
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle(Request $request, Closure $next): Response {
         if (!Auth::check() || !($request->session()->has('admin') && $request->session()->get('admin') == Auth::user()->id)) {
             return redirect('/')->with('error', 'Du har inte behörighet att visa den här sidan.');
         }
