@@ -3,7 +3,7 @@
 @section('title', 'Skapa nytt val')
 
 @section('content')
-    <form method="POST" action="{{ url()->current() }}">
+    <form method="POST"  action="{{ request()->getPathInfo() }}"">
         @csrf
 
         <div class="form">
