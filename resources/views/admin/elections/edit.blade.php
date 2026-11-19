@@ -14,7 +14,7 @@
             : ($value ? str_replace(' ', 'T', (string) $value) : '');
     @endphp
 
-    <form method="POST" action="{{ url()->current() }}">
+    <form method="POST"  action="{{ request()->getPathInfo() }}">
         @csrf
 
         <div class="form">
