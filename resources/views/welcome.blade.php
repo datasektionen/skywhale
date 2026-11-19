@@ -1,149 +1,134 @@
-@php
-    $now = \Carbon\Carbon::now(new DateTimeZone('Europe/Stockholm'));
-    $elections = \App\Models\Election::where('opens', '<', $now)->where('closes', '>', $now)->get();
-    $nominees = [];
-    foreach ($elections as $election) {
-        $positions = $election->positions();
-        foreach ($positions as $position) {
-            foreach($election->nominees($position) as $nominee) {
-                if (!apcu_exists($nominee->kth_username)) {
-                    $nominees[] = $nominee->kth_username;
-                }
-            }
-        }
-    }
-    if (count($nominees) !== 0) {
-        $opts = [
-            'http' => [
-                'method' => "POST",
-                'header' => array(
-                    'Authorization: Bearer ' . env('RFINGER_API_KEY'),
-                    'Content-type: application/json',
-                ),
-                'content' => json_encode($nominees)
-            ]
-        ];
-        $context = stream_context_create($opts);
-        $response = file_get_contents(env('RFINGER_API_URL') . '/batch', false, $context);
-        foreach (json_decode($response) as $user => $link) {
-            apcu_store($user, $link, 3600);
-        }
-    }
-@endphp
-
 @extends('master')
 
 @section('title', 'Val')
 
 @section('head-extra')
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('.hidebox-a').change(function () {
-			if ($(this).prop('checked')) {
-				$('.waiting').hide();
-			} else {
-				$('.waiting').show();
-			}
-		});
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggles = [
+                { id: 'hide-waiting', selector: '.waiting', hideWhenChecked: true },
+                { id: 'hide-declined', selector: '.declined', hideWhenChecked: true },
+                { id: 'show-images', selector: '.profile-img', hideWhenChecked: false },
+            ];
 
-		$('.hidebox-b').change(function () {
-			if ($(this).prop('checked')) {
-				$('.declined').hide();
-			} else {
-				$('.declined').show();
-			}
-		});
+            toggles.forEach(({ id, selector, hideWhenChecked }) => {
+                const checkbox = document.getElementById(id);
+                if (!checkbox) return;
 
-		$('.hidebox-c').change(function () {
-			if ($(this).prop('checked')) {
-				$('.profile-img').removeClass('hidden');
-			} else {
-				$('.profile-img').addClass('hidden');
-			}
-		});
+                const updateVisibility = () => {
+                    const shouldHide = hideWhenChecked ? checkbox.checked : !checkbox.checked;
+                    document.querySelectorAll(selector).forEach(el => {
+                        el.classList.toggle('hidden', shouldHide);
+                    });
+                };
 
-		$('.hidebox-a').prop('checked', 'checked').change();
-		$('.hidebox-b').prop('checked', 'checked').change();
-		$('.hidebox-c').prop('checked', false).change();
-	});
-</script>
+                checkbox.addEventListener('change', updateVisibility);
+                updateVisibility();
+            });
+        });
+    </script>
 @endsection
 
 @section('content')
-	@if(count($elections) > 0)
-		<div class="checkbox" style="display: inline-block;width: 300px;">
-			{!! Form::checkbox('', '', false, ['class' => 'hidebox-a', 'id' => 'hide-declined-a']) !!}
-			<label for="hide-declined-a">Göm ej besvarade nomineringar</label>
-		</div>
-		<div class="checkbox" style="display: inline-block;width: 300px;">
-			{!! Form::checkbox('', '', false, ['class' => 'hidebox-b', 'id' => 'hide-declined-b']) !!}
-			<label for="hide-declined-b">Göm avböjda nomineringar</label>
-		</div>
-		<div class="checkbox" style="display: inline-block;">
-			{!! Form::checkbox('', '', false, ['class' => 'hidebox-c', 'id' => 'hide-declined-c']) !!}
-			<label for="hide-declined-c">Visa bilder</label>
-		</div>
-	@endif
+    @if($elections->isNotEmpty())
+        <div class="filters">
+            <div class="checkbox" style="display: inline-block; width: 300px;">
+                <input type="checkbox" id="hide-waiting" checked>
+                <label for="hide-waiting">Göm ej besvarade nomineringar</label>
+            </div>
 
-	@forelse($elections as $election)
-		<h1>{{ $election->name }}</h1>
+            <div class="checkbox" style="display: inline-block; width: 300px;">
+                <input type="checkbox" id="hide-declined" checked>
+                <label for="hide-declined">Göm avböjda nomineringar</label>
+            </div>
 
-		<div class="clear"></div>
+            <div class="checkbox" style="display: inline-block;">
+                <input type="checkbox" id="show-images">
+                <label for="show-images">Visa bilder</label>
+            </div>
+        </div>
+    @endif
 
-		<p>{!! nl2br($election->description) !!}</p>
+    @forelse($elections as $election)
+        <h1>{{ $election->name }}</h1>
 
-		<p>
-			Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($election->nomination_stop)) }},
-			acceptansstopp är {{ date("Y-m-d H:i", strtotime($election->acceptance_stop)) }}
-			och valet stänger {{ date("Y-m-d H:i", strtotime($election->closes)) }}.
-		</p>
+        <div class="clear"></div>
 
-		<p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
+        <p>{!! nl2br(e($election->description)) !!}</p>
 
-		<ul class="elections" id="election-{{ $election->id }}">
-			@foreach($election->positions() as $position)
-				<li>
-					<h3>
-						{{ $position->title }}
-						@if($position->pivot->count > 1)
-							<span class="position-count">×{{ $position->pivot->count }}</span>
-						@endif
-					</h3>
-					<p>
-						@if ($position->pivot->nomination_stop !== null)
-							Nomineringsstopp är {{ date("Y-m-d H:i", strtotime($position->pivot->nomination_stop)) }}.
-						@endif
-						@if ($position->pivot->acceptance_stop !== null)
-							Acceptansstopp är {{ date("Y-m-d H:i", strtotime($position->pivot->acceptance_stop)) }}.
-						@endif
-					</p>
-					@if($election->nominees($position)->count() > 0)
-						<ul>
-							@foreach($election->nominees($position) as $nominee)
-							<li class="{{ $nominee->status == 'accepted' ? 'accepted' : ($nominee->status == 'declined' ? 'declined' : ($nominee->status == 'accepted' ? 'acccepted' : 'waiting')) }}">
-								<img loading="lazy" class="profile-img hidden" src="{{ \App\Models\User::picture($nominee->kth_username) }}" />
+        <p>
+            Nomineringsstopp är {{ $election->nomination_stop->format('Y-m-d H:i') }},
+            acceptansstopp är {{ $election->acceptance_stop->format('Y-m-d H:i') }}
+            och valet stänger {{ $election->closes->format('Y-m-d H:i') }}.
+        </p>
 
-								@if ($nominee->status == 'accepted')
-									Accepterat:
-								@elseif ($nominee->status == 'declined')
-									Tackat nej:
-								@endif
+        <p>Alla poster som ska väljas visas nedan tillsammans med nominerade personer för den posten.</p>
 
-								<a href="/person/{{ $nominee->kth_username }}">{{ $nominee->name }} ({{ $nominee->kth_username }})</a>
+        <ul class="elections" id="election-{{ $election->id }}">
+            @foreach($election->positions() as $position)
+                <li>
+                    <h3>
+                        {{ $position->title }}
+                        @if($position->pivot->count > 1)
+                            <span class="position-count">×{{ $position->pivot->count }}</span>
+                        @endif
+                    </h3>
 
-								@if (Auth::check() && session('admin') == Auth::user()->id)
-									<a href="/admin/elections/edit-nomination/{{ $nominee->uuid }}">Ändra</a>
-								@endif
-							</li>
-							@endforeach
-						</ul>
-					@else
-						<p>Inga nominerade.</p>
-					@endif
-				</li>
-			@endforeach
-		</ul>
-	@empty
-		<p>Det finns inga öppna val just nu.</p>
-	@endforelse
+                    @if($position->pivot->nomination_stop || $position->pivot->acceptance_stop)
+                        <p>
+                            @if($position->pivot->nomination_stop)
+                                Nomineringsstopp är {{ \Illuminate\Support\Carbon::parse($position->pivot->nomination_stop)->format('Y-m-d H:i') }}.
+                            @endif
+                            @if($position->pivot->acceptance_stop)
+                                Acceptansstopp är {{ \Illuminate\Support\Carbon::parse($position->pivot->acceptance_stop)->format('Y-m-d H:i') }}.
+                            @endif
+                        </p>
+                    @endif
+
+                    @php $nominees = $election->nominees($position); @endphp
+
+                    @if($nominees->isNotEmpty())
+                        <ul>
+                            @foreach($nominees as $nominee)
+                                @php
+                                    $statusClass = match($nominee->status) {
+                                        'accepted' => 'accepted',
+                                        'declined' => 'declined',
+                                        default    => 'waiting',
+                                    };
+                                @endphp
+
+                                <li class="{{ $statusClass }}">
+                                    <img
+                                        loading="lazy"
+                                        class="profile-img hidden"
+                                        src="{{ \App\Models\User::picture($nominee->kth_username) }}"
+                                        alt="{{ $nominee->name }}"
+                                    />
+
+                                    @if($nominee->status === 'accepted')
+                                        Accepterat:
+                                    @elseif($nominee->status === 'declined')
+                                        Tackat nej:
+                                    @endif
+
+                                    <a href="{{ url('/person/' . $nominee->kth_username) }}">
+                                        {{ $nominee->name }} ({{ $nominee->kth_username }})
+                                    </a>
+
+                                    @if(auth()->check() && session('admin') == auth()->id())
+                                        <a href="{{ url('/admin/elections/edit-nomination/' . $nominee->uuid) }}">Ändra</a>
+                                    @endif
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>Inga nominerade.</p>
+                    @endif
+                </li>
+            @endforeach
+        </ul>
+    @empty
+        <p>Det finns inga öppna val just nu.</p>
+    @endforelse
 @endsection

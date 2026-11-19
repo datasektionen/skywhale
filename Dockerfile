@@ -1,33 +1,57 @@
-FROM alpine:3.15
-
-RUN apk --no-cache add php7 php7-mbstring php7-pdo php7-openssl php7-json php7-phar php7-fileinfo php7-pecl-apcu \
-    php7-dom php7-tokenizer php7-xml php7-xmlwriter php7-session php7-pgsql php7-pdo_pgsql php7-fpm php7-curl \
-    git zip nginx
-
-RUN php -r 'copy("https://getcomposer.org/installer", "php://stdout");' | \
-    php -- --install-dir=/usr/local/bin --filename=composer --1 --quiet
-# Composer version 2 does not work with the version of laravel we're using
-
-COPY nginx_app.conf /etc/nginx/http.d/default.conf
-RUN sed -i 's/;clear_env/clear_env/' /etc/php7/php-fpm.d/www.conf # Gives PHP access to environment variables
-
-RUN : \
-    && addgroup -S www \
-    && adduser -D -H -G www www \
-    && chown www:www /var/log/php7 \
-    && :
-
+FROM node:20-alpine AS frontend
 WORKDIR /app
-COPY . /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
 
-# With cache, build goes brrrrrr
-# Unless specifying `--no-scripts`, someone thought it would be funny to connect to the database
-# right after installing dependencies.
-RUN --mount=type=cache,target=/app/vendor/ composer install --no-scripts --no-dev && cp -r vendor _vendor
-RUN ln -s _vendor vendor && chown -R www:www /app
-RUN echo "extension=apcu.so" > php.ini
+FROM php:8.5.12-fpm-alpine3.24
 
-EXPOSE 8000
+WORKDIR /var/www/html
 
-USER root
-CMD ["/app/run.sh"]
+RUN apk add --no-cache \
+    icu-dev \
+    libpng-dev \
+    libzip-dev \
+    oniguruma-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    postgresql-dev \
+    postgresql-client \
+    linux-headers \
+    bash \
+    nginx \
+    su-exec
+
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+
+RUN docker-php-ext-install pdo_pgsql
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install intl
+
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && pecl install apcu \
+    && docker-php-ext-enable apcu \
+    && apk del .build-deps
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+COPY . .
+COPY --from=frontend /app/public/build /var/www/html/public/build
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+RUN set -x \
+    && getent group www-data || addgroup -g 82 -S www-data \
+    && getent passwd www-data || adduser -u 82 -D -S -G www-data -s /bin/sh www-data \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+EXPOSE 9000
+
+CMD ["./run.sh"]

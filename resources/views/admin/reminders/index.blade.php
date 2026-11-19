@@ -3,36 +3,58 @@
 @section('title', 'Påminnelsemejl')
 
 @section('admin-content')
-{!! Form::open(['url' => URL::to(Request::path(), [], Request::secure())]) !!}
-<p>Personer som inte har svarat på minst en aktuell nominering visas i tabellen nedan. Du kan bara påminna personer som du inte påmint inom de 24 senaste timmarna.</p>
-<table>
-	<tr>
-		<th></th>
-		<th>Namn</th>
-		<th>Poster</th>
-		<th>Senast påmind</th>
-	</tr>
-	@foreach ($nominees as $nominee) 
-		<tr>
-			<td>
-				<div class="checkbox">
-					{!! Form::checkbox('users[]', $nominee[0]->id, true, ['id' => 'u' . $nominee[0]->id]) !!}
-					<label for="u{{ $nominee[0]->id }}"></label>
-				</div>
-			</td>
-			<td>{{ $nominee[0]->name }}</td>
-			<td>
-				{{ count($nominee) }}:
-				@foreach ($nominee as $position)
-					{{ $position->election_name }}: {{ $position->position }},
-				@endforeach
-			</td>
-			<td>
-				{{ $nominee[0]->reminded === null ? 'Aldrig' : date("Y-m-d H:i", strtotime($nominee[0]->reminded)) }}
-			</td>
-		</tr>
-	@endforeach
-</table>
-{!! Form::submit('Skicka påminnelsemejl till markerade') !!}
-{!! Form::close() !!}
+    <form method="POST" action="{{ url()->current() }}">
+        @csrf
+
+        <p>Personer som inte har svarat på minst en aktuell nominering visas i tabellen nedan. Du kan bara påminna personer som du inte påmint inom de 24 senaste timmarna.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Namn</th>
+                    <th>Poster</th>
+                    <th>Senast påmind</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($nominees as $nominee)
+                    @php
+                        $person = $nominee[0];
+                        $isChecked = old('_token')
+                            ? in_array($person->id, old('users', []))
+                            : true;
+                    @endphp
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <input
+                                    type="checkbox"
+                                    name="users[]"
+                                    value="{{ $person->id }}"
+                                    id="u{{ $person->id }}"
+                                    @checked($isChecked)
+                                >
+                                <label for="u{{ $person->id }}"></label>
+                            </div>
+                        </td>
+                        <td>{{ $person->name }}</td>
+                        <td>
+                            {{ count($nominee) }}:
+                            {{ collect($nominee)->map(fn ($p) => "{$p->election_name}: {$p->position}")->join(', ') }}
+                        </td>
+                        <td>
+                            {{ $person->reminded ? \Illuminate\Support\Carbon::parse($person->reminded)->format('Y-m-d H:i') : 'Aldrig' }}
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4">Inga personer att påminna just nu.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <button type="submit">Skicka påminnelsemejl till markerade</button>
+    </form>
 @endsection

@@ -1,16 +1,16 @@
 <?php namespace App\Http\Controllers;
 
+use DateTimeZone;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\Request;
-use Auth;
 
 use App\Models\Election;
 use App\Models\Position;
 use App\Models\User;
 use App\Models\Event;
+use Illuminate\View\View;
 
 /**
  * Main controller. Handles requests that does not fit in under other controllers.
@@ -23,10 +23,44 @@ class Controller extends BaseController {
 
 	/**
 	 * The welcome page. Just shows a view.
-	 * 
+	 *
 	 * @return view the welcome view
 	 */
-	public function getWelcome() {
+	public function getWelcome(): View {
+        $now = \Carbon\Carbon::now(new DateTimeZone('Europe/Stockholm'));
+        $elections = Election::where('opens', '<', $now)->where('closes', '>', $now)->get();
+
+        // Load profile pictures
+        $nominees = [];
+        foreach ($elections as $election) {
+            $positions = $election->positions();
+            foreach ($positions as $position) {
+                foreach($election->nominees($position) as $nominee) {
+                    if (!apcu_exists($nominee->kth_username)) {
+                        $nominees[] = $nominee->kth_username;
+                    }
+                }
+            }
+        }
+
+        if (count($nominees) !== 0) {
+            $opts = [
+                'http' => [
+                    'method' => "POST",
+                    'header' => array(
+                        'Authorization: Bearer ' . env('RFINGER_API_KEY'),
+                        'Content-type: application/json',
+                    ),
+                    'content' => json_encode($nominees)
+                ]
+            ];
+            $context = stream_context_create($opts);
+            $response = file_get_contents(env('RFINGER_API_URL') . '/batch', false, $context);
+            foreach (json_decode($response) as $user => $link) {
+                apcu_store($user, $link, 3600);
+            }
+        }
+
 		return view('welcome')
 			->with('elections', Election::open());
 	}
@@ -34,7 +68,7 @@ class Controller extends BaseController {
 	/**
 	 * Show a person.
 	 * @param  int $id the id of the person to show
-	 * 
+	 *
 	 * @return view     the person view
 	 */
 	public function getPerson($username) {

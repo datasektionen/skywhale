@@ -3,23 +3,49 @@
 @section('title', 'Ändra nominering')
 
 @section('content')
-<p>Du ändrar att <b>{{ $user->name }}</b> är nominerad till <b>{{ $positions[$positionId]->title }}</b> i valet {{ $election->name }}. Just nu är statusen "{{ $nomination->status == 'accepted' ? 'Accepterad' : ($nomination->status == 'declined' ? 'Tackat nej' : 'Inte svarat') }}".</p>
+    @php
+        $statusLabels = [
+            'declined' => 'Tackat nej',
+            'accepted' => 'Accepterad',
+            'waiting'  => 'Inte svarat',
+        ];
+    @endphp
 
-<p><a href="/admin/elections/remove-nomination/{{ $uuid }}">Du kan också ta bort nomineringen genom att klicka här.</a></p>
-{!! Form::open(['url' => URL::to(Request::path(), [], Request::secure())]) !!}
-<div class="form">
-    <div class="form-entry">
-        <span class="description">
-        	Status:
-        </span>
-        <div class="input">
-        	<div class="select">
-            	{!! Form::select('status', ['declined' => 'Tackat nej', 'accepted' => 'Accepterat', 'waiting' => 'Inte svarat'], $nomination->status) !!}
+    <p>
+        Du ändrar att <strong>{{ $user->name }}</strong> är nominerad till
+        <strong>{{ $positions[$positionId]->title }}</strong> i valet {{ $election->name }}.
+        Just nu är statusen "{{ $statusLabels[$nomination->status] ?? 'Inte svarat' }}".
+    </p>
+
+    <p>
+        <a href="{{ url("/admin/elections/remove-nomination/{$uuid}") }}">
+            Du kan också ta bort nomineringen genom att klicka här.
+        </a>
+    </p>
+
+    <form method="POST" action="{{ url()->current() }}">
+        @csrf
+
+        <div class="form">
+            <div class="form-entry">
+                <label for="status" class="description">
+                    Status:
+                </label>
+                <div class="input">
+                    <div class="select">
+                        <select name="status" id="status">
+                            @foreach ($statusLabels as $value => $label)
+                                <option value="{{ $value }}" @selected(old('status', $nomination->status) === $value)>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="clear"></div>
             </div>
+
+            <button type="submit">Spara</button>
         </div>
-        <div class="clear"></div>
-    </div>
-    {!! Form::submit('Spara') !!}
-</div>
-{!! Form::close() !!}
+    </form>
 @endsection

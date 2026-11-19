@@ -1,15 +1,15 @@
 <?php namespace App\Models;
 
 use DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+use stdClass;
 
 /**
  * Position model. Represents a position (Post in Swedish).
  * Data source is the dfunkt API.
- *
- * @author Jonas Dahl
- * @version 2016-10-14
  */
-class Position {
+class Position extends Model {
     /**
      * Returns all nominations for the specified user.
      *
@@ -17,7 +17,7 @@ class Position {
      * @param  [Election]  $openElections A list of elections, will default to all open ones if null or not given
      * @return DB query              querying for all relevant rows in position_user
      */
-    public static function nominationsForUser($userId, $openElections = null) {
+    public static function nominationsForUser(int $userId, Collection $openElections = null) {
         if ($openElections === null) {
             $openElections = Election::open();
         }
@@ -40,7 +40,7 @@ class Position {
      * @param  [Election]  $openElections A list of elections, will default to all open ones if null or not given
      * @return [Position]                 A list of Positions connected with the user and election
      */
-    public static function forUser($user_id, $openElections = null) {
+    public static function forUser(int $user_id, Collection $openElections = null): array {
         $nominations = Position::nominationsForUser($user_id, $openElections)->get();
 
         $positions = Position::allKey();
@@ -59,10 +59,10 @@ class Position {
     /**
      * Get all active positions from API.
      *
-     * @param  array  $columns
+     * @param  $columns
      * @return json decoded roles list
      */
-    public static function active($columns = array()) {
+    public static function active(array $columns = array()): array {
         $rolesString = file_get_contents('https://dfunkt.datasektionen.se/api/active-roles');
         $roles = json_decode($rolesString);
         usort($roles, function ($a, $b) {
@@ -74,10 +74,10 @@ class Position {
     /**
      * Get one Position from API. Notice: This function queries the API. Do not spam.
      *
-     * @param  string $identifier the defunct identifier
+     * @param  $identifier the defunct identifier
      * @return json decoded response from api
      */
-    public static function find($identifier) {
+    public static function find(string $identifier): stdClass {
         $ans = file_get_contents("https://dfunkt.datasektionen.se/api/role/" . $identifier);
         return json_decode($ans);
     }
@@ -85,10 +85,10 @@ class Position {
     /**
      * Get all positions from API with their dfunkt identifier as key.
      *
-     * @param  array  $columns
-     * @return array  the roles
+     * @param  $columns
+     * @return the roles
      */
-    public static function allKey($columns = array()) {
+    public static function allKey(array $columns = array()): array {
         $rolesString = file_get_contents('https://dfunkt.datasektionen.se/api/active-roles');
         $roles = json_decode($rolesString);
 
@@ -102,10 +102,10 @@ class Position {
 
     /**
      * Returns a list of dfunkt roles. The list only contains roles that are on the $positions argument list.
-     * @param  [string] $positions dfunkt identifiers
+     * @param  $positions dfunkt identifiers
      * @return collection of positions
      */
-    public static function dataForIds($positions) {
+    public static function dataForIds(array $positions): Collection {
         $ans = [];
         $rolesString = file_get_contents('https://dfunkt.datasektionen.se/api/roles');
         $roles = json_decode($rolesString);

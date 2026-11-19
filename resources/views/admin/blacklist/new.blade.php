@@ -3,22 +3,31 @@
 @section('title', 'Skapa ny person')
 
 @section('content')
-{!! Form::open(['url' => URL::to(Request::path(), [], Request::secure())]) !!}
-<div class="form">
-    <div class="form-entry">
-        <span class="description">
-            KTH-mejl
-        </span>
-        <div class="input">
-            {!! Form::text('kth_username', NULL, array('placeholder' => 'xxxxxxxx@kth.se')) !!}
-        </div>
-    </div>
+    <form method="POST" action="{{ url()->current() }}">
+        @csrf
 
-    <div class="form-entry">
-        <div class="input">
-            {!! Form::submit('Blacklista e-post', NULL) !!}
+        <div class="form">
+            <div class="form-entry">
+                <label for="kth_username" class="description">KTH-mejl</label>
+                <div class="input">
+                    <input
+                        type="email"
+                        name="kth_username"
+                        id="kth_username"
+                        value="{{ old('kth_username') }}"
+                        placeholder="xxxxxxxx@kth.se"
+                    >
+                    @error('kth_username')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-entry">
+                <div class="input">
+                    <button type="submit">Blacklista e-post</button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-{!! Form::close() !!}
+    </form>
 @endsection
