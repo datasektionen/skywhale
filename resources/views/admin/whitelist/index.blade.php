@@ -3,7 +3,7 @@
 @section('title', 'Användare som inte får e-post')
 
 @section('admin-content')
-    <form method="POST" action="{{ url()->current() }}">
+    <form method="POST"  action="{{ request()->getPathInfo() }}">
         @csrf
 
         <p>Det här är en lista över personer som blivit tillagda men inte fått något mejl. Om du kan bekräfta att dessa personer är medlemmar i Datasektionen (eller kan bli), så gör det. Om personerna inte är seriösa kandidater, bekräfta inte. Du kan också lägga till dem i blacklisten direkt.</p>
