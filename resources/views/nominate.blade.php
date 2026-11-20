@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     @if ($positions->flatten()->isEmpty())
         <p>Det finns inga öppna val att nominera i.</p>
     @else
-        <form method="POST"  action="{{ request()->getPathInfo() }}"">
+        <form method="POST"  action="{{ request()->getPathInfo() }}">
             @csrf
 
             <div class="form">

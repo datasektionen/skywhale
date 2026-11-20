@@ -7,7 +7,7 @@
 @endsection
 
 @section('admin-content')
-    <form method="POST"  action="{{ request()->getPathInfo() }}"">
+    <form method="POST"  action="{{ request()->getPathInfo() }}">
         @csrf
 
         <p>Blacklisten innehåller KTH-användarnamn som inte kan nomineras till poster.</p>

@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<form method="POST"  action="{{ request()->getPathInfo() }}"">
+<form method="POST"  action="{{ request()->getPathInfo() }}">
     @csrf
     @method('PUT') {{-- Change to PATCH if your route uses Route::patch() --}}
 

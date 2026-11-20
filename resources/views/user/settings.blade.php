@@ -3,7 +3,7 @@
 @section('title', 'Dina inställningar')
 
 @section('content')
-<form method="POST"  action="{{ request()->getPathInfo() }}"">
+<form method="POST"  action="{{ request()->getPathInfo() }}">
     @csrf
 
     <div class="form">
