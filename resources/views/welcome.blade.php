@@ -15,6 +15,11 @@
                 const checkbox = document.getElementById(id);
                 if (!checkbox) return;
 
+                const saved = localStorage.getItem(id);
+                if (saved !== null) {
+                    checkbox.checked = saved === 'true';
+                }
+
                 const updateVisibility = () => {
                     const shouldHide = hideWhenChecked ? checkbox.checked : !checkbox.checked;
                     document.querySelectorAll(selector).forEach(el => {
@@ -22,7 +27,11 @@
                     });
                 };
 
-                checkbox.addEventListener('change', updateVisibility);
+                checkbox.addEventListener('change', () => {
+                    localStorage.setItem(id, checkbox.checked);
+                    updateVisibility();
+                });
+
                 updateVisibility();
             });
         });
