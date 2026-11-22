@@ -23,6 +23,34 @@ job "skywhale" {
       config {
         image = var.image_tag
         ports = ["http"]
+
+        volumes = [
+          "local/nginx.conf:/etc/nginx/http.d/http_proxy.conf"
+        ]
+      }
+
+      template {
+        data = <<EOF
+server {
+    listen {{ env "NOMAD_PORT_http" }};
+    server_name _;
+    root /var/www/html/public;
+
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/public$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+EOF
+        destination = "local/nginx.conf"
       }
 
       template {
@@ -36,6 +64,8 @@ RFINGER_API_KEY={{ .rfinger_api_key }}
 DB_PASSWORD={{ .database_password }}
 {{ end }}
 PORT={{ env "NOMAD_PORT_http" }}
+LOG_CHANNEL=stderr
+LOG_LEVEL=info
 SSO_API_URL=http://sso.nomad.dsekt.internal
 OIDC_PROVIDER=http://sso.nomad.dsekt.internal/op
 OIDC_ID=skywhale
@@ -50,6 +80,7 @@ DB_DATABASE=skywhale
 APP_URL=https://val.datasektionen.se
 APP_ENV=production
 APP_DEBUG=false
+SESSION_DRIVER=cookie
 ENV
         destination = "local/.env"
         env         = true
