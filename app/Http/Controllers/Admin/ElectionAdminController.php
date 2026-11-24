@@ -28,8 +28,8 @@ class ElectionAdminController extends BaseController {
 	 * @return view containing a list over elections
 	 */
 	public function getShow() {
-		$elections = Election::orderBy('opens', 'DESC')->paginate(20);
-		return view('admin.elections.index')->with('elections', $elections);
+		$elections = Election::orderBy('opens', 'DESC')->paginate(10); // 20 was to many and caused a annoying delay in loading the page
+		return view('admin.elections.index')->with('elections', $elections); // Also, it's rarely any need to view mor than 6 older elections
 	}
 
 	/**
