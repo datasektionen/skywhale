@@ -80,7 +80,7 @@
 
             <div class="form-entry">
                 <label for="closes" class="description">
-                    Valet stänger (när det inte längre visas på valsidan):
+                    Datum för valtillfället (och när valet inte längre visas på valsidan):
                 </label>
                 <div class="input">
                     <input
