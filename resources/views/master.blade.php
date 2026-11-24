@@ -52,7 +52,7 @@
             str: "Hem",
             href: "/"
         }
-        @if (\App\Models\Election::nominateable()->count() > 0)
+        @if (\App\Models\Election::nominateable()->count() > 0 && \Auth::user())
         ,{
             str: "Nominera",
             href: "/nominate"

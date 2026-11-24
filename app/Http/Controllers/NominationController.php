@@ -26,6 +26,9 @@ class NominationController extends BaseController {
 	 * @return view the nomination view
 	 */
 	public function getNominate() {
+		if (Auth::guest()) {
+			return redirect("/")->with('error', 'Du måste vara inloggad för att få nominera folk.');
+		}
 		return view('nominate')
 			->with('positions', Election::nominateablePositions());
 	}
