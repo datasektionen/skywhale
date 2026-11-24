@@ -41,7 +41,7 @@ class NominationController extends BaseController {
 	 */
 	public function getNominationAnswer(Request $request) {
 		if (Auth::guest()) {
-			return redirect()->back()->with('error', 'Du är inte inloggad.');
+			return redirect('login')->with('error', 'Du måste vara inloggad för att få svara på nomineringar.');
 		}
 
 		// Now get the open elections and their positions that are open for nomination
