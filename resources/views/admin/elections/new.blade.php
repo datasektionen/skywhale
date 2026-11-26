@@ -95,6 +95,7 @@
             <div class="form-entry">
                 <span class="description">
                     Poster som kan väljas
+                    <span class="desc">Poster vars mandat går ut inom 3 månader är förvalda.</span>
                 </span>
                 <div class="input">
                     @foreach (\App\Models\Position::active() as $position)
@@ -104,9 +105,14 @@
                                 name="positions[]"
                                 id="position-{{ $position->identifier }}"
                                 value="{{ $position->identifier }}"
-                                @checked(in_array($position->identifier, old('positions', $expiring)))
+                                @checked(in_array($position->identifier, old('positions', array_keys($expiring))))
                             >
-                            <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>
+                            <label for="position-{{ $position->identifier }}">
+                                {{ $position->title }}
+                                @isset($expiring[$position->identifier])
+                                    <span class="position-expires">går ut {{ $expiring[$position->identifier] }}</span>
+                                @endisset
+                            </label>
                         </div>
                     @endforeach
                     <p>Du kan lägga till fler poster senare.</p>

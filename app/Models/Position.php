@@ -72,9 +72,9 @@ class Position extends Model {
     }
 
     /**
-     * Get identifiers of positions with a mandate ending within three months.
+     * Get positions with a mandate ending within three months.
      *
-     * @return dfunkt identifiers
+     * @return end dates keyed by dfunkt identifier
      */
     public static function expiring(): array {
         $rolesString = file_get_contents('https://dfunkt.datasektionen.se/api/roles/all/current');
@@ -85,8 +85,7 @@ class Position extends Model {
         foreach ($roles as $role) {
             foreach ($role->Mandates as $mandate) {
                 if ($mandate->end <= $limit) {
-                    $res[] = $role->identifier;
-                    break;
+                    $res[$role->identifier] = min($res[$role->identifier] ?? $mandate->end, $mandate->end);
                 }
             }
         }

@@ -192,7 +192,8 @@ input[type=checkbox] {
 input.position-count {
   width: 50px;
 }
-span.position-count {
+span.position-count,
+span.position-expires {
   font-style: italic;
   color: #79c;
 }
