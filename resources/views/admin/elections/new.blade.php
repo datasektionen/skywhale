@@ -95,9 +95,13 @@
             <div class="form-entry">
                 <span class="description">
                     Poster som kan väljas
-                    <span class="desc">Poster vars mandat går ut inom 3 månader är förvalda.</span>
                 </span>
                 <div class="input">
+                    @if ($expiring)
+                        <button type="button" onclick="document.querySelectorAll('input[data-expiring]').forEach(cb => cb.checked = true)">
+                            Välj poster som går ut inom 3 månader
+                        </button>
+                    @endif
                     @foreach (\App\Models\Position::active() as $position)
                         <div class="checkbox">
                             <input
@@ -105,7 +109,8 @@
                                 name="positions[]"
                                 id="position-{{ $position->identifier }}"
                                 value="{{ $position->identifier }}"
-                                @checked(in_array($position->identifier, old('positions', array_keys($expiring))))
+                                @checked(in_array($position->identifier, old('positions', [])))
+                                @isset($expiring[$position->identifier]) data-expiring @endisset
                             >
                             <label for="position-{{ $position->identifier }}">
                                 {{ $position->title }}
