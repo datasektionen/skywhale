@@ -104,7 +104,7 @@
                                 name="positions[]"
                                 id="position-{{ $position->identifier }}"
                                 value="{{ $position->identifier }}"
-                                @checked(in_array($position->identifier, old('positions', [])))
+                                @checked(in_array($position->identifier, old('positions', $expiring)))
                             >
                             <label for="position-{{ $position->identifier }}">{{ $position->title }}</label>
                         </div>

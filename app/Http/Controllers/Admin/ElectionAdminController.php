@@ -38,7 +38,7 @@ class ElectionAdminController extends BaseController {
 	 * @return view containing new election form
 	 */
 	public function getNew() {
-		return view('admin.elections.new');
+		return view('admin.elections.new')->with('expiring', Position::expiring());
 	}
 
 	/**

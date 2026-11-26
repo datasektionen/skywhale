@@ -72,6 +72,28 @@ class Position extends Model {
     }
 
     /**
+     * Get identifiers of positions with a mandate ending within three months.
+     *
+     * @return dfunkt identifiers
+     */
+    public static function expiring(): array {
+        $rolesString = file_get_contents('https://dfunkt.datasektionen.se/api/roles/all/current');
+        $roles = json_decode($rolesString);
+        $limit = now()->addMonths(3)->toDateString();
+
+        $res = [];
+        foreach ($roles as $role) {
+            foreach ($role->Mandates as $mandate) {
+                if ($mandate->end <= $limit) {
+                    $res[] = $role->identifier;
+                    break;
+                }
+            }
+        }
+        return $res;
+    }
+
+    /**
      * Get one Position from API. Notice: This function queries the API. Do not spam.
      *
      * @param  $identifier the defunct identifier
